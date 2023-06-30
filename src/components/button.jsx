@@ -9,14 +9,14 @@ const btnStyle = {
   btnDelete: `${genericBtn} bg-kred text-white hover:bg-opacity-60`
 }
 
-const Button = ({ children, style, size }) => {
+const Button = ({ children, style, size, event }) => {
   if (style === 'primarylg') { style = btnStyle.btnPrimarylg }
   if (style === 'primarysm') { style = btnStyle.btnPrimarysm }
   if (style === 'secondary') { style = btnStyle.btnSecondary }
   if (style === 'delete') { style = btnStyle.btnDelete }
 
   return (
-    <button className={`${style} ${size}`}>
+    <button onClick={event} className={`${style} ${size}`}>
       {children}
     </button>
   )

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import TabletModal from './components/tabletModal'
 import HeaderComp from './components/header'
 import { EmptyBoard } from './components/EmptyBoard'
-import { GET } from '../core/api'
+import { getBoards } from '../core/api'
 
 function App () {
   const [modalTablet, setModalTablet] = useState(false)
@@ -11,14 +11,11 @@ function App () {
 
   useEffect(() => {
     if (initialBoard === null) {
-      GET()
+      getBoards()
         .then(data => {
-        // Utilizar la respuesta exitosa
-          console.log(data)
           setInitialBoard(() => data)
         })
         .catch(error => {
-        // Manejar el error
           setInitialBoard([])
           console.error(error)
         })

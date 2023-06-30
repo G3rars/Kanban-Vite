@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { CardModal } from './cardModal.jsx'
+import NewBoardModal from './NewBoardModal'
+import { createPortal } from 'react-dom'
 
 export default function TabletModal ({ handleClick, modalTable, data }) {
   const transition = modalTable ? 'enter' : 'exit'
+  const [modalBoard, setBoardModal] = useState(false)
+  const newBoard = () => setBoardModal(prevState => !prevState)
   return (
     <>
+
+      {modalBoard && createPortal(<NewBoardModal event={newBoard} />, document.body)}
       <div className={`${transition} absolute bg-kwhite h-full w-[300px] shadow-md z-10 flex flex-col`}>
         <div className='p-8'>
           <img src='styles/assets/logo-dark.svg' alt='' />
@@ -16,9 +22,9 @@ export default function TabletModal ({ handleClick, modalTable, data }) {
 
         <div>
           {
-            Array.isArray(data) && data.map((item) => <CardModal key={item.id}>{item.name}</CardModal>)
+            Array.isArray(data) && data.map((item) => <CardModal color={'text-black'} hover={'text-kwhite'} key={item._id}>{item.name}</CardModal>)
           }
-          <CardModal>+Add new board</CardModal>
+          <CardModal event={newBoard} color={'text-kpurple'}>+Add new board</CardModal>
         </div>
 
         <div className='rounded-md mt-auto h-32 flex justify-center items-center'>

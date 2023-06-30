@@ -1,7 +1,7 @@
 import React from 'react'
 import { CardModal } from './cardModal.jsx'
 
-export default function TabletModal ({ handleClick, modalTable }) {
+export default function TabletModal ({ handleClick, modalTable, data }) {
   const transition = modalTable ? 'enter' : 'exit'
   return (
     <>
@@ -15,10 +15,10 @@ export default function TabletModal ({ handleClick, modalTable }) {
         </div>
 
         <div>
-          <CardModal>Platform Launch</CardModal>
-          <CardModal>Marketing Plan</CardModal>
-          <CardModal>Roadmap</CardModal>
-          <CardModal>+ Create New Board</CardModal>
+          {
+            Array.isArray(data) && data.map((item) => <CardModal key={item.id}>{item.name}</CardModal>)
+          }
+          <CardModal>+Add new board</CardModal>
         </div>
 
         <div className='rounded-md mt-auto h-32 flex justify-center items-center'>

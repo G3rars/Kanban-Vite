@@ -1,10 +1,8 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import TabletModal from './components/tabletModal'
 import HeaderComp from './components/header'
 
-
-function App() {
-
+function App () {
   const [modalTablet, setModalTablet] = useState(false)
   const handleClick = () => setModalTablet(prevState => !prevState)
 

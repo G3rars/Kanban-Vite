@@ -1,3 +1,4 @@
+import React from 'react'
 import CardModal from './cardModal'
 
 export default function TabletModal ({ handleClick, modalTable }) {

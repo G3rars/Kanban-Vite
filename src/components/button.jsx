@@ -1,3 +1,4 @@
+import React from 'react'
 
 const genericBtn = 'w-full h-10 px-4 rounded-full capitalize text-md duration-200 mx-auto font-bold'
 

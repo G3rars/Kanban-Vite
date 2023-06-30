@@ -1,6 +1,4 @@
-'use client'
-
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { createPortal } from 'react-dom'
 import Button from './button'
 import { ViewTaskModal } from './ViewTaskModal'
@@ -8,7 +6,6 @@ import { ViewTaskModal } from './ViewTaskModal'
 export default function HeaderComp ({ handleClick }) {
   const [modalBoard, setBoardModal] = useState(false)
 
-  // estaba cansado del error asique le agrege esta linea para evitar los errores de compilacion, eslint, etc
   // if (typeof (document) !== 'undefined' && !modalBoard) setBoardModal(false)
 
   return (

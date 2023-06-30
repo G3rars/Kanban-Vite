@@ -1,4 +1,6 @@
-function CardColumn ({ children }) {
+import React from 'react'
+
+function CardColumn (children) {
   return (
     <section className='grid'>
       <div className='flex h-4 justify-start gap-2 items-center'>

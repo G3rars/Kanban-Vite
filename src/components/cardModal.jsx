@@ -1,6 +1,6 @@
 import React from 'react'
 
-function cardModal ({ children }) {
+function CardModal ({ children }) {
   return (
     <>
       <section className='flex text-black hover:bg-kpurple hover:text-kwhite p-4 rounded-r-full mr-6 mt-3 duration-200 cursor-pointer'>
@@ -15,4 +15,4 @@ function cardModal ({ children }) {
   )
 }
 
-export { cardModal }
+export { CardModal }

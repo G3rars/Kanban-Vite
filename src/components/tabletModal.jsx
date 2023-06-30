@@ -1,5 +1,5 @@
 import React from 'react'
-import CardModal from './cardModal'
+import { CardModal } from './cardModal.jsx'
 
 export default function TabletModal ({ handleClick, modalTable }) {
   const transition = modalTable ? 'enter' : 'exit'
@@ -27,7 +27,6 @@ export default function TabletModal ({ handleClick, modalTable }) {
 
       </div>
       <div onClick={handleClick} className={`bg-black w-full ${modalTable ? 'opacity-30' : 'hidden'} h-full absolute z-0`} />
-
     </>
   )
 }

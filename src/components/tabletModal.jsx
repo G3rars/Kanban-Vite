@@ -1,7 +1,6 @@
-import React, { MouseEventHandler } from 'react'
 import CardModal from './cardModal'
 
-export default function TabletModal ({ handleClick, modalTable } : {handleClick: MouseEventHandler, modalTable: boolean}) {
+export default function TabletModal ({ handleClick, modalTable }) {
   const transition = modalTable ? 'enter' : 'exit'
   return (
     <>

@@ -1,4 +1,3 @@
-import React from 'react'
 
 const genericBtn = 'w-full h-10 px-4 rounded-full capitalize text-md duration-200 mx-auto font-bold'
 
@@ -9,7 +8,7 @@ const btnStyle = {
   btnDelete: `${genericBtn} bg-kred text-white hover:bg-opacity-60`
 }
 
-const Button = ({ children, style, size } :{children: React.ReactNode, style: string, size?: string}) => {
+const Button = ({ children, style, size }) => {
   if (style === 'primarylg') { style = btnStyle.btnPrimarylg }
   if (style === 'primarysm') { style = btnStyle.btnPrimarysm }
   if (style === 'secondary') { style = btnStyle.btnSecondary }

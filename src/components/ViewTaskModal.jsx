@@ -1,7 +1,6 @@
-import Image from 'next/image'
-import React from 'react'
 
-function Subtask ({ id, content }: {id: string, content: string}) {
+
+function Subtask ({ id, content }) {
   return (
     <div key={id} className='w-full min-h-[60px] bg-kcianli rounded flex items-center gap-4 p-3'>
       <input
@@ -21,7 +20,7 @@ function ViewTaskModal () {
       <article className='bg-kwhite w-screen max-w-[345px] md:max-w-[480px] min-h-[560px] p-6 rounded-md flex flex-col gap-6'>
         <div className='flex justify-between items-center gap-6'>
           <h3 className='text-lg font-bold text-kblack'>Research pricing points of various competitors and trial different business models</h3>
-          <Image width={5} height={20} className='cursor-pointer h-5 w-2' src='/styles/assets/icon-vertical-ellipsis.svg' alt='icon-vertical-ellipsis.svg' />
+          <img width={5} height={20} className='cursor-pointer h-5 w-2' src='/styles/assets/icon-vertical-ellipsis.svg' alt='icon-vertical-ellipsis.svg' />
         </div>
         <div className='w-full'>
           <p className='text-sm font-normal text-kgrayli leading-6'>We know what we're planning to build for version one. Now we need to finalise the first pricing model we'll use. Keep iterating the subtasks until we have a coherent proposition.</p>

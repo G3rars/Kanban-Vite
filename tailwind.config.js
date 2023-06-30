@@ -1,9 +1,7 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}'
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -14,7 +12,6 @@ module.exports = {
         kblackli: '#20212C',
         kblackli2: '#2B2C37',
         kgray: '#3E3F4E',
-        kgrayli: '#828FA3',
         kcian: '#E4EBFA',
         kcianli: '#F4F7FD',
         kwhite: '#FFFFFF',
@@ -28,16 +25,14 @@ module.exports = {
         lg: '18px',
         xl: '20px'
       },
+      fontFamily: {
+        jakarta: ['Plus Jakarta Sans', 'sans- serif']
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
       }
-
-    }
+    },
   },
-  plugins: [
-    require('tailwind-scrollbar'),
-    require('@tailwindcss/forms')
-  ]
+  plugins: [],
 }

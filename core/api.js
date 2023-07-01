@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { formatData } from '../src/helpers/formatData'
 
 const DB = 'https://bdd-kanban.vercel.app'
 
@@ -6,7 +7,10 @@ const DB = 'https://bdd-kanban.vercel.app'
 
 const getBoards = async () => {
   return axios.get(`${DB}/board`) // Retornar la promesa
-    .then(response => response.data)
+    .then(response => {
+      const data = formatData(response.data)
+      return data
+    })
     .catch(error => { console.error(error.response.data) })
 }
 

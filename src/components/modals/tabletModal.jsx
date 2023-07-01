@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { CardModal } from './cardModal.jsx'
-import NewBoardModal from './NewBoardModal'
+import NewBoardModal from './NewBoardModal.jsx'
 import { createPortal } from 'react-dom'
 
 export default function TabletModal ({ handleClick, modalTable, data }) {
@@ -21,9 +21,11 @@ export default function TabletModal ({ handleClick, modalTable, data }) {
 
         <div>
           {
-            Array.isArray(data) && data.map((item) => <CardModal color={'text-black'} hover={'text-kwhite'} key={item._id}>{item.name}</CardModal>)
+            Array.isArray(data) && data.map((item) => (
+              <CardModal color={'text-black'} hover={'text-kwhite'} key={item.board_id}>{item.board_name}</CardModal>
+            ))
           }
-          <CardModal event={newBoard} color={'text-kpurple'}>+Add new board</CardModal>
+          <CardModal key={'initialCardModal'} event={newBoard} color={'text-kpurple'}>+Add new board</CardModal>
         </div>
 
         <div className='rounded-md mt-auto h-32 flex justify-center items-center'>

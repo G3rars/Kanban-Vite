@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import SubTaskCard from './subTaskCard'
-import Button from './button'
-import { getBoards, postBoard, postColumn } from '../../core/api'
+import SubTaskCard from '../subTaskCard'
+import Button from '../button'
+import { getBoards, postBoard, postColumn } from '../../../core/api'
 
 export default function NewBoardModal ({ event }) {
   const [nameBoard, setNameBoard] = useState('')

@@ -17,7 +17,6 @@ const getBoards = () => {
 const postBoard = (postData) => {
   return axios.post(`${DB}/board`, postData) // Retornar la promesa
     .then(response => {
-      alert('todo bien')
     })
     .catch(error => {
       console.error(error.response.data)
@@ -25,9 +24,8 @@ const postBoard = (postData) => {
 }
 
 const postColumn = (postData, id) => {
-  return axios.post(`${DB}/board/${id}`, postData) // Retornar la promesa
+  return axios.post(`${DB}/column/${id}`, postData) // Retornar la promesa
     .then(response => {
-      alert('todo bien')
     })
     .catch(error => {
       console.error(error.response.data)

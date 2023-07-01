@@ -34,7 +34,7 @@ function App () {
         data={initialBoard}
       />
       <HeaderComp handleClick={handleClick} />
-      <main className='min-w-full h-full px-5 py-6 flex items-start flex-auto gap-6 overflow-x-scroll'>
+      <main className='bg-kcianli min-w-full h-full px-5 py-6 flex items-start flex-auto gap-6 overflow-x-scroll'>
         {
           !Array.isArray(initialBoard) && <EmptyBoard />
         }

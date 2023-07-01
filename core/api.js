@@ -16,9 +16,7 @@ const getBoards = async () => {
 
 const postBoard = async (postData) => {
   return axios.post(`${DB}/board`, postData) // Retornar la promesa
-    .then(response => {
-      return response.data
-    })
+    .then(response => { })
     .catch(error => { console.error(error.response.data) })
 }
 

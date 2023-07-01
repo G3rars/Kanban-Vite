@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-export default function SubTaskCard ({ handleRemoveColumn, onUpdate }) {
+export default function SubTaskCard ({ handleRemoveColumn, onUpdate, columnKey }) {
   const [input, setInput] = useState('')
 
   const handelInput = (e) => {
@@ -17,8 +17,8 @@ export default function SubTaskCard ({ handleRemoveColumn, onUpdate }) {
           type='text'
           onChange={handelInput}
         />
-        <div className='flex justify-center items-center pl-5'>
-          <img onClick={handleRemoveColumn} className='h-[14px] w-[14px] cursor-pointer' src='/styles/assets/icon-cross.svg' alt='icon-cross.svg' />
+        <div className='flex justify-center h-10 items-center pl-5'>
+          <img onClick={() => handleRemoveColumn(columnKey)} className='h-[14px] w-[14px] cursor-pointer' src='/styles/assets/icon-cross.svg' alt='icon-cross.svg' />
         </div>
       </div>
     </>

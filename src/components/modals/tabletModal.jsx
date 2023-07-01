@@ -6,11 +6,15 @@ import { createPortal } from 'react-dom'
 export default function TabletModal ({ handleClick, modalTable, data }) {
   const transition = modalTable ? 'enter' : 'exit'
   const [modalBoard, setBoardModal] = useState(false)
-  const newBoard = () => setBoardModal(prevState => !prevState)
+  const newBoard = () => {
+    setBoardModal(prevState => !prevState)
+    handleClick()
+  }
+
   return (
     <>
       {modalBoard && createPortal(<NewBoardModal event={newBoard} />, document.body)}
-      <div className={`${transition} absolute bg-kwhite h-full w-[300px] shadow-md z-10 flex flex-col`}>
+      <div className={`${transition} absolute bg-kwhite h-full w-[300px] shadow-md z-20 flex flex-col`}>
         <div className='p-8'>
           <img src='styles/assets/logo-dark.svg' alt='' />
         </div>
@@ -33,7 +37,7 @@ export default function TabletModal ({ handleClick, modalTable, data }) {
         </div>
 
       </div>
-      <div onClick={handleClick} className={`bg-black w-full ${modalTable ? 'opacity-30' : 'hidden'} h-full absolute z-0`} />
+      <div onClick={handleClick} className={`bg-black w-full ${modalTable ? 'opacity-30' : 'hidden'} h-full absolute z-10`} />
     </>
   )
 }

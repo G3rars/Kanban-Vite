@@ -9,7 +9,6 @@ export default function TabletModal ({ handleClick, modalTable, data }) {
   const newBoard = () => setBoardModal(prevState => !prevState)
   return (
     <>
-
       {modalBoard && createPortal(<NewBoardModal event={newBoard} />, document.body)}
       <div className={`${transition} absolute bg-kwhite h-full w-[300px] shadow-md z-10 flex flex-col`}>
         <div className='p-8'>

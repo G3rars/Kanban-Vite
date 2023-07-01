@@ -1,7 +1,7 @@
 export default {
   content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}'
   ],
   theme: {
     extend: {
@@ -12,6 +12,7 @@ export default {
         kblackli: '#20212C',
         kblackli2: '#2B2C37',
         kgray: '#3E3F4E',
+        kgrayli: '#828FA3',
         kcian: '#E4EBFA',
         kcianli: '#F4F7FD',
         kwhite: '#FFFFFF',
@@ -32,7 +33,7 @@ export default {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
       }
-    },
+    }
   },
-  plugins: [],
+  plugins: []
 }

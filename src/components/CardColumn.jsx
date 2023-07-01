@@ -1,8 +1,8 @@
 import React from 'react'
 
-function CardColumn (children) {
+function CardColumn ({ children }) {
   return (
-    <section className='grid'>
+    <section className='grid min-w-[280px]'>
       <div className='flex h-4 justify-start gap-2 items-center'>
         <div className='h-4 rounded-full w-4 bg-cyan-500' />
         <p className='font-bold text-kgray text-base tracking-widest uppercase'>Todo (4)</p>

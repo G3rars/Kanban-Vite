@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 import SubTaskCard from '../subTaskCard'
 import Button from '../button'
-import { getBoards, postBoard, postColumn } from '../../../core/api'
+import { postBoard, postColumn } from '../../../core/api'
 
 export default function NewBoardModal ({ event }) {
   const [nameBoard, setNameBoard] = useState('')
   const [column, setColumn] = useState([])
   const [subTaskValues, setSubTaskValues] = useState([])
-  const [data, setData] = useState(null)
 
   const handleUpdateSubTask = (index, value) => {
     setSubTaskValues((prevValues) => {
@@ -30,24 +29,15 @@ export default function NewBoardModal ({ event }) {
     }
 
     try {
-      await postBoard(formData)
-      const response = await getBoards()
-      const foundBoard = response.find((board) => board.name === nameBoard)
-
-      setData(response)
-      console.log(response)
-
-      if (foundBoard) {
-        console.log(foundBoard._id)
-        for (const value of subTaskValues) {
-          await postColumn({
-            name: value
-          }, foundBoard._id)
-        }
-      } else {
-        console.log('No se encontró un board con el nombre:', nameBoard)
+      const response = await postBoard(formData)
+      for (const value of subTaskValues) {
+        await postColumn({
+          name: value
+        }, response._id)
       }
+      alert('Elegante ha funcionado!')
     } catch (error) {
+      alert('algo ha salido mal')
       console.error(error)
     }
   }

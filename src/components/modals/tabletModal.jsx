@@ -3,14 +3,13 @@ import { CardModal } from './cardModal.jsx'
 import NewBoardModal from './NewBoardModal.jsx'
 import { createPortal } from 'react-dom'
 
-export default function TabletModal ({ handleClick, modalTable, data }) {
+export default function TabletModal ({ handleClick, modalTable, data, changeBoard }) {
   const transition = modalTable ? 'enter' : 'exit'
   const [modalBoard, setBoardModal] = useState(false)
   const newBoard = () => {
     setBoardModal(prevState => !prevState)
     handleClick()
   }
-
   return (
     <>
       {modalBoard && createPortal(<NewBoardModal event={newBoard} />, document.body)}
@@ -26,10 +25,10 @@ export default function TabletModal ({ handleClick, modalTable, data }) {
         <div>
           {
             Array.isArray(data) && data.map((item) => (
-              <CardModal color={'text-black'} hover={'text-kwhite'} key={item.board_id}>{item.board_name}</CardModal>
+              <CardModal changeBoard={changeBoard} color={'text-black'} hover={'text-kwhite'} keyData={item.board_id} key={item.board_id}>{item.board_name}</CardModal>
             ))
           }
-          <CardModal key={'initialCardModal'} event={newBoard} color={'text-kpurple'}>+Add new board</CardModal>
+          <CardModal changeBoard={changeBoard} key={'initialCardModal'} event={newBoard} color={'text-kpurple'}>+Add new board</CardModal>
         </div>
 
         <div className='rounded-md mt-auto h-32 flex justify-center items-center'>

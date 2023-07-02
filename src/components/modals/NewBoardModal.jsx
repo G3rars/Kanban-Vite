@@ -48,6 +48,8 @@ export default function NewBoardModal ({ event }) {
         console.log(`la columna ${value} ha sido creada`)
         return postColumn(newColumn, id)
       })
+      alert('Se ha creado el tablero')
+      location.reload()
     } catch (error) {
       console.log(error)
     }

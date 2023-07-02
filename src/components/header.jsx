@@ -2,7 +2,7 @@ import React from 'react'
 import Button from './button'
 import { BoardConfig } from './modals/BoardConfig'
 
-export default function HeaderComp ({ handleClick, boardSettings, openBoardSettings, openDeleteBoard }) {
+export default function HeaderComp ({ handleClick, boardSettings, openBoardSettings, openDeleteBoard, data }) {
   return (
     <nav className='w-full h-[64px] flex flex-row shadow-md lg:h-[96px] md:h-[80px] justify-between pr-7 relative'>
       <div className=' mx-4 pr-4 flex items-center justify-center md:border-r border-solid border-opacity-10 border-kpurple'>
@@ -11,7 +11,9 @@ export default function HeaderComp ({ handleClick, boardSettings, openBoardSetti
       </div>
 
       <div className='flex items-center font-bold text-xl mr-auto'>
-        Platform Launch
+      {
+      data && data.board_name
+      }
       </div>
 
       <div className='flex content-center items-center ml-2'>

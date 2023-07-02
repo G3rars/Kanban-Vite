@@ -14,6 +14,8 @@ import { DeleteModal } from './components/modals/deleteModal'
 import { Portal } from './components/modals/Portal'
 import { EditBoardModal } from './components/modals/EditBoardModal'
 
+import NewBoardModal from './components/modals/NewBoardModal refactor'
+
 // Extras
 import { deleteBoard, getBoards } from '../core/api'
 import { initialSettingsState } from './helpers/contants'
@@ -22,6 +24,7 @@ function App () {
   const [modalTablet, setModalTablet] = useState(false)
   const [initialBoard, setInitialBoard] = useState(null)
   const [boardSettings, setBoardSettings] = useState(initialSettingsState)
+  const [modalBoard, setBoardModal] = useState(false)
 
   useEffect(() => {
     if (initialBoard === null) {
@@ -54,6 +57,7 @@ function App () {
     <>
       <TabletModal
         handleClick={handleClick}
+        setBoardModal={setBoardModal}
         modalTable={modalTablet}
         data={initialBoard}
       />
@@ -77,6 +81,8 @@ function App () {
           )
         }
       </main>
+      <div className='flex justify-end ga-16'>
+      </div>
       { (boardSettings.delete || boardSettings.edit) && createPortal(
         <Portal close={closeSettings} >
           {
@@ -97,6 +103,7 @@ function App () {
         document.body
       )
       }
+      {modalBoard && createPortal(<Portal><NewBoardModal /></Portal>, document.body)}
     </>
   )
 }

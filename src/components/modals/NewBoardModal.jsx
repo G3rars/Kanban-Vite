@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import SubTaskCard from '../subTaskCard'
 import Button from '../button'
-import { getBoards, postBoard, postColumn } from '../../../core/api'
+import { postBoard, postColumn } from '../../../core/api'
+import { v4 as uuidv4 } from 'uuid'
 
 export default function NewBoardModal ({ event }) {
   const [nameBoard, setNameBoard] = useState('')
   const [column, setColumn] = useState([])
   const [subTaskValues, setSubTaskValues] = useState([])
-  const [data, setData] = useState(null)
 
   const handleUpdateSubTask = (index, value) => {
     setSubTaskValues((prevValues) => {
@@ -19,7 +19,15 @@ export default function NewBoardModal ({ event }) {
 
   const handleAddColumn = (e) => {
     e.preventDefault()
-    setColumn([...column, <SubTaskCard onUpdate={(value) => handleUpdateSubTask(column.length, value)} key={column.length} />])
+    setColumn([...column, <SubTaskCard handleDeleteColumn={handleDeleteColumn} onUpdate={(value) => handleUpdateSubTask(column.length, value)} key={uuidv4()} dataKey={uuidv4()} />])
+  }
+
+  const handleDeleteColumn = (e, dataKey) => {
+    e.preventDefault()
+    setColumn(prevColumn => {
+      const updatedColumn = prevColumn.filter(subTask => subTask.props.dataKey !== dataKey)
+      return updatedColumn
+    })
   }
 
   const handleSubmit = async (e) => {
@@ -30,25 +38,18 @@ export default function NewBoardModal ({ event }) {
     }
 
     try {
-      await postBoard(formData)
-      const response = await getBoards()
-      const foundBoard = response.find((board) => board.name === nameBoard)
-
-      setData(response)
-      console.log(response)
-
-      if (foundBoard) {
-        console.log(foundBoard._id)
-        for (const value of subTaskValues) {
-          await postColumn({
-            name: value
-          }, foundBoard._id)
+      const postData = await postBoard(formData)
+      const id = postData._id
+      console.log(`se ha creado el board aqui tienes la id ${postData._id}`)
+      await subTaskValues.map((value) => {
+        const newColumn = {
+          name: value
         }
-      } else {
-        console.log('No se encontró un board con el nombre:', nameBoard)
-      }
+        console.log(`la columna ${value} ha sido creada`)
+        return postColumn(newColumn, id)
+      })
     } catch (error) {
-      console.error(error)
+      console.log(error)
     }
   }
 
@@ -65,7 +66,9 @@ export default function NewBoardModal ({ event }) {
           <div className='grid gap-2 mt-4 mb-1'>
             <p className='text-sm font-bold text-kgrayli opacity-60'>Board Columns</p>
             <div className='grid gap-2 overflow-y-auto h-28 scrollbar-thin scrollbar-thumb-kpurple pr-4'>
-              {column}
+              {
+              column.length === 0 ? (<p className='opacity-60 text-center p-8'>Empty Columns</p>) : column
+              }
             </div>
           </div>
           <Button event={handleAddColumn} key='newColBtn' style='secondary' size='mb-4'><p>+ Add New Column</p></Button>

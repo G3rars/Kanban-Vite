@@ -6,7 +6,7 @@ const DB = 'https://bdd-kanban.vercel.app'
 // TODO: Evitar problemas de CORS
 
 const getBoards = async () => {
-  return axios.get(`${DB}/board`) // Retornar la promesa
+  return axios.get(`${DB}/board`)
     .then(response => {
       const data = formatData(response.data)
       return data
@@ -21,20 +21,20 @@ const postBoard = async (postData) => {
 }
 
 const postColumn = async (postData, id) => {
-  return axios.post(`${DB}/column/${id}`, postData) // Retornar la promesa
+  return axios.post(`${DB}/column/${id}`, postData)
     .then(response => { })
     .catch(error => { console.error(error.response.data) })
 }
 
-const deleteBoard = async (postData) => {
-  return axios.delete(`${DB}/board`, postData) // Retornar la promesa
-    .then(response => { })
+const deleteBoard = async (id) => {
+  return axios.delete(`${DB}/board/${id}`)
+    .then(response => { console.log(response) })
     .catch(error => { console.error(error.response.data) })
 }
 
-const deleteColumn = async (postData, id) => {
-  return axios.delete(`${DB}/column/${id}`, postData)
-    .then(() => { })
+const deleteColumn = async (id) => {
+  return axios.delete(`${DB}/column/${id}`)
+    .then(() => { console.log('Se ha borrado la columna con id: ', id) })
     .catch(error => { console.error(error.response.data) })
 }
 

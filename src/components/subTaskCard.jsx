@@ -1,13 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-export default function SubTaskCard ({ handleRemoveColumn, onUpdate, columnKey }) {
-  const [input, setInput] = useState('')
-
+export default function SubTaskCard ({ onUpdate, handleDeleteColumn, dataKey }) {
   const handelInput = (e) => {
     const inputValue = e.target.value
-    setInput(inputValue)
     onUpdate(inputValue)
   }
+
   return (
     <>
       <div className='flex pb-2'>
@@ -18,7 +16,7 @@ export default function SubTaskCard ({ handleRemoveColumn, onUpdate, columnKey }
           onChange={handelInput}
         />
         <div className='flex justify-center h-10 items-center pl-5'>
-          <img onClick={() => handleRemoveColumn(columnKey)} className='h-[14px] w-[14px] cursor-pointer' src='/styles/assets/icon-cross.svg' alt='icon-cross.svg' />
+          <img onClick={(e) => handleDeleteColumn(e, dataKey)} className='h-[14px] w-[14px] cursor-pointer' src='/styles/assets/icon-cross.svg' alt='icon-cross.svg' />
         </div>
       </div>
     </>

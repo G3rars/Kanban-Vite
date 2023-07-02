@@ -6,17 +6,17 @@ import { createPortal } from 'react-dom'
 import HeaderComp from './components/header'
 import { EmptyBoard } from './components/EmptyBoard'
 import { CardColumn } from './components/CardColumn'
-import { DeleteModal } from './components/modals/deleteModal'
 import { deleteBoard, getBoards } from '../core/api'
-import { Portal } from './components/modals/Portal'
 import Card from './components/card'
-import ViewTaskModal from './components/modals/ViewTaskModal'
 
 // Modals
+import { DeleteModal } from './components/modals/deleteModal'
+import { Portal } from './components/modals/Portal'
 import TabletModal from './components/modals/tabletModal'
 import { EditBoardModal } from './components/modals/EditBoardModal'
+import ViewTaskModal from './components/modals/ViewTaskModal'
 
-import NewBoardModal from './components/modals/NewBoardModal.refactor'
+import NewBoardModal from './components/modals/NewBoardModal'
 
 // Extras
 import { initialSettingsState } from './helpers/contants'
@@ -47,6 +47,7 @@ function App () {
   const openDeleteBoard = () => setBoardSettings(prevState => ({ initialState: initialSettingsState, delete: !prevState.delete }))
   const openEditBoard = () => setBoardSettings(prevState => ({ initialState: initialSettingsState, edit: !prevState.edit }))
   const closeSettings = () => setBoardSettings(initialSettingsState)
+  const closeNewBoardModal = () => setBoardModal(false)
   const handleClick = () => setModalTablet(prevState => !prevState)
 
   const changeBoard = (e, keyData) => {
@@ -122,7 +123,12 @@ function App () {
         document.body
       )
       }
-      {modalBoard && createPortal(<Portal><NewBoardModal /></Portal>, document.body)}
+      {modalBoard && createPortal(
+        <Portal close={closeNewBoardModal}>
+          <NewBoardModal event={closeNewBoardModal} />
+        </Portal>,
+        document.body
+      )}
     </>
   )
 }

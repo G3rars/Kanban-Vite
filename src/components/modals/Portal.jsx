@@ -1,10 +1,10 @@
 import React from 'react'
 
-function Portal ({ children }) {
+function Portal ({ children, close }) {
   return (
-        <section className='grid place-content-center absolute bg-black bg-opacity-50 w-full h-full z-40'>
-          {children}
-        </section>
+    <section onClick={close} className='grid place-content-center absolute bg-black bg-opacity-50 w-full h-full z-40'>
+      {children}
+    </section>
   )
 }
 

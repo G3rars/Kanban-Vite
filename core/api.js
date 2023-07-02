@@ -7,10 +7,7 @@ const DB = 'https://bdd-kanban.vercel.app'
 
 const getBoards = async () => {
   return axios.get(`${DB}/board`)
-    .then(response => {
-      const data = formatData(response.data)
-      return data
-    })
+    .then(response => { return formatData(response.data) })
     .catch(error => { console.error(error.response.data) })
 }
 

@@ -41,7 +41,7 @@ export default function NewBoardModal ({ event }) {
       const postData = await postBoard(formData)
       const id = postData._id
       console.log(`se ha creado el board aqui tienes la id ${postData._id}`)
-      await subTaskValues.map((value) => {
+      subTaskValues.map((value) => {
         const newColumn = {
           name: value
         }

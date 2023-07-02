@@ -12,6 +12,7 @@ import Card from './components/card'
 import TabletModal from './components/modals/tabletModal'
 import { DeleteModal } from './components/modals/deleteModal'
 import { Portal } from './components/modals/Portal'
+import { EditBoardModal } from './components/modals/EditBoardModal'
 
 // Extras
 import { deleteBoard, getBoards } from '../core/api'
@@ -24,7 +25,6 @@ function App () {
 
   useEffect(() => {
     if (initialBoard === null) {
-      console.log('useEffect')
       getBoards()
         .then(data => {
           setInitialBoard(data)
@@ -37,6 +37,7 @@ function App () {
 
   const openBoardSettings = () => setBoardSettings(prevState => ({ initialState: initialSettingsState, settings: !prevState.settings }))
   const openDeleteBoard = () => setBoardSettings(prevState => ({ initialState: initialSettingsState, delete: !prevState.delete }))
+  const openEditBoard = () => setBoardSettings(prevState => ({ initialState: initialSettingsState, edit: !prevState.edit }))
   const closeSettings = () => setBoardSettings(initialSettingsState)
   const handleClick = () => setModalTablet(prevState => !prevState)
 
@@ -56,7 +57,13 @@ function App () {
         modalTable={modalTablet}
         data={initialBoard}
       />
-      <HeaderComp handleClick={handleClick} boardSettings={boardSettings} openBoardSettings={openBoardSettings} openDeleteBoard={openDeleteBoard} />
+      <HeaderComp
+        handleClick={handleClick}
+        boardSettings={boardSettings}
+        openBoardSettings={openBoardSettings}
+        openDeleteBoard={openDeleteBoard}
+        openEditBoard={openEditBoard}
+      />
       <main className='bg-kcianli min-w-full h-full px-5 py-6 flex items-start flex-auto gap-6 overflow-x-scroll'>
         {
           (EmptyBoardCondition) && <EmptyBoard />
@@ -70,11 +77,22 @@ function App () {
           )
         }
       </main>
-      { boardSettings.delete && createPortal(
-        <Portal>
-          <DeleteModal
-            deleteBoard={removeBoard}
-            close={closeSettings} />
+      { (boardSettings.delete || boardSettings.edit) && createPortal(
+        <Portal close={closeSettings} >
+          {
+            boardSettings.delete && (
+              <DeleteModal
+                deleteBoard={removeBoard}
+                close={closeSettings}
+                onClick={e => e.stopPropagation()}
+              />
+            )
+          }
+          {
+            boardSettings.edit && (
+              <EditBoardModal />
+            )
+          }
         </Portal>,
         document.body
       )

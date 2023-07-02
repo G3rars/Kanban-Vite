@@ -2,7 +2,7 @@ import React from 'react'
 import Button from './button'
 import { BoardConfig } from './modals/BoardConfig'
 
-export default function HeaderComp ({ handleClick, boardSettings, openBoardSettings, openDeleteBoard }) {
+export default function HeaderComp ({ handleClick, boardSettings, openBoardSettings, openDeleteBoard, openEditBoard }) {
   return (
     <nav className='w-full h-[64px] flex flex-row shadow-md lg:h-[96px] md:h-[80px] justify-between pr-7 relative'>
       <div className=' mx-4 pr-4 flex items-center justify-center md:border-r border-solid border-opacity-10 border-kpurple'>
@@ -30,7 +30,7 @@ export default function HeaderComp ({ handleClick, boardSettings, openBoardSetti
         {
             boardSettings.settings && (
               <div className='h-24 w-48 bg-kwhite shadow-lg absolute right-8 top-14 rounded-md z-30 md:top-16 lg:top-20'>
-                <BoardConfig openDeleteBoard={openDeleteBoard} />
+                <BoardConfig openDeleteBoard={openDeleteBoard} openEditBoard={openEditBoard} />
               </div>
             )
           }

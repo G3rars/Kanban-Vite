@@ -2,19 +2,17 @@ import React, { useState, useRef } from 'react'
 import Button from '../button'
 import SubTaskCard from '../subTaskCard'
 import { v4 as uuidv4 } from 'uuid'
-// import { useTest } from '../customHooks/useTest'
-// import { postBoard, postColumn } from '../../../core/api'
+import { postBoard, postColumn } from '../../../core/api'
 
 export default function NewBoardModal ({ event }) {
   const [column, setColumn] = useState([])
   const newBoardForm = useRef()
-  // const { saludo, setSaludo } = useTest()
 
   const handleAddColumn = () => {
     const formData = Object.fromEntries(new FormData(newBoardForm.current))
-    const test = Object.entries(formData)
-    test.shift()
-    const cols = test.map((item) => ({
+    const dataArr = Object.entries(formData)
+    dataArr.shift()
+    const cols = dataArr.map((item) => ({
       name: item[0],
       value: item[1],
       id: uuidv4()
@@ -30,12 +28,12 @@ export default function NewBoardModal ({ event }) {
   const handleDeleteColumn = (colID) => {
     const newCols = [...column]
     const formData = Object.fromEntries(new FormData(newBoardForm.current))
-    const test = Object.entries(formData)
-    test.shift()
-    const cols = test.map((item, index) => ({
+    const dataArr = Object.entries(formData)
+    dataArr.shift()
+    const cols = dataArr.map((item, index) => ({
       name: item[0],
       value: item[1],
-      id: newCols.id[index]
+      id: newCols[index].id
     }))
     const index = cols.findIndex((item) => item.id === colID)
     cols.splice(index, 1)
@@ -46,16 +44,10 @@ export default function NewBoardModal ({ event }) {
     e.preventDefault()
     const formData = Object.fromEntries(new FormData(e.target))
     try {
-      console.log('test', formData)
-      // const postData = await postBoard(formData.name)
-      // const id = postData._id
-      // subTaskValues.map((value) => {
-      //   const newColumn = {
-      //     name: value
-      //   }
-      //   console.log(`la columna ${value} ha sido creada`)
-      //   return postColumn(newColumn, id)
-      // })
+      const postData = await postBoard({ name: formData.name })
+      const id = postData._id
+      console.log(postData, id)
+      column.forEach(async (col) => await postColumn({ name: col.name }, id))
     } catch (error) {
       console.log(error)
     }

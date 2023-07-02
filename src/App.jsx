@@ -14,7 +14,7 @@ import { DeleteModal } from './components/modals/deleteModal'
 import { Portal } from './components/modals/Portal'
 import { EditBoardModal } from './components/modals/EditBoardModal'
 
-import NewBoardModal from './components/modals/NewBoardModal refactor'
+import NewBoardModal from './components/modals/NewBoardModal.refactor'
 
 // Extras
 import { deleteBoard, getBoards } from '../core/api'

@@ -1,9 +1,10 @@
 import React from 'react'
-import { DeleteModal } from './deleteModal'
 
-function Portal ({ closeSettings }) {
+function Portal ({ children }) {
   return (
-      <DeleteModal closeSettings={closeSettings} />
+        <section className='grid place-content-center absolute bg-black bg-opacity-50 w-full h-full z-40'>
+          {children}
+        </section>
   )
 }
 

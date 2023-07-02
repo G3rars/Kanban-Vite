@@ -1,19 +1,21 @@
+// React utils
 import React, { useState, useEffect } from 'react'
-import TabletModal from './components/modals/tabletModal'
+import { createPortal } from 'react-dom'
+
+// Components
 import HeaderComp from './components/header'
 import { EmptyBoard } from './components/EmptyBoard'
 import { CardColumn } from './components/CardColumn'
-import { DeleteModal } from './components/modals/deleteModal'
-import { deleteBoard, getBoards } from '../core/api'
 import Card from './components/card'
-import { createPortal } from 'react-dom'
+
+// Modals
+import TabletModal from './components/modals/tabletModal'
+import { DeleteModal } from './components/modals/deleteModal'
 import { Portal } from './components/modals/Portal'
 
-const initialSettingsState = {
-  settings: false,
-  delete: false,
-  edit: false
-}
+// Extras
+import { deleteBoard, getBoards } from '../core/api'
+import { initialSettingsState } from './helpers/contants'
 
 function App () {
   const [modalTablet, setModalTablet] = useState(false)

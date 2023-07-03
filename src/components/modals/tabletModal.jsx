@@ -2,7 +2,7 @@ import React from 'react'
 import { CardModal } from './cardModal.jsx'
 
 export default function TabletModal ({ handleClick, modalTable, data, setBoardModal, changeBoard }) {
-  const transition = modalTable ? 'enter' : 'exit'
+  const transition = modalTable.side_menu ? 'enter' : 'exit'
 
   return (
     <>
@@ -29,7 +29,7 @@ export default function TabletModal ({ handleClick, modalTable, data, setBoardMo
         </div>
 
       </div>
-      <div onClick={handleClick} className={`bg-black w-full ${modalTable ? 'opacity-30' : 'hidden'} h-full absolute z-10`} />
+      <div onClick={handleClick} className={`bg-kblack w-full ${modalTable.side_menu ? 'opacity-30' : 'hidden'} h-full absolute z-10`} />
     </>
   )
 }

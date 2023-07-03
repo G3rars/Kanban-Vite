@@ -19,20 +19,28 @@ import { Portal } from './components/layouts/Portal'
 import { Main } from './components/layouts/Main'
 
 // Extras
-import { ACTIONS } from './helpers/contants'
-import { useModals } from './customHooks/useModals'
+import { useRed } from './customHooks/useRed'
 import AddTaskModal from './components/modals/addTaskModal'
 import { useAxios } from './customHooks/useAxios'
+import {
+  MODALS,
+  modalReducer,
+  initialModalsState as initialState
+} from './helpers/contants'
+import { Error } from './components/modals/Error'
+import { Loading } from './components/layouts/Loading'
 
 function App () {
-  const { state, dispatch } = useModals()
+  const { state, dispatch } = useRed({ reducer: modalReducer, initialState })
   const {
     changeBoard,
     handleViewTask,
     removeBoard,
+    reloadPage,
     initialBoard,
     activeBoard,
-    dataTask
+    dataTask,
+    reqStatus
   } = useAxios(dispatch)
 
   const showColumnsCondition = Array.isArray(initialBoard) && initialBoard.length !== 0 && activeBoard
@@ -41,17 +49,17 @@ function App () {
     <>
       <TabletModal
         changeBoard={changeBoard}
-        handleClick={() => dispatch(ACTIONS.CLOSE_ALL_MODALS)}
-        setBoardModal={() => dispatch(ACTIONS.OPEN_NEW_BOARD_MODAL)}
+        handleClick={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
+        setBoardModal={() => dispatch(MODALS.OPEN_NEW_BOARD_MODAL)}
         modalTable={state}
         data={initialBoard}
       />
       <HeaderComp
-        handleClick={() => dispatch(ACTIONS.OPEN_SIDE_MENU)}
-        openBoardSettings={() => dispatch(ACTIONS.OPEN_BOARD_SETTINGS)}
-        openDeleteBoard={() => dispatch(ACTIONS.OPEN_BOARD_DELETE)}
-        openEditBoard={() => dispatch(ACTIONS.OPEN_BOARD_EDIT)}
-        addTask={() => dispatch(ACTIONS.OPEN_NEW_TASK)}
+        handleClick={() => dispatch(MODALS.OPEN_SIDE_MENU)}
+        openBoardSettings={() => dispatch(MODALS.OPEN_BOARD_SETTINGS)}
+        openDeleteBoard={() => dispatch(MODALS.OPEN_BOARD_DELETE)}
+        openEditBoard={() => dispatch(MODALS.OPEN_BOARD_EDIT)}
+        addTask={() => dispatch(MODALS.OPEN_NEW_TASK)}
         boardSettings={state}
         data={activeBoard}
       />
@@ -67,12 +75,12 @@ function App () {
             ))
             : <EmptyBoard />
         }
-        <Portal state={state} close={() => dispatch(ACTIONS.CLOSE_ALL_MODALS)}>
+        <Portal state={{ ...state, ...reqStatus }} close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}>
           {
             state.delete && (
               <DeleteModal
                 deleteBoard={removeBoard}
-                close={() => dispatch(ACTIONS.CLOSE_ALL_MODALS)}
+                close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
               />
             )
           }
@@ -80,12 +88,14 @@ function App () {
           { state.new_task && <AddTaskModal /> }
           { state.task_details &&
               <ViewTaskModal
-                setActiveTask={() => dispatch(ACTIONS.OPEN_TASK_DETAILS)}
+                setActiveTask={() => dispatch(MODALS.OPEN_TASK_DETAILS)}
                 activeBoard={activeBoard}
                 dataTask={dataTask}
               />
           }
-          { state.new_board && <NewBoardModal event={() => dispatch(ACTIONS.CLOSE_ALL_MODALS)} /> }
+          { state.new_board && <NewBoardModal event={() => dispatch(MODALS.CLOSE_ALL_MODALS)} /> }
+          { reqStatus.error && <Error reload={reloadPage} /> }
+          { reqStatus.loading && <Loading /> }
         </Portal>
       </Main>
     </>

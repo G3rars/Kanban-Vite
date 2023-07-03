@@ -18,13 +18,8 @@ export default function HeaderComp ({ handleClick, boardSettings, openBoardSetti
 
       <div className='flex content-center items-center ml-2'>
 
-        <div className='w-[48px] h-[32px] md:w-[164px] md:h-[48px] bg-kpurple hover:opacity-60 rounded-full flex justify-center items-center cursor-pointer duration-300 md:hidden'>
-          <img width={14} height={14} src='styles/assets/icon-add-task-mobile.svg' alt='icon-add-task-mobile.svg' />
-        </div>
-
-        <div className='hidden md:block'>
-          <Button event={addTask} style='primarylg' size='h-10 max-w-[295px]'>+add new task</Button>
-        </div>
+        <Button event={addTask} style='primarylg' size='md:hidden h-10 max-w-[48px] max-h-[32px] grid place-content-center rounded-full'><img width={14} height={14} src='styles/assets/icon-add-task-mobile.svg' alt='icon-add-task-mobile.svg' /></Button>
+        <Button event={addTask} style='primarylg' size='hidden md:block h-10 max-w-[295px]'>+add new task</Button>
 
         <div className='ml-3 w-3 h-6 flex justify-end' onClick={openBoardSettings}>
           <img width={5} height={20} className='cursor-pointer' src='/styles/assets/icon-vertical-ellipsis.svg' alt='icon-vertical-ellipsis.svg' />

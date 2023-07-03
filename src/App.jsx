@@ -1,6 +1,5 @@
 // React utils
 import React, { useState, useEffect } from 'react'
-import { createPortal } from 'react-dom'
 
 // Components
 import HeaderComp from './components/header'
@@ -11,20 +10,22 @@ import Card from './components/card'
 
 // Modals
 import { DeleteModal } from './components/modals/deleteModal'
-import { Portal } from './components/modals/Portal'
 import TabletModal from './components/modals/tabletModal'
 import { EditBoardModal } from './components/modals/EditBoardModal'
 import ViewTaskModal from './components/modals/ViewTaskModal'
 import NewBoardModal from './components/modals/NewBoardModal'
 
+// Layout
+import { Portal } from './components/layouts/Portal'
+import { Main } from './components/layouts/Main'
+
 // Extras
 import { ACTIONS } from './helpers/contants'
-import { useModals } from './components/customHooks/useModals'
+import { useModals } from './customHooks/useModals'
 
 function App () {
   const [initialBoard, setInitialBoard] = useState(null)
   const [activeBoard, setActiveBoard] = useState(null)
-  const [activeTaks, setActiveTask] = useState(false)
   const [dataTask, setDataTask] = useState(null)
   const { state, dispatch } = useModals()
 
@@ -51,7 +52,7 @@ function App () {
   const handleViewTask = (keyData) => {
     const subArray = initialBoard.flatMap((value) => value.board_columns.flatMap((column) => column.cards.filter((card) => card._id === keyData)))
     setDataTask(...subArray)
-    setActiveTask(prevState => !prevState)
+    dispatch(ACTIONS.OPEN_TASK_DETAILS)
   }
 
   async function removeBoard () {
@@ -79,7 +80,7 @@ function App () {
         openEditBoard={() => dispatch(ACTIONS.OPEN_BOARD_EDIT)}
         data={activeBoard}
       />
-      <main className='bg-kcianli min-w-full h-full px-5 py-6 flex items-start flex-auto gap-6 overflow-x-scroll'>
+      <Main>
         {
           showColumnsCondition && activeBoard && activeBoard.board_columns.length > 0
             ? activeBoard.board_columns.map(value => (
@@ -91,9 +92,7 @@ function App () {
             ))
             : <EmptyBoard />
         }
-      </main>
-      { (state.delete || state.edit) && createPortal(
-        <Portal close={() => dispatch(ACTIONS.CLOSE_ALL_MODALS)}>
+        <Portal state={state} close={() => dispatch(ACTIONS.CLOSE_ALL_MODALS)}>
           {
             state.delete && (
               <DeleteModal
@@ -103,23 +102,21 @@ function App () {
               />
             )
           }
-          { state.edit && <EditBoardModal /> }
-          { activeTaks && <ViewTaskModal
-                            setActiveTask={setActiveTask}
-                            activeBoard={activeBoard}
-                            dataTask={dataTask}
-                          />
+          { state.edit &&
+              <EditBoardModal />
           }
-        </Portal>,
-        document.body
-      )
-      }
-      {state.new_board && createPortal(
-        <Portal close={() => dispatch(ACTIONS.CLOSE_ALL_MODALS)}>
-          <NewBoardModal event={() => dispatch(ACTIONS.CLOSE_ALL_MODALS)} />
-        </Portal>,
-        document.body
-      )}
+          { state.task_details &&
+              <ViewTaskModal
+                setActiveTask={() => dispatch(ACTIONS.OPEN_TASK_DETAILS)}
+                activeBoard={activeBoard}
+                dataTask={dataTask}
+              />
+          }
+          { state.new_board &&
+              <NewBoardModal event={() => dispatch(ACTIONS.CLOSE_ALL_MODALS)} />
+          }
+        </Portal>
+      </Main>
     </>
   )
 }

@@ -3,7 +3,8 @@ const initialSettingsState = {
   delete: false,
   edit: false,
   new_board: false,
-  side_menu: false
+  side_menu: false,
+  task_details: false
 }
 
 const ACTIONS = {
@@ -12,6 +13,7 @@ const ACTIONS = {
   OPEN_BOARD_DELETE: 'openBoardDelete',
   OPEN_NEW_BOARD_MODAL: 'openNewBoardModal',
   OPEN_SIDE_MENU: 'openSideMenu',
+  OPEN_TASK_DETAILS: 'openTaskDetails',
   CLOSE_SIDE_MENU: 'closeSideMenu',
   CLOSE_NEW_BOARD_MODAL: 'closeNewBoardModal',
   CLOSE_ALL_MODALS: 'closeAll'

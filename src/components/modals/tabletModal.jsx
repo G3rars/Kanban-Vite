@@ -18,10 +18,25 @@ export default function TabletModal ({ handleClick, modalTable, data, setBoardMo
         <div>
           {
             Array.isArray(data) && data.map((item) => (
-              <CardModal changeBoard={changeBoard} color={'text-black'} hover={'text-kwhite'} keyData={item.board_id} key={item.board_id}>{item.board_name}</CardModal>
+              <CardModal
+                changeBoard={changeBoard}
+                color={'text-black'}
+                hover={'text-kwhite'}
+                keyData={item.board_id}
+                key={item.board_id}
+              >
+                {item.board_name}
+              </CardModal>
             ))
           }
-          <CardModal key={'initialCardModal'} changeBoard={changeBoard} event={setBoardModal} color={'text-kpurple'}>+Add new board</CardModal>
+          <CardModal
+            key={'initialCardModal'}
+            changeBoard={changeBoard}
+            event={setBoardModal}
+            color={'text-kpurple'}
+          >
+            +Add new board
+          </CardModal>
         </div>
 
         <div className='rounded-md mt-auto h-32 flex justify-center items-center'>

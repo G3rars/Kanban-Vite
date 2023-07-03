@@ -2,7 +2,7 @@ import React from 'react'
 import Button from './button'
 import { BoardConfig } from './modals/BoardConfig'
 
-export default function HeaderComp ({ handleClick, boardSettings, openBoardSettings, openDeleteBoard, openEditBoard, data }) {
+export default function HeaderComp ({ handleClick, boardSettings, openBoardSettings, openDeleteBoard, openEditBoard, data, addTask }) {
   return (
     <nav className='w-full h-[64px] flex flex-row shadow-md lg:h-[96px] md:h-[80px] justify-between pr-7 relative'>
       <div className=' mx-4 pr-4 flex items-center justify-center md:border-r border-solid border-opacity-10 border-kpurple'>
@@ -23,7 +23,7 @@ export default function HeaderComp ({ handleClick, boardSettings, openBoardSetti
         </div>
 
         <div className='hidden md:block'>
-          <Button style='primarylg' size='h-10 max-w-[295px]'>+add new task</Button>
+          <Button event={addTask} style='primarylg' size='h-10 max-w-[295px]'>+add new task</Button>
         </div>
 
         <div className='ml-3 w-3 h-6 flex justify-end' onClick={openBoardSettings}>

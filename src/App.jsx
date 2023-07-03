@@ -22,6 +22,7 @@ import { Main } from './components/layouts/Main'
 // Extras
 import { ACTIONS } from './helpers/contants'
 import { useModals } from './customHooks/useModals'
+import AddTaskModal from './components/modals/addTaskModal'
 
 function App () {
   const [initialBoard, setInitialBoard] = useState(null)
@@ -61,7 +62,7 @@ function App () {
     dispatch(ACTIONS.CLOSE_ALL_MODALS)
   }
 
-  const showColumnsCondition = Array.isArray(initialBoard) && initialBoard.length !== 0
+  const showColumnsCondition = Array.isArray(initialBoard) && initialBoard.length !== 0 && activeBoard
 
   return (
     <>
@@ -74,15 +75,16 @@ function App () {
       />
       <HeaderComp
         handleClick={() => dispatch(ACTIONS.OPEN_SIDE_MENU)}
-        boardSettings={state}
         openBoardSettings={() => dispatch(ACTIONS.OPEN_BOARD_SETTINGS)}
         openDeleteBoard={() => dispatch(ACTIONS.OPEN_BOARD_DELETE)}
         openEditBoard={() => dispatch(ACTIONS.OPEN_BOARD_EDIT)}
+        addTask={() => dispatch(ACTIONS.OPEN_NEW_TASK)}
+        boardSettings={state}
         data={activeBoard}
       />
       <Main>
         {
-          showColumnsCondition && activeBoard && activeBoard.board_columns.length > 0
+          showColumnsCondition && activeBoard.board_columns.length > 0
             ? activeBoard.board_columns.map(value => (
               <CardColumn key={value._id} data={value}>
                 {value.cards.map(data => (
@@ -98,13 +100,11 @@ function App () {
               <DeleteModal
                 deleteBoard={removeBoard}
                 close={() => dispatch(ACTIONS.CLOSE_ALL_MODALS)}
-                onClick={e => e.stopPropagation()}
               />
             )
           }
-          { state.edit &&
-              <EditBoardModal />
-          }
+          { state.edit && <EditBoardModal /> }
+          { state.new_task && <AddTaskModal /> }
           { state.task_details &&
               <ViewTaskModal
                 setActiveTask={() => dispatch(ACTIONS.OPEN_TASK_DETAILS)}
@@ -112,9 +112,7 @@ function App () {
                 dataTask={dataTask}
               />
           }
-          { state.new_board &&
-              <NewBoardModal event={() => dispatch(ACTIONS.CLOSE_ALL_MODALS)} />
-          }
+          { state.new_board && <NewBoardModal event={() => dispatch(ACTIONS.CLOSE_ALL_MODALS)} /> }
         </Portal>
       </Main>
     </>

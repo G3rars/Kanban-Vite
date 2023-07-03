@@ -1,7 +1,7 @@
 import { useReducer } from 'react'
 
 import {
-  initialSettingsState as initialState,
+  initialModalsState as initialState,
   ACTIONS
 } from '../helpers/contants'
 
@@ -19,6 +19,8 @@ function reducer (state, action) {
       return { ...state, side_menu: true }
     case ACTIONS.OPEN_TASK_DETAILS:
       return { ...state, task_details: true }
+    case ACTIONS.OPEN_NEW_TASK:
+      return { ...state, new_task: true }
     case ACTIONS.CLOSE_SIDE_MENU:
       return { ...state, side_menu: false }
     case ACTIONS.CLOSE_ALL_MODALS:

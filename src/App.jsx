@@ -1,11 +1,10 @@
 // React utils
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 // Components
 import HeaderComp from './components/header'
 import { EmptyBoard } from './components/EmptyBoard'
 import { CardColumn } from './components/CardColumn'
-import { deleteBoard, getBoards } from '../core/api'
 import Card from './components/card'
 
 // Modals
@@ -23,44 +22,18 @@ import { Main } from './components/layouts/Main'
 import { ACTIONS } from './helpers/contants'
 import { useModals } from './customHooks/useModals'
 import AddTaskModal from './components/modals/addTaskModal'
+import { useAxios } from './customHooks/useAxios'
 
 function App () {
-  const [initialBoard, setInitialBoard] = useState(null)
-  const [activeBoard, setActiveBoard] = useState(null)
-  const [dataTask, setDataTask] = useState(null)
   const { state, dispatch } = useModals()
-
-  useEffect(() => {
-    if (initialBoard === null) {
-      getBoards()
-        .then(data => {
-          setInitialBoard(data)
-          setActiveBoard(data[0])
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    }
-  }, [activeBoard])
-
-  const changeBoard = (e, keyData) => {
-    e.preventDefault()
-    const idBoard = initialBoard.find(value => value.board_id === keyData)
-    setActiveBoard(idBoard)
-    dispatch(ACTIONS.CLOSE_SIDE_MENU)
-  }
-
-  const handleViewTask = (keyData) => {
-    const subArray = initialBoard.flatMap((value) => value.board_columns.flatMap((column) => column.cards.filter((card) => card._id === keyData)))
-    setDataTask(...subArray)
-    dispatch(ACTIONS.OPEN_TASK_DETAILS)
-  }
-
-  async function removeBoard () {
-    await deleteBoard(initialBoard.at(-1).board_id)
-    setInitialBoard(null)
-    dispatch(ACTIONS.CLOSE_ALL_MODALS)
-  }
+  const {
+    changeBoard,
+    handleViewTask,
+    removeBoard,
+    initialBoard,
+    activeBoard,
+    dataTask
+  } = useAxios(dispatch)
 
   const showColumnsCondition = Array.isArray(initialBoard) && initialBoard.length !== 0 && activeBoard
 

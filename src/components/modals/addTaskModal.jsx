@@ -30,7 +30,7 @@ export default function AddTaskModal () {
               <Button style='secondary'>+add new task</Button>
               <p className='opacity-60 font-bold text-xs pt-3 pb-1'>Status</p>
               <select name='status' className='w-[295px] h-[40px] border-[1px] rounded-md'>
-                <img src='' alt='' />
+                {/* <img src='' alt='' /> */}
                 <option value=''>Selecciona una opción</option>
                 <option value='TODO'>TODO</option>
                 <option value='DOING'>DOING</option>

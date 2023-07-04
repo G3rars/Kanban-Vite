@@ -12,16 +12,19 @@ function useAxios (action) {
   useEffect(() => {
     if (initialBoard === null) {
       dispatch(REQ_ACTION.LOADING)
-      getBoards() // necesita un await, ver como convertir esto en asincrono
-        .then(data => {
+      const fetchData = async () => {
+        try {
+          const data = await getBoards()
           setInitialBoard(data)
           setActiveBoard(data[0])
           dispatch(REQ_ACTION.LOADED)
-        })
-        .catch(error => {
+        } catch (error) {
           console.error(error)
           dispatch(REQ_ACTION.ERROR)
-        })
+        }
+      }
+
+      fetchData()
     }
   }, [activeBoard])
 

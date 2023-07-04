@@ -5,14 +5,14 @@ import Button from '../button'
 export default function AddTaskModal () {
   return (
     <>
-      <section className='absolute w-full h-full bg-black bg-opacity-60 flex items-center justify-center'>
+      <section onClick={e => e.stopPropagation()} className='absolute w-full h-full bg-black bg-opacity-60 flex items-center justify-center'>
         <div className='w-[343px] h-[659px] rounded-lg bg-kwhite'>
           <div className='pl-6 pr-6'>
             <h3 className='font-bold text-lg pt-5'>Add New Task</h3>
-            <form action=''>
+            <form>
               <p className='opacity-60 font-bold text-xs pt-3 pb-1'>Title</p>
               <input
-                className='w-[295px] h-[40px] border-[1px] rounded-md'
+                className=' w-[295px] h-[40px] border-[1px] rounded-md text-md font-medium leading-6 pl-4 border-solid border-kgrayli'
                 type='text'
                 placeholder='e.g. Take coffee break'
               />

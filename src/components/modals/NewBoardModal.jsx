@@ -6,26 +6,28 @@ import { postBoard, postColumn } from '../../../core/api'
 
 export default function NewBoardModal ({ event }) {
   const [column, setColumn] = useState([])
-  const newBoardForm = useRef()
+  const newBoardForm = useRef() // useRef es similar al getElementById
+
+  /* useRef --> objeto (el newBoardForm) --> current = el elemento */
 
   const handleAddColumn = () => {
     const formData = Object.fromEntries(new FormData(newBoardForm.current))
     const dataArr = Object.entries(formData)
-    dataArr.shift()
-    const cols = dataArr.map((item) => ({
+    dataArr.shift() // quito el nombre del tablero
+    const cols = dataArr.map((item) => ({ // [ [name, value], [name, value] ]
       name: item[0],
       value: item[1],
       id: uuidv4()
-    }))
+    })) // [ [name, value, id], [name, value, id] ]
     cols.push({
       name: `col_${cols.length + 1}`,
       value: '',
       id: uuidv4()
-    })
-    setColumn(cols)
+    }) // [ [name, value, id], [name, value, id], [name, value, id] ]
+    setColumn(cols) // seteo las columnas con --> [ [name, value, id], [name, value, id], [name, value, id] ]
   }
 
-  const handleDeleteColumn = (colID) => {
+  const handleDeleteColumn = (columnID) => {
     const newCols = [...column]
     const formData = Object.fromEntries(new FormData(newBoardForm.current))
     const dataArr = Object.entries(formData)
@@ -35,7 +37,7 @@ export default function NewBoardModal ({ event }) {
       value: item[1],
       id: newCols[index].id
     }))
-    const index = cols.findIndex((item) => item.id === colID)
+    const index = cols.findIndex((item) => item.id === columnID)
     cols.splice(index, 1)
     setColumn([...cols])
   }
@@ -46,7 +48,6 @@ export default function NewBoardModal ({ event }) {
     try {
       const postData = await postBoard({ name: formData.name })
       const id = postData._id
-      console.log(postData, id)
       column.forEach(async (col) => await postColumn({ name: col.name }, id))
     } catch (error) {
       console.log(error)

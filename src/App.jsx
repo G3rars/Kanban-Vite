@@ -1,5 +1,5 @@
 // React utils
-import React from 'react'
+import React, { useReducer } from 'react'
 
 // Components
 import HeaderComp from './components/header'
@@ -19,7 +19,6 @@ import { Portal } from './components/layouts/Portal'
 import { Main } from './components/layouts/Main'
 
 // Extras
-import { useRed } from './customHooks/useRed'
 import AddTaskModal from './components/modals/addTaskModal'
 import { useAxios } from './customHooks/useAxios'
 import {
@@ -31,7 +30,7 @@ import { Error } from './components/modals/Error'
 import { Loading } from './components/layouts/Loading'
 
 function App () {
-  const { state, dispatch } = useRed({ reducer: modalReducer, initialState })
+  const [state, dispatch] = useReducer(modalReducer, initialState)
   const {
     changeBoard,
     handleViewTask,

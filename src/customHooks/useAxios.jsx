@@ -1,29 +1,28 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useReducer } from 'react'
 import { deleteBoard, getBoards } from '../../core/api'
 import { MODALS, REQ_ACTION, initialRequestState, requestReducer } from '../helpers/contants'
-import { useRed } from './useRed'
 
 function useAxios (action) {
-  const { state, dispatch } = useRed({ reducer: requestReducer, initialState: initialRequestState })
+  const [state, dispatch] = useReducer(requestReducer, initialRequestState)
   const [initialBoard, setInitialBoard] = useState(null)
   const [activeBoard, setActiveBoard] = useState(null)
   const [dataTask, setDataTask] = useState(null)
 
+  const fetchData = async () => {
+    try {
+      const data = await getBoards()
+      setInitialBoard(data)
+      setActiveBoard(data[0])
+      dispatch(REQ_ACTION.LOADED)
+    } catch (error) {
+      console.error(error)
+      dispatch(REQ_ACTION.ERROR)
+    }
+  }
+
   useEffect(() => {
     if (initialBoard === null) {
       dispatch(REQ_ACTION.LOADING)
-      const fetchData = async () => {
-        try {
-          const data = await getBoards()
-          setInitialBoard(data)
-          setActiveBoard(data[0])
-          dispatch(REQ_ACTION.LOADED)
-        } catch (error) {
-          console.error(error)
-          dispatch(REQ_ACTION.ERROR)
-        }
-      }
-
       fetchData()
     }
   }, [activeBoard])
@@ -37,14 +36,13 @@ function useAxios (action) {
   }
 
   const handleViewTask = (keyData) => {
-    console.log(keyData, initialBoard)
     const subArray = initialBoard.flatMap((value) => value.board_columns.flatMap((column) => column.cards.filter((card) => card._id === keyData)))
     setDataTask(...subArray)
     action(MODALS.OPEN_TASK_DETAILS)
   }
 
   async function removeBoard () {
-    await deleteBoard(initialBoard.at(-1).board_id)
+    await deleteBoard(initialBoard.at(-1).board_id) // PREGUNTAR SI EXISTE ALGUN TABLERO PARA BORRAR
     setInitialBoard(null)
     action(MODALS.CLOSE_ALL_MODALS)
   }

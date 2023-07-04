@@ -12,7 +12,7 @@ function useAxios (action) {
   useEffect(() => {
     if (initialBoard === null) {
       dispatch(REQ_ACTION.LOADING)
-      getBoards()
+      getBoards() // necesita un await, ver como convertir esto en asincrono
         .then(data => {
           setInitialBoard(data)
           setActiveBoard(data[0])

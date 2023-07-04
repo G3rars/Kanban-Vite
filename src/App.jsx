@@ -73,7 +73,7 @@ function App () {
                 ))}
               </CardColumn>
             ))
-            : <EmptyBoard />
+            : !state.loading && <EmptyBoard />
         }
         <Portal state={{ ...state, ...reqStatus }} close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}>
           {

@@ -1,107 +1,103 @@
-import React, { useState, useEffect } from 'react'
-import TabletModal from './components/modals/tabletModal'
+// React utils
+import React from 'react'
+
+// Components
 import HeaderComp from './components/header'
 import { EmptyBoard } from './components/EmptyBoard'
 import { CardColumn } from './components/CardColumn'
-import { DeleteModal } from './components/modals/deleteModal'
-import { deleteBoard, getBoards } from '../core/api'
-import { createPortal } from 'react-dom'
-import { Portal } from './components/modals/Portal'
 import Card from './components/card'
-import ViewTaskModal from './components/modals/ViewTaskModal'
 
-const initialSettingsState = {
-  settings: false,
-  delete: false,
-  edit: false
-}
+// Modals
+import { DeleteModal } from './components/modals/deleteModal'
+import TabletModal from './components/modals/tabletModal'
+import { EditBoardModal } from './components/modals/EditBoardModal'
+import ViewTaskModal from './components/modals/ViewTaskModal'
+import NewBoardModal from './components/modals/NewBoardModal'
+
+// Layout
+import { Portal } from './components/layouts/Portal'
+import { Main } from './components/layouts/Main'
+
+// Extras
+import { useRed } from './customHooks/useRed'
+import AddTaskModal from './components/modals/addTaskModal'
+import { useAxios } from './customHooks/useAxios'
+import {
+  MODALS,
+  modalReducer,
+  initialModalsState as initialState
+} from './helpers/contants'
+import { Error } from './components/modals/Error'
+import { Loading } from './components/layouts/Loading'
 
 function App () {
-  const [modalTablet, setModalTablet] = useState(false)
-  const [initialBoard, setInitialBoard] = useState(null)
-  const [boardSettings, setBoardSettings] = useState(initialSettingsState)
-  const [activeBoard, setActiveBoard] = useState(null)
-  const [activeTaks, setActiveTask] = useState(false)
-  const [dataTask, setDataTask] = useState(null)
+  const { state, dispatch } = useRed({ reducer: modalReducer, initialState })
+  const {
+    changeBoard,
+    handleViewTask,
+    removeBoard,
+    reloadPage,
+    initialBoard,
+    activeBoard,
+    dataTask,
+    reqStatus
+  } = useAxios(dispatch)
 
-  useEffect(() => {
-    if (initialBoard === null) {
-      console.log('useEffect')
-      getBoards()
-        .then(data => {
-          setInitialBoard(data)
-          setActiveBoard(data[0])
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    }
-  }, [activeBoard])
-
-  const openBoardSettings = () => setBoardSettings(prevState => ({ initialState: initialSettingsState, settings: !prevState.settings }))
-  const openDeleteBoard = () => setBoardSettings(prevState => ({ initialState: initialSettingsState, delete: !prevState.delete }))
-  const closeSettings = () => setBoardSettings(initialSettingsState)
-  const handleClick = () => setModalTablet(prevState => !prevState)
-
-  const changeBoard = (e, keyData) => {
-    e.preventDefault()
-    const idBoard = initialBoard.find(value => value.board_id === keyData)
-    setActiveBoard(idBoard)
-    handleClick()
-  }
-
-  const handleViewTask = (keyData) => {
-    const subArray = initialBoard.flatMap((value) => value.board_columns.flatMap((column) => column.cards.filter((card) => card._id === keyData)))
-    setDataTask(...subArray)
-    setActiveTask(prevState => !prevState)
-  }
-
-  async function removeBoard () {
-    await deleteBoard(initialBoard[0].board_id)
-    setInitialBoard(null)
-    closeSettings()
-  }
-
-  const showColumnsCondition = Array.isArray(initialBoard) && initialBoard.length !== 0
+  const showColumnsCondition = Array.isArray(initialBoard) && initialBoard.length !== 0 && activeBoard
 
   return (
     <>
       <TabletModal
         changeBoard={changeBoard}
-        handleClick={handleClick}
-        modalTable={modalTablet}
+        handleClick={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
+        setBoardModal={() => dispatch(MODALS.OPEN_NEW_BOARD_MODAL)}
+        modalTable={state}
         data={initialBoard}
       />
-      <HeaderComp data={activeBoard} handleClick={handleClick} boardSettings={boardSettings} openBoardSettings={openBoardSettings} openDeleteBoard={openDeleteBoard} />
-      <main className='bg-kcianli min-w-full h-full px-5 py-6 flex items-start flex-auto gap-6 overflow-x-scroll'>
+      <HeaderComp
+        handleClick={() => dispatch(MODALS.OPEN_SIDE_MENU)}
+        openBoardSettings={() => dispatch(MODALS.OPEN_BOARD_SETTINGS)}
+        openDeleteBoard={() => dispatch(MODALS.OPEN_BOARD_DELETE)}
+        openEditBoard={() => dispatch(MODALS.OPEN_BOARD_EDIT)}
+        addTask={() => dispatch(MODALS.OPEN_NEW_TASK)}
+        boardSettings={state}
+        data={activeBoard}
+      />
+      <Main>
         {
-                showColumnsCondition && activeBoard && activeBoard.board_columns.length > 0
-                  ? (
-                      activeBoard.board_columns.map(value => (
-      <CardColumn key={value._id} data={value}>
-        {value.cards.map(data => (
-          <Card handleViewTask={handleViewTask} key={data._id} data={data}></Card>
-        ))}
-      </CardColumn>
-                      ))
-                    )
-                  : (
-    <EmptyBoard />
-                    )
-}
-      </main>
-      {
-        activeTaks && <ViewTaskModal activeBoard={activeBoard} dataTask={dataTask} setActiveTask={setActiveTask}/>
-      }
-      { boardSettings.delete && createPortal(
-        <Portal>
-          <DeleteModal
-            deleteBoard={removeBoard}
-            close={closeSettings} />
-        </Portal>,
-        document.body
-      )
-      }
+          showColumnsCondition && activeBoard.board_columns.length > 0
+            ? activeBoard.board_columns.map(value => (
+              <CardColumn key={value._id} data={value}>
+                {value.cards.map(data => (
+                  <Card handleViewTask={handleViewTask} key={data._id} data={data}></Card>
+                ))}
+              </CardColumn>
+            ))
+            : !state.loading && <EmptyBoard />
+        }
+        <Portal state={{ ...state, ...reqStatus }} close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}>
+          {
+            state.delete && (
+              <DeleteModal
+                deleteBoard={removeBoard}
+                close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
+              />
+            )
+          }
+          { state.edit && <EditBoardModal /> }
+          { state.new_task && <AddTaskModal /> }
+          { state.task_details &&
+              <ViewTaskModal
+                setActiveTask={() => dispatch(MODALS.OPEN_TASK_DETAILS)}
+                activeBoard={activeBoard}
+                dataTask={dataTask}
+              />
+          }
+          { state.new_board && <NewBoardModal event={() => dispatch(MODALS.CLOSE_ALL_MODALS)} /> }
+          { reqStatus.error && <Error reload={reloadPage} /> }
+          { reqStatus.loading && <Loading /> }
+        </Portal>
+      </Main>
     </>
   )
 }

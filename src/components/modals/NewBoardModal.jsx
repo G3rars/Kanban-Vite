@@ -13,12 +13,14 @@ export default function NewBoardModal ({ event }) {
   const handleAddColumn = () => {
     const formData = Object.fromEntries(new FormData(newBoardForm.current))
     const dataArr = Object.entries(formData)
+    console.log(dataArr)
     dataArr.shift() // quito el nombre del tablero
     const cols = dataArr.map((item) => ({ // [ [name, value], [name, value] ]
       name: item[0],
       value: item[1],
       id: uuidv4()
     })) // [ [name, value, id], [name, value, id] ]
+    console.log(cols)
     cols.push({
       name: `col_${cols.length + 1}`,
       value: '',

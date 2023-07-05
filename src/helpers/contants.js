@@ -5,7 +5,8 @@ const initialModalsState = {
   new_board: false,
   side_menu: false,
   task_details: false,
-  new_task: false
+  new_task: false,
+  tablet_btn_bottom: true
 }
 
 const initialRequestState = {
@@ -56,7 +57,7 @@ function modalReducer (state, action) {
     case MODALS.OPEN_NEW_BOARD_MODAL:
       return { ...state, side_menu: false, new_board: true }
     case MODALS.OPEN_SIDE_MENU:
-      return { ...state, settings: false, side_menu: true }
+      return { ...state, settings: false, tablet_btn_bottom: false, side_menu: true }
     case MODALS.OPEN_TASK_DETAILS:
       return { ...state, task_details: true }
     case MODALS.OPEN_NEW_TASK:

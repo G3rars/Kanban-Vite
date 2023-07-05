@@ -28,6 +28,7 @@ import {
 } from './helpers/contants'
 import { Error } from './components/modals/Error'
 import { Loading } from './components/layouts/Loading'
+import { SideBarButton } from './components/SideBarButton'
 
 function App () {
   const [state, dispatch] = useReducer(modalReducer, initialState)
@@ -48,7 +49,7 @@ function App () {
     <>
       <TabletModal
         changeBoard={changeBoard}
-        handleClick={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
+        close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
         setBoardModal={() => dispatch(MODALS.OPEN_NEW_BOARD_MODAL)}
         modalTable={state}
         data={initialBoard}
@@ -97,6 +98,7 @@ function App () {
           { reqStatus.loading && <Loading /> }
         </Portal>
       </Main>
+      { state.tablet_btn_bottom && <SideBarButton event={() => dispatch(MODALS.OPEN_SIDE_MENU)} /> }
     </>
   )
 }

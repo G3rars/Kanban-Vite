@@ -56,7 +56,7 @@ function modalReducer (state, action) {
     case MODALS.OPEN_NEW_BOARD_MODAL:
       return { ...state, side_menu: false, new_board: true }
     case MODALS.OPEN_SIDE_MENU:
-      return { ...state, side_menu: true }
+      return { ...state, settings: false, side_menu: true }
     case MODALS.OPEN_TASK_DETAILS:
       return { ...state, task_details: true }
     case MODALS.OPEN_NEW_TASK:

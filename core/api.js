@@ -23,6 +23,18 @@ const postColumn = async (postData, id) => {
     .catch(error => { console.error(error.response.data) })
 }
 
+const postCard = async (postData, id) => {
+  return axios.post(`${DB}/card/${id}`, postData)
+    .then(response => { })
+    .catch(error => { console.error(error.response.data) })
+}
+
+const patchTask = async (cardId, subTaskId) => {
+  return axios.delete(`${DB}/card/${cardId}/${subTaskId}`)
+    .then(response => {})
+    .catch(error => { console.error(error.response.data) })
+}
+
 const deleteBoard = async (id) => {
   return axios.delete(`${DB}/board/${id}`)
     .then(response => { console.log(response) })
@@ -40,5 +52,7 @@ export {
   postBoard,
   postColumn,
   deleteBoard,
-  deleteColumn
+  deleteColumn,
+  postCard,
+  patchTask
 }

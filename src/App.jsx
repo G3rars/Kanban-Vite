@@ -84,7 +84,7 @@ function App () {
             )
           }
           { state.edit && <EditBoardModal /> }
-          { state.new_task && <AddTaskModal /> }
+          { state.new_task && <AddTaskModal activeBoard={activeBoard} /> }
           { state.task_details &&
               <ViewTaskModal
                 setActiveTask={() => dispatch(MODALS.OPEN_TASK_DETAILS)}

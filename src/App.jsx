@@ -29,6 +29,7 @@ import {
 import { Error } from './components/modals/Error'
 import { Loading } from './components/layouts/Loading'
 import { SideBarButton } from './components/SideBarButton'
+import { ThemeProvider } from './context/ThemeContext'
 
 function App () {
   const [state, dispatch] = useReducer(modalReducer, initialState)
@@ -46,7 +47,7 @@ function App () {
   const showColumnsCondition = Array.isArray(initialBoard) && initialBoard.length !== 0 && activeBoard
 
   return (
-    <>
+    <ThemeProvider>
       <TabletModal
         changeBoard={changeBoard}
         close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
@@ -99,7 +100,7 @@ function App () {
         </Portal>
       </Main>
       { state.tablet_btn_bottom && <SideBarButton event={() => dispatch(MODALS.OPEN_SIDE_MENU)} /> }
-    </>
+    </ThemeProvider>
   )
 }
 

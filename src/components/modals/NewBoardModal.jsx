@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Button from '../button'
 import SubTaskCard from '../subTaskCard'
 import { v4 as uuidv4 } from 'uuid'
@@ -9,10 +9,22 @@ export default function NewBoardModal ({ event }) {
   const [column, setColumn] = useState([])
   const newBoardForm = useRef()
 
+  useEffect(() => {
+    if (column.length === 0) {
+      const cols = []
+      cols.push({
+        name: 'col_1',
+        required: true,
+        id: uuidv4()
+      })
+      setColumn(cols)
+    }
+  }, [column])
+
   function saveColInfo () {
     const formData = getFormData(newBoardForm.current)
     const dataArr = objectToArr(formData)
-    dataArr.shift()
+    dataArr.length !== 0 && dataArr.shift()
     const cols = dataArr.map((item, index) => ({
       name: item[0],
       value: item[1],
@@ -25,7 +37,6 @@ export default function NewBoardModal ({ event }) {
     const cols = saveColInfo()
     cols.push({
       name: `col_${cols.length + 1}`,
-      value: '',
       id: uuidv4()
     })
     setColumn(cols)
@@ -59,7 +70,7 @@ export default function NewBoardModal ({ event }) {
       </div>
       <form className='grid gap-2' onSubmit={handleSubmit} ref={newBoardForm}>
         <label htmlFor='boardName' className='text-sm font-bold text-kgrayli opacity-60'>Board Name</label>
-        <input type='text' id='boardName' name='name' placeholder='e.g. Web Design' className='w-full h-10 border-solid border-kgrayli border-[1px] rounded border-opacity-25 pl-4 py-2 outline-kpurple' />
+        <input required type='text' id='boardName' name='name' placeholder='e.g. Web Design' className='w-full h-10 border-solid border-kgrayli border-[1px] rounded border-opacity-25 pl-4 py-2 outline-kpurple' />
         <div className='grid gap-2 mt-4 mb-1'>
           <p className='text-sm font-bold text-kgrayli opacity-60'>Board Columns</p>
           <div className='grid gap-2 overflow-y-auto h-28 scrollbar-thin scrollbar-thumb-kpurple pr-4'>
@@ -73,6 +84,7 @@ export default function NewBoardModal ({ event }) {
                       handleDeleteColumn={handleDeleteColumn}
                       inputName={item.name}
                       defValue={item.value}
+                      required={item.required}
                     />))
                   )
             }

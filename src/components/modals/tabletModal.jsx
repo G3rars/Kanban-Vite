@@ -1,9 +1,7 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { CardModal } from './cardModal.jsx'
-import { ThemeContext } from '../../context/ThemeContext.jsx'
 
-export default function TabletModal ({ close, modalTable, data, setBoardModal, changeBoard }) {
-  const { darkTheme } = useContext(ThemeContext)
+export default function TabletModal ({ close, modalTable, data, setBoardModal, changeBoard, changeTheme }) {
   const transition = modalTable.side_menu ? 'enter' : 'exit'
 
   return (
@@ -43,7 +41,7 @@ export default function TabletModal ({ close, modalTable, data, setBoardModal, c
 
         <div className='rounded-md mt-auto mx-auto flex justify-center items-center gap-4 bg-kcian w-64 h-12 mb-4'>
           <img width="19" height="19" src="/styles/assets/icon-light-theme.svg" alt="icon-light-theme.svg" />
-         <ThemeSwitch />
+         <ThemeSwitch changeTheme={changeTheme} />
          <img width="19" height="19" src="/styles/assets/icon-dark-theme.svg" alt="icon-dark-theme.svg" />
         </div>
 
@@ -59,11 +57,11 @@ export default function TabletModal ({ close, modalTable, data, setBoardModal, c
   )
 }
 
-function ThemeSwitch () {
+function ThemeSwitch ({ changeTheme }) {
   return (
       <label htmlFor="toggleB" className="flex items-center cursor-pointer">
         <div className="relative group">
-          <input type="checkbox" id="toggleB" className="sr-only peer" />
+          <input onClick={changeTheme} type="checkbox" id="toggleB" className="sr-only peer" />
           <div className="block bg-kpurple w-10 h-5 rounded-full group-hover:bg-opacity-80"></div>
           <div className="dot absolute left-1 top-0.5 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-full"></div>
         </div>

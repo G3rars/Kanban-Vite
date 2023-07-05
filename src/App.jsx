@@ -29,10 +29,11 @@ import {
 import { Error } from './components/modals/Error'
 import { Loading } from './components/layouts/Loading'
 import { SideBarButton } from './components/SideBarButton'
-import { ThemeProvider } from './context/ThemeContext'
+import { useTheme } from './customHooks/useTheme'
 
 function App () {
   const [state, dispatch] = useReducer(modalReducer, initialState)
+  const { changeTheme } = useTheme()
   const {
     changeBoard,
     handleViewTask,
@@ -47,13 +48,14 @@ function App () {
   const showColumnsCondition = Array.isArray(initialBoard) && initialBoard.length !== 0 && activeBoard
 
   return (
-    <ThemeProvider>
+    <>
       <TabletModal
         changeBoard={changeBoard}
         close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
         setBoardModal={() => dispatch(MODALS.OPEN_NEW_BOARD_MODAL)}
         modalTable={state}
         data={initialBoard}
+        changeTheme={changeTheme}
       />
       <HeaderComp
         handleClick={() => dispatch(MODALS.OPEN_SIDE_MENU)}
@@ -100,7 +102,7 @@ function App () {
         </Portal>
       </Main>
       { state.tablet_btn_bottom && <SideBarButton event={() => dispatch(MODALS.OPEN_SIDE_MENU)} /> }
-    </ThemeProvider>
+    </>
   )
 }
 

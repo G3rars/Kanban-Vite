@@ -49,7 +49,7 @@ function requestReducer (state, action) {
 function modalReducer (state, action) {
   switch (action) {
     case MODALS.OPEN_BOARD_SETTINGS:
-      return { ...state, settings: true }
+      return { ...state, settings: !state.settings }
     case MODALS.OPEN_BOARD_EDIT:
       return { ...state, settings: false, edit: true }
     case MODALS.OPEN_BOARD_DELETE:

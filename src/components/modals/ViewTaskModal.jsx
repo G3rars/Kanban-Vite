@@ -24,15 +24,17 @@ export default function ViewTaskModal ({ setActiveTask, dataTask, activeBoard })
           <img width={5} height={20} className='cursor-pointer' src='/styles/assets/icon-vertical-ellipsis.svg' alt='icon-vertical-ellipsis.svg' />
         </div>
       </div>
-      <div className=''>
+      <div className='min-h-[40px]'>
         <p className='text-sm font-normal text-kgrayli leading-6'>{dataTask.description}</p>
       </div>
       <form className='flex flex-col gap-2 h-full justify-between'>
+        <div className='grid gap-2'>
         <label className='text-sm font-bold text-kgrayli mb-2'>Subtasks ({COMPLETED} of {TOTAL})</label>
-        {
-          dataTask.subTask &&
-            dataTask.subTask.map((value) => <Subtask key={value._id} id={value._id} content={value} check={value.completed} />)
-        }
+          {
+            dataTask.subTask &&
+              dataTask.subTask.map((value) => <Subtask key={value._id} id={value._id} content={value} check={value.completed} />)
+          }
+        </div>
         <div className='grid gap-2'>
           <label htmlFor='status' className='text-sm font-bold text-kgrayli mt-4'>Current Status</label>
           <select name='status' className='form-select w-full h-[40px] border-solid border-kgrayli border-[1px] rounded-md border-opacity-25'>

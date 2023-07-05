@@ -3,7 +3,7 @@ function getFormData (ref) {
 }
 
 function objectToArr (obj) {
-  Object.entries(obj)
+  return Object.entries(obj)
 }
 
 export {

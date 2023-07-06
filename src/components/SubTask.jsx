@@ -1,11 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-function Subtask ({ id, content, check = false }) {
+function Subtask ({ id, content, check, handleCheckbox }) {
+  const [status, setStatus] = useState(check)
+  const handleStatus = () => {
+    setStatus(prevState => !prevState)
+    handleCheckbox(id, !status)
+  }
   return (
     <div className='w-full min-h-[60px] bg-kcianli rounded flex items-center gap-4 p-3'>
       <input
+      onChange={handleStatus}
         type='checkbox'
-        name='subtasks'
+        name={id}
         defaultChecked={check}
         id={id}
         className='form-checkbox text-kpurple h-4 w-4 peer'

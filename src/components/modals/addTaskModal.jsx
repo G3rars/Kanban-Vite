@@ -34,7 +34,7 @@ export default function AddTaskModal ({ activeBoard }) {
     e.preventDefault()
     const formData = Object.fromEntries(new FormData(e.target))
     const dataArr = Object.entries(formData)
-    const cols = dataArr.filter(([name]) => name.startsWith('col_')).map(([name, value]) => ({ name: value, complete: false }))
+    const cols = dataArr.filter(([name]) => name.startsWith('col_')).map(([_, value]) => ({ name: value, complete: false }))
     const data = {
       title: formData.title,
       description: formData.description,

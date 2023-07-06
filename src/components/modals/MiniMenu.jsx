@@ -4,11 +4,11 @@ import { ThemeSwitch } from '../SwitchTheme'
 
 function MiniMenu ({ data, setBoardModal, changeBoard, changeTheme, activeBoard }) {
   const totalBoards = Array.isArray(data) && data.length
-  console.log(data)
+  // console.log(data)
 
   return (
     <aside onClick={(e) => e.stopPropagation()} className='w-screen max-w-[265px] min-h-[325px] grid bg-kwhite rounded-md'>
-        <p className='font-bold text-md opacity-60 uppercase tracking-wide pl-7 mb-3 dark:text-kwhite'>
+        <p className='py-4 pl-7 font-bold text-md opacity-60 uppercase tracking-wide dark:text-kwhite'>
           all Board ({totalBoards})
         </p>
 

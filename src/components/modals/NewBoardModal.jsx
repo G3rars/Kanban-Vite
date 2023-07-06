@@ -56,7 +56,7 @@ export default function NewBoardModal ({ event }) {
       const postData = await postBoard({ name: formData.name })
       const id = postData._id
       const cols = saveColInfo()
-      cols.forEach(async (col) => await postColumn({ name: col.name }, id))
+      cols.forEach(async (col) => await postColumn({ name: col.value }, id))
     } catch (error) {
       console.log(error)
     }

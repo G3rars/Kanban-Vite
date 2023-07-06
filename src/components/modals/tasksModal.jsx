@@ -5,26 +5,26 @@ import Button from '../button'
 export default function TaskModal () {
   return (
     <>
-      <section className='absolute w-full h-full bg-black bg-opacity-60 flex items-center justify-center'>
-        <div className='w-[343px] h-[659px] md:w-[480px] md:h-[675px] rounded-lg bg-kwhite shadow-lg'>
-          <div className='pl-6 pr-6'>
-            <h3 className='font-bold text-lg pt-5'>Add New Task</h3>
+      <section className='absolute flex h-full w-full items-center justify-center bg-black/60'>
+        <div className='h-[659px] w-[343px] rounded-lg bg-kwhite shadow-lg md:h-[675px] md:w-[480px]'>
+          <div className='px-6'>
+            <h3 className='pt-5 text-lg font-bold'>Add New Task</h3>
             <form action=''>
-              <p className='opacity-60 font-bold text-xs pt-3 pb-1'>Title</p>
+              <p className='pb-1 pt-3 text-xs font-bold opacity-60'>Title</p>
               <input
-                className='w-full h-[40px] border-[1px] rounded-md pl-4 text-sm'
+                className='h-[40px] w-full rounded-md border-[1px] pl-4 text-sm'
                 type='text'
                 placeholder='e.g. Take coffee break'
               />
-              <p className='opacity-60 font-bold text-xs pt-4 pb-1'>Description</p>
+              <p className='pb-1 pt-4 text-xs font-bold opacity-60'>Description</p>
               <textarea
-                className='w-full h-[112px] border-[1px] rounded-md pt-4 pl-4 pr-2 text-sm'
+                className='h-[112px] w-full rounded-md border-[1px] pl-4 pr-2 pt-4 text-sm'
                 placeholder='e.g. It’s always good to take a break. This
                         15 minute break will  recharge the batteries
                         a little.'
               />
-              <p className='opacity-60 font-bold text-xs pt-4 pb-1'>SubTask</p>
-              <div className='h-[120px] mb-5 overflow-auto scrollbar-thin'>
+              <p className='pb-1 pt-4 text-xs font-bold opacity-60'>SubTask</p>
+              <div className='mb-5 h-[120px] overflow-auto scrollbar-thin'>
                 <SubTaskCard />
                 <SubTaskCard />
                 <SubTaskCard />
@@ -33,8 +33,8 @@ export default function TaskModal () {
                 <SubTaskCard />
               </div>
               <Button style='secondary' size='full'>+add new task</Button>
-              <p className='opacity-60 font-bold text-xs pt-3 pb-1'>Status</p>
-              <select name='status' className='w-full h-[40px] border-[1px] rounded-md mb-5'>
+              <p className='pb-1 pt-3 text-xs font-bold opacity-60'>Status</p>
+              <select name='status' className='mb-5 h-[40px] w-full rounded-md border-[1px]'>
                 <option value=''>Selecciona una opción</option>
                 <option value='TODO'>TODO</option>
                 <option value='DOING'>DOING</option>

@@ -63,20 +63,20 @@ export default function NewBoardModal ({ event }) {
   }
 
   return (
-    <article onClick={e => e.stopPropagation()} className='bg-kwhite w-screen max-w-[345px] md:max-w-[480px] min-h-[415px] p-6 rounded-md flex flex-col gap-6'>
+    <article onClick={e => e.stopPropagation()} className='flex min-h-[415px] w-screen max-w-[345px] flex-col gap-6 rounded-md bg-kwhite p-6 md:max-w-[480px]'>
       <div className='flex items-center justify-between'>
         <h3 className='text-lg font-bold text-kblack'>Add New Board</h3>
         <img onClick={event} className='h-4 w-4 cursor-pointer' src="/styles/assets/icon-cross.svg" alt="icon-cross.svg" />
       </div>
       <form className='grid gap-2' onSubmit={handleSubmit} ref={newBoardForm}>
         <label htmlFor='boardName' className='text-sm font-bold text-kgrayli opacity-60'>Board Name</label>
-        <input required type='text' id='boardName' name='name' placeholder='e.g. Web Design' className='w-full h-10 border-solid border-kgrayli border-[1px] rounded border-opacity-25 pl-4 py-2 outline-kpurple' />
-        <div className='grid gap-2 mt-4 mb-1'>
+        <input required type='text' id='boardName' name='name' placeholder='e.g. Web Design' className='h-10 w-full rounded border-[1px] border-solid border-kgrayli/30 py-2 pl-4 outline-kpurple' />
+        <div className='mb-1 mt-4 grid gap-2'>
           <p className='text-sm font-bold text-kgrayli opacity-60'>Board Columns</p>
-          <div className='grid gap-2 overflow-y-auto h-28 scrollbar-thin scrollbar-thumb-kpurple pr-4'>
+          <div className='grid h-28 gap-2 overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-kpurple'>
             {
               column.length === 0
-                ? (<p className='opacity-60 text-center p-8'>Empty Columns</p>)
+                ? (<p className='p-8 text-center opacity-60'>Empty Columns</p>)
                 : (column.map((item) => (
                     <SubTaskCard
                       key={uuidv4()}

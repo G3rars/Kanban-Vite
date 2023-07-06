@@ -3,10 +3,10 @@ import MiniMenu from '../modals/MiniMenu'
 
 function Main ({ children, onMiniMenu, openMiniMenu, close }) {
   return (
-    <main className={`bg-kcianli min-w-full h-full px-5 py-6 flex items-start flex-auto gap-6 relative ${MiniMenu ? 'overflow-x-hidden' : 'overflow-x-scroll'}}`}>
+    <main className={`relative flex h-full min-w-full flex-auto items-start gap-6 bg-kcianli px-5 py-6 ${MiniMenu ? 'overflow-x-hidden' : 'overflow-x-scroll'}`}>
       {children }
       {openMiniMenu &&
-        <div onClick={close} className='top-0 right-0 absolute w-full h-full z-40 grid place-content-center bg-black bg-opacity-50'>
+        <div onClick={close} className='absolute right-0 top-0 z-40 grid h-full w-full place-content-center bg-black/50'>
           {onMiniMenu()}
         </div>
       }

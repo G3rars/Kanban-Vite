@@ -1,11 +1,13 @@
 module.exports = {
+  root: true,
   env: {
     browser: true,
     es2021: true
   },
   extends: [
     'standard',
-    'plugin:react/recommended'
+    'plugin:react/recommended',
+    'plugin:tailwindcss/recommended'
   ],
   overrides: [
     {
@@ -18,6 +20,10 @@ module.exports = {
       parserOptions: {
         sourceType: 'script'
       }
+    },
+    {
+      files: ['*.ts', '*.tsx', '*.js'],
+      parser: '@typescript-eslint/parser'
     }
   ],
   parserOptions: {

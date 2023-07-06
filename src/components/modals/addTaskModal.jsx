@@ -44,29 +44,29 @@ export default function AddTaskModal ({ activeBoard }) {
   }
   return (
     <>
-      <section onClick={e => e.stopPropagation()} className='w-screen max-w-[350px] min-h-fit rounded-lg bg-kwhite p-6 md:max-w-[480px]'>
-        <h3 className='font-bold text-lg'>Add New Task</h3>
+      <section onClick={e => e.stopPropagation()} className='min-h-fit w-screen max-w-[350px] rounded-lg bg-kwhite p-6 md:max-w-[480px]'>
+        <h3 className='text-lg font-bold'>Add New Task</h3>
         <form onSubmit={handleSubmit} ref={newTaskForm} className='grid w-full'>
-          <label htmlFor='title' className='opacity-60 font-bold text-xs pt-3 pb-1'>Title</label>
+          <label htmlFor='title' className='pb-1 pt-3 text-xs font-bold opacity-60'>Title</label>
           <input
-            className='w-full h-[40px] border-[1px] rounded-md text-md font-medium leading-6 pl-4 border-solid border-kgrayli border-opacity-30'
+            className='h-[40px] w-full rounded-md border-[1px] border-solid border-kgrayli/30 pl-4 text-md font-medium leading-6'
             type='text'
             name='title'
             placeholder='e.g. Take coffee break'
           />
-          <label htmlFor='description' className='opacity-60 font-bold text-xs pt-5 pb-1'>Description</label>
+          <label htmlFor='description' className='pb-1 pt-5 text-xs font-bold opacity-60'>Description</label>
           <textarea
           name='description'
-            className='w-full h-[112px] border-[1px] rounded-md border-solid border-kgrayli border-opacity-30 text-sm font-medium'
+            className='h-[112px] w-full rounded-md border-[1px] border-solid border-kgrayli/30 text-sm font-medium'
             placeholder='e.g. It’s always good to take a break. This
                     15 minute break will  recharge the batteries
                     a little.'
           />
-          <label htmlFor='subtask' className='opacity-60 font-bold text-xs pt-5 pb-1'>SubTask</label>
-          <div className='text-md h-[120px] font-medium overflow-y-auto scrollbar-thin scrollbar-thumb-kpurple'>
+          <label htmlFor='subtask' className='pb-1 pt-5 text-xs font-bold opacity-60'>SubTask</label>
+          <div className='h-[120px] overflow-y-auto text-md font-medium scrollbar-thin scrollbar-thumb-kpurple'>
           {
               column.length === 0
-                ? (<p className='opacity-60 text-center p-8'>Empty Columns</p>)
+                ? (<p className='p-8 text-center opacity-60'>Empty Columns</p>)
                 : (column.map((item) => (
                     <SubTaskCard
                       key={uuidv4()}
@@ -86,8 +86,8 @@ export default function AddTaskModal ({ activeBoard }) {
           >
             +add new task
           </Button>
-          <label htmlFor='status' className='opacity-60 font-bold text-xs pt-3 pb-1'>Status</label>
-          <select name='id' className='w-full h-[40px] border-[1px] rounded-md border-solid border-kgrayli border-opacity-30 text-sm font-medium'>
+          <label htmlFor='status' className='pb-1 pt-3 text-xs font-bold opacity-60'>Status</label>
+          <select name='id' className='h-[40px] w-full rounded-md border-[1px] border-solid border-kgrayli/30 text-sm font-medium'>
             {
               activeBoard && activeBoard.board_columns.map(value => (<option key={value._id} value={value._id}>{value.name}</option>))
             }

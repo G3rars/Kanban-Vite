@@ -6,7 +6,8 @@ const initialModalsState = {
   side_menu: false,
   task_details: false,
   new_task: false,
-  tablet_btn_bottom: true
+  tablet_btn_bottom: true,
+  mini_menu: false
 }
 
 const initialRequestState = {
@@ -22,6 +23,7 @@ const MODALS = {
   OPEN_SIDE_MENU: 'openSideMenu',
   OPEN_TASK_DETAILS: 'openTaskDetails',
   OPEN_NEW_TASK: 'openMewTask',
+  OPEN_MINI_MENU: 'openMiniMenu',
   CLOSE_SIDE_MENU: 'closeSideMenu',
   CLOSE_NEW_BOARD_MODAL: 'closeNewBoardModal',
   CLOSE_ALL_MODALS: 'closeAll'
@@ -50,6 +52,8 @@ function modalReducer (state, action) {
   switch (action) {
     case MODALS.OPEN_BOARD_SETTINGS:
       return { ...state, settings: !state.settings }
+    case MODALS.OPEN_MINI_MENU:
+      return { ...state, mini_menu: !state.mini_menu }
     case MODALS.OPEN_BOARD_EDIT:
       return { ...state, settings: false, edit: true }
     case MODALS.OPEN_BOARD_DELETE:

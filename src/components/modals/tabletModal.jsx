@@ -1,5 +1,6 @@
 import React from 'react'
 import { CardModal } from './cardModal.jsx'
+import { ThemeSwitch } from '../SwitchTheme.jsx'
 
 export default function TabletModal ({ close, modalTable, data, setBoardModal, changeBoard, changeTheme, activeBoard }) {
   const totalBoards = Array.isArray(data) && data.length
@@ -16,15 +17,14 @@ export default function TabletModal ({ close, modalTable, data, setBoardModal, c
 
         <div className='overflow-y-auto'>
           {
-            Array.isArray(data) && data.map((item) => ( // TODO: quitar el index y verificar que tablero esta abierto
+            Array.isArray(data) && data.map((item) => (
               <CardModal
                 event={changeBoard}
                 keyData={item.board_id}
                 key={item.board_id}
                 type={item.board_id === activeBoard.board_id ? 'active' : 'inactive'}
-              >
-                {item.board_name}
-              </CardModal>
+                content={item.board_name}
+              />
             ))
           }
         </div>
@@ -33,9 +33,8 @@ export default function TabletModal ({ close, modalTable, data, setBoardModal, c
             event={setBoardModal}
             key='initialCardModal'
             type='special'
-          >
-            + Create new board
-          </CardModal>
+            content='+ Create new board'
+          />
 
           {/*
            // ! Swich Theme
@@ -58,17 +57,5 @@ export default function TabletModal ({ close, modalTable, data, setBoardModal, c
       </aside>
       <div onClick={close} className={`bg-kblack w-full ${modalTable.side_menu ? 'opacity-30' : 'hidden'} h-full absolute z-10`} />
     </>
-  )
-}
-
-function ThemeSwitch ({ changeTheme }) {
-  return (
-      <label htmlFor="toggleB" className="flex items-center cursor-pointer">
-        <div className="relative group">
-          <input onClick={changeTheme} type="checkbox" id="toggleB" className="sr-only peer" />
-          <div className="block bg-kpurple w-10 h-5 rounded-full group-hover:bg-opacity-80"></div>
-          <div className="dot absolute left-1 top-0.5 bg-white w-4 h-4 rounded-full transition duration-300 peer-checked:translate-x-full"></div>
-        </div>
-      </label>
   )
 }

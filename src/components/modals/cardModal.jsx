@@ -1,6 +1,6 @@
 import React from 'react'
 
-function CardModal ({ children, event, keyData, type }) {
+function CardModal ({ children, event, keyData, type, content }) {
   function handleCLick () {
     event(keyData)
   }
@@ -27,7 +27,7 @@ function CardModal ({ children, event, keyData, type }) {
           </svg>
         </div>
         <p className='font-bold text-md capitalize'>
-          {children}
+          {content}
         </p>
     </button>
   )

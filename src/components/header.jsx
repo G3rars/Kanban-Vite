@@ -4,7 +4,7 @@ import { BoardConfig } from './modals/BoardConfig'
 
 export default function HeaderComp ({ handleClick, boardSettings, openBoardSettings, openDeleteBoard, openEditBoard, data, addTask }) {
   return (
-    <nav className='w-full h-[64px] flex flex-row shadow-md lg:h-[96px] md:h-[80px] justify-between pr-7 relative dark:bg-kblackli2'>
+    <nav className='w-full h-[64px] flex flex-row shadow-md lg:h-[96px] md:h-[80px] justify-between pr-7 relative dark:bg-kdarkGray'>
       <div className=' mx-4 pr-4 flex items-center justify-center md:border-r border-solid border-opacity-10 border-kpurple'>
         <img className='md:hidden' width={34} height={35} src='/styles/assets/logo-mobile.svg' alt='logo-mobile.svg' />
         <img onClick={handleClick} className='hidden md:block cursor-pointer' src='/styles/assets/logo-dark.svg' width={153} height={26} alt='logo-dark.svg' />

@@ -55,6 +55,7 @@ function App () {
         setBoardModal={() => dispatch(MODALS.OPEN_NEW_BOARD_MODAL)}
         modalTable={state}
         data={initialBoard}
+        activeBoard={activeBoard}
         changeTheme={changeTheme}
       />
       <HeaderComp

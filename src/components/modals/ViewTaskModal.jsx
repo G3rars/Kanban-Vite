@@ -41,7 +41,7 @@ export default function ViewTaskModal ({ dataTask, activeBoard }) {
     }
   }
 
-  const test = async () => {
+  const handleSubmit = async () => {
     const deleteId = task.map(value => ({ name: value.name, completed: value.completed }))
     const sendData = {
       subTask: deleteId
@@ -68,8 +68,8 @@ export default function ViewTaskModal ({ dataTask, activeBoard }) {
         <p className='text-sm font-normal leading-6 text-kgrayli'>{dataTask.description}</p>
       </div>
 
-      <form ref={formRef} className='flex flex-col gap-2 h-full justify-between'>
-        <label className='text-sm font-bold text-kgrayli mb-2'>Subtasks ({COMPLETED} of {TOTAL})</label>
+      <form ref={formRef} className='flex h-full flex-col justify-between gap-2'>
+        <label className='mb-2 text-sm font-bold text-kgrayli'>Subtasks ({COMPLETED} of {TOTAL})</label>
         {
           dataTask.subTask &&
             dataTask.subTask.map((value) => <Subtask handleCheckbox={handleCheckbox} key={value._id} id={value._id} content={value} check={value.completed} />)
@@ -91,7 +91,7 @@ export default function ViewTaskModal ({ dataTask, activeBoard }) {
             }
           </select>
         </div>
-        <button onClick={(e) => { e.preventDefault(); test() } } className='bg-red-500'>prueba</button>
+        <button onClick={(e) => { e.preventDefault(); handleSubmit() } } className='bg-red-500'>prueba</button>
       </form>
       {
         modal && (

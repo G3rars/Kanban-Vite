@@ -3,6 +3,7 @@ export default {
     './index.html',
     './src/**/*.{js,ts,jsx,tsx}'
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -10,7 +11,7 @@ export default {
         kpurpleli: '#A8A4FF',
         kblack: '#000112',
         kblackli: '#20212C',
-        kblackli2: '#2B2C37',
+        kdarkGray: '#2B2C37',
         kgray: '#3E3F4E',
         kgrayli: '#828FA3',
         kcian: '#E4EBFA',
@@ -36,6 +37,7 @@ export default {
     }
   },
   plugins: [
-    require('@tailwindcss/forms')
+    require('@tailwindcss/forms'),
+    require('tailwind-scrollbar')
   ]
 }

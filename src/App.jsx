@@ -28,9 +28,13 @@ import {
 } from './helpers/contants'
 import { Error } from './components/modals/Error'
 import { Loading } from './components/layouts/Loading'
+import { SideBarButton } from './components/SideBarButton'
+import { useTheme } from './customHooks/useTheme'
+import MiniMenu from './components/modals/MiniMenu'
 
 function App () {
   const [state, dispatch] = useReducer(modalReducer, initialState)
+  const { changeTheme } = useTheme()
   const {
     changeBoard,
     handleViewTask,
@@ -47,22 +51,37 @@ function App () {
   return (
     <>
       <TabletModal
-        changeBoard={changeBoard}
-        handleClick={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
-        setBoardModal={() => dispatch(MODALS.OPEN_NEW_BOARD_MODAL)}
-        modalTable={state}
         data={initialBoard}
+        setBoardModal={() => dispatch(MODALS.OPEN_NEW_BOARD_MODAL)}
+        changeBoard={changeBoard}
+        changeTheme={changeTheme}
+        activeBoard={activeBoard}
+        close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
+        modalTable={state}
       />
       <HeaderComp
-        handleClick={() => dispatch(MODALS.OPEN_SIDE_MENU)}
+        openSideMenu={() => dispatch(MODALS.OPEN_SIDE_MENU)}
         openBoardSettings={() => dispatch(MODALS.OPEN_BOARD_SETTINGS)}
         openDeleteBoard={() => dispatch(MODALS.OPEN_BOARD_DELETE)}
         openEditBoard={() => dispatch(MODALS.OPEN_BOARD_EDIT)}
         addTask={() => dispatch(MODALS.OPEN_NEW_TASK)}
-        boardSettings={state}
+        openMiniMenu={() => dispatch(MODALS.OPEN_MINI_MENU)}
+        states={state}
         data={activeBoard}
       />
-      <Main>
+      <Main
+        openMiniMenu={state.mini_menu}
+        close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
+        onMiniMenu={
+          () => <MiniMenu
+            data={initialBoard}
+            setBoardModal={() => dispatch(MODALS.OPEN_NEW_BOARD_MODAL)}
+            changeBoard={changeBoard}
+            changeTheme={changeTheme}
+            activeBoard={activeBoard}
+          />
+        }
+      >
         {
           showColumnsCondition && activeBoard.board_columns.length > 0
             ? activeBoard.board_columns.map(value => (
@@ -97,6 +116,7 @@ function App () {
           { reqStatus.loading && <Loading /> }
         </Portal>
       </Main>
+      { state.tablet_btn_bottom && <SideBarButton event={() => dispatch(MODALS.OPEN_SIDE_MENU)} /> }
     </>
   )
 }

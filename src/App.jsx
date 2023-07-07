@@ -102,7 +102,7 @@ function App () {
               />
             )
           }
-          { state.edit && <EditBoardModal /> }
+          { state.edit && <EditBoardModal activeBoard={activeBoard} /> }
           { state.new_task && <AddTaskModal activeBoard={activeBoard} /> }
           { state.task_details &&
               <ViewTaskModal

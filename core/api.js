@@ -17,9 +17,26 @@ const postBoard = async (postData) => {
     .catch(error => { console.error(error.response.data) })
 }
 
+const putBoard = async (idBoard, postData) => {
+  return axios.put(`${DB}/board/${idBoard}`, postData)
+    .then(response => {})
+    .catch(error => { console.error(error.response.data) })
+}
+
 const postColumn = async (postData, id) => {
   return axios.post(`${DB}/column/${id}`, postData)
     .then(response => { })
+    .catch(error => { console.error(error.response.data) })
+}
+const putColumn = async (idColumn, postData) => {
+  return axios.put(`${DB}/column/${idColumn}`, postData)
+    .then(response => {})
+    .catch(error => { console.error(error.response.data) })
+}
+
+const deleteColumn = async (id) => {
+  return axios.delete(`${DB}/column/${id}`)
+    .then(() => { console.log('Se ha borrado la columna con id: ', id) })
     .catch(error => { console.error(error.response.data) })
 }
 
@@ -51,13 +68,6 @@ const deleteBoard = async (id) => {
     .then(response => { console.log(response) })
     .catch(error => { console.error(error.response.data) })
 }
-
-const deleteColumn = async (id) => {
-  return axios.delete(`${DB}/column/${id}`)
-    .then(() => { console.log('Se ha borrado la columna con id: ', id) })
-    .catch(error => { console.error(error.response.data) })
-}
-
 export {
   getBoards,
   postBoard,
@@ -67,5 +77,7 @@ export {
   postCard,
   putCard,
   deleteCard,
-  getCard
+  getCard,
+  putBoard,
+  putColumn
 }

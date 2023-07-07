@@ -1,13 +1,53 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Subtask } from '../SubTask'
 import { BoardConfig } from './BoardConfig'
+import { deleteCard, getCard, postCard, putCard } from '../../../core/api'
+// import { patchTask } from '../../../core/api'
 
-// TODO: setActiveTask no es usado en ningun lado
-export default function ViewTaskModal ({ setActiveTask, dataTask, activeBoard }) {
+export default function ViewTaskModal ({ dataTask, activeBoard }) {
   const [modal, setModal] = useState(false)
-
+  const [task, setTask] = useState(dataTask.subTask)
+  const formRef = useRef()
   function taskOptions () {
     setModal(prevState => !prevState)
+  }
+
+  const handleCheckbox = (id, status) => {
+    const taskCpy = task
+    const changeTask = taskCpy.map((value) => {
+      if (value._id === id) {
+        return {
+          ...value,
+          completed: status
+        }
+      }
+      return value
+    })
+    setTask(changeTask)
+  }
+
+  const changeColumn = async () => {
+    let updateData = await getCard()
+    updateData = updateData.find(value => value._id === dataTask._id)
+    const formData = Object.fromEntries(new FormData(formRef.current))
+    if (formData.status !== updateData.column) {
+      const data = {
+        title: updateData.title,
+        description: updateData.description,
+        subTask: updateData.subTask
+      }
+      postCard(data, formData.status)
+      deleteCard(updateData._id)
+    }
+  }
+
+  const test = async () => {
+    const deleteId = task.map(value => ({ name: value.name, completed: value.completed }))
+    const sendData = {
+      subTask: deleteId
+    }
+    await putCard(dataTask._id, sendData)
+    await changeColumn()
   }
 
   const TOTAL = dataTask.subTask.length
@@ -27,7 +67,13 @@ export default function ViewTaskModal ({ setActiveTask, dataTask, activeBoard })
       <div className='min-h-[40px]'>
         <p className='text-sm font-normal leading-6 text-kgrayli'>{dataTask.description}</p>
       </div>
-      <form className='flex h-full flex-col justify-between gap-2'>
+
+      <form ref={formRef} className='flex flex-col gap-2 h-full justify-between'>
+        <label className='text-sm font-bold text-kgrayli mb-2'>Subtasks ({COMPLETED} of {TOTAL})</label>
+        {
+          dataTask.subTask &&
+            dataTask.subTask.map((value) => <Subtask handleCheckbox={handleCheckbox} key={value._id} id={value._id} content={value} check={value.completed} />)
+        }
         <div className='grid gap-2'>
         <label className='mb-2 text-sm font-bold text-kgrayli'>Subtasks ({COMPLETED} of {TOTAL})</label>
           {
@@ -40,11 +86,12 @@ export default function ViewTaskModal ({ setActiveTask, dataTask, activeBoard })
           <select name='status' className='form-select h-[40px] w-full rounded-md border-[1px] border-solid border-kgrayli/30'>
             {
               activeBoard &&
-                activeBoard.board_columns.map(value => (<option key={value._id}>{value.name}</option>))
+                activeBoard.board_columns.map(value => (<option value={value._id} key={value._id}>{value.name}</option>))
                 // TODO: colocar como primera opcion del select la columna a la cual pertenece la tarea
             }
           </select>
         </div>
+        <button onClick={(e) => { e.preventDefault(); test() } } className='bg-red-500'>prueba</button>
       </form>
       {
         modal && (

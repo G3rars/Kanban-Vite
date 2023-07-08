@@ -41,9 +41,10 @@ function useAxios (action) {
     action(MODALS.OPEN_TASK_DETAILS)
   }
 
-  async function removeBoard () {
-    await deleteBoard(initialBoard.at(-1).board_id) // PREGUNTAR SI EXISTE ALGUN TABLERO PARA BORRAR
-    setInitialBoard(null)
+  async function removeBoard (activeBoard) {
+    console.log(activeBoard)
+    await deleteBoard(activeBoard.board_id)
+    location.reload()
     action(MODALS.CLOSE_ALL_MODALS)
   }
 

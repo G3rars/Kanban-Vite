@@ -84,7 +84,7 @@ export default function NewBoardModal ({ event }) {
                       handleDeleteColumn={handleDeleteColumn}
                       inputName={item.name}
                       defValue={item.value}
-                      required={item.required}
+                      // required={item.required}
                     />))
                   )
             }

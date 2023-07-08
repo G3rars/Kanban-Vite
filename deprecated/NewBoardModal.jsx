@@ -40,18 +40,15 @@ export default function NewBoardModal ({ event }) {
     try {
       const postData = await postBoard(formData)
       const id = postData._id
-      console.log(`se ha creado el board aqui tienes la id ${postData._id}`)
       subTaskValues.map((value) => {
         const newColumn = {
           name: value
         }
-        console.log(`la columna ${value} ha sido creada`)
         return postColumn(newColumn, id)
       })
       alert('Se ha creado el tablero')
       location.reload()
     } catch (error) {
-      console.log(error)
     }
   }
 

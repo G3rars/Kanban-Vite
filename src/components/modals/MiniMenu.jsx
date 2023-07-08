@@ -4,7 +4,6 @@ import { ThemeSwitch } from '../SwitchTheme'
 
 function MiniMenu ({ data, setBoardModal, changeBoard, changeTheme, activeBoard }) {
   const totalBoards = Array.isArray(data) && data.length
-  // console.log(data)
 
   return (
     <aside onClick={(e) => e.stopPropagation()} className='grid min-h-[325px] w-screen max-w-[265px] rounded-md bg-kwhite'>

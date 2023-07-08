@@ -19,10 +19,9 @@ function EditBoardModal ({ activeBoard }) {
     setColumn(cols)
   }
   const handleDeleteColumn = (colID) => {
-    const cols = [...column]
-    const newCols = cols.filter(value => value._id !== colID)
+    const newCols = column.filter(value => value._id !== colID)
     setColumn(newCols)
-    const findDelete = cols.find(value => value._id === colID && !value._id.startsWith('col_'))
+    const findDelete = column.find(value => value._id === colID && !value._id.startsWith('col_'))
     setDeleteCol([...deleteCol, findDelete])
   }
   const handleSubmit = async (e) => {

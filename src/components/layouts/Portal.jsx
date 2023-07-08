@@ -5,7 +5,7 @@ function Portal ({ children, close, state }) {
   return (
     <>
       {renderCondition && createPortal(
-        <section onClick={close} className={`absolute z-40 h-full w-full ${state.loading ? 'flex items-end justify-end p-10' : 'grid place-content-center bg-black/50'}`}>
+        <section onClick={() => close()} className={`absolute z-40 h-full w-full ${state.loading ? 'flex items-end justify-end p-10' : 'grid place-content-center bg-black/50'}`}>
           {children}
         </section>,
         document.body

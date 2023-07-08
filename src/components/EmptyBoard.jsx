@@ -2,7 +2,6 @@ import React from 'react'
 import Button from './button'
 
 export default function EmptyBoard ({ activeBoard, event }) {
-  console.log(activeBoard)
   return (
     <div className='mx-auto flex h-full flex-col place-content-center items-center justify-center gap-6'>
     {!activeBoard ?? true ? <img className= 'w-1/2 md:w-full' src="styles/assets/logo-dark.svg" alt="logo-dark.svg" /> : ''}

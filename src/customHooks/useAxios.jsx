@@ -7,6 +7,7 @@ function useAxios (action) {
   const [initialBoard, setInitialBoard] = useState(null)
   const [activeBoard, setActiveBoard] = useState(null)
   const [dataTask, setDataTask] = useState(null)
+  const [isEdit, setIsEdit] = useState(false)
 
   const fetchData = async () => {
     try {
@@ -35,14 +36,18 @@ function useAxios (action) {
     action(MODALS.CLOSE_SIDE_MENU)
   }
 
+  const handleEditTask = () => {
+    setIsEdit(value => !value)
+    action(MODALS.CLOSE_ALL_MODALS)
+    action(MODALS.OPEN_NEW_TASK)
+  }
+
   const handleViewTask = (keyData) => {
     const subArray = initialBoard.flatMap((value) => value.board_columns.flatMap((column) => column.cards.filter((card) => card._id === keyData)))
     setDataTask(...subArray)
     action(MODALS.OPEN_TASK_DETAILS)
   }
-
   async function removeBoard (activeBoard) {
-    console.log(activeBoard)
     await deleteBoard(activeBoard.board_id)
     location.reload()
     action(MODALS.CLOSE_ALL_MODALS)
@@ -57,6 +62,7 @@ function useAxios (action) {
     initialBoard,
     activeBoard,
     dataTask,
+    isEdit,
     reqStatus: state
   }
 
@@ -64,7 +70,8 @@ function useAxios (action) {
     changeBoard,
     handleViewTask,
     removeBoard,
-    reloadPage
+    reloadPage,
+    handleEditTask
   }
 
   return { ...states, ...functions }

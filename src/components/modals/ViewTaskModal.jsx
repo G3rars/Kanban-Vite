@@ -2,9 +2,8 @@ import React, { useRef, useState } from 'react'
 import { Subtask } from '../SubTask'
 import { BoardConfig } from './BoardConfig'
 import { deleteCard, getCard, postCard, putCard } from '../../../core/api'
-// import { patchTask } from '../../../core/api'
 
-export default function ViewTaskModal ({ dataTask, activeBoard }) {
+export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask }) {
   const [modal, setModal] = useState(false)
   const [task, setTask] = useState(dataTask.subTask)
   const formRef = useRef()
@@ -36,15 +35,15 @@ export default function ViewTaskModal ({ dataTask, activeBoard }) {
         description: updateData.description,
         subTask: updateData.subTask
       }
+      await deleteCard(updateData._id)
       postCard(data, formData.status)
-      deleteCard(updateData._id)
     }
   }
 
   const handleSubmit = async () => {
-    const deleteId = task.map(value => ({ name: value.name, completed: value.completed }))
+    const subTasks = task.map(value => ({ name: value.name, completed: value.completed }))
     const sendData = {
-      subTask: deleteId
+      subTask: subTasks
     }
     await putCard(dataTask._id, sendData)
     await changeColumn()
@@ -69,25 +68,23 @@ export default function ViewTaskModal ({ dataTask, activeBoard }) {
       </div>
 
       <form ref={formRef} className='flex h-full flex-col justify-between gap-2'>
+        <div className='grid gap-2'>
         <label className='mb-2 text-sm font-bold text-kgrayli'>Subtasks ({COMPLETED} of {TOTAL})</label>
         {
           dataTask.subTask &&
             dataTask.subTask.map((value) => <Subtask handleCheckbox={handleCheckbox} key={value._id} id={value._id} content={value} check={value.completed} />)
         }
-        <div className='grid gap-2'>
-        <label className='mb-2 text-sm font-bold text-kgrayli'>Subtasks ({COMPLETED} of {TOTAL})</label>
-          {
-            dataTask.subTask &&
-              dataTask.subTask.map((value) => <Subtask key={value._id} id={value._id} content={value} check={value.completed} />)
-          }
         </div>
         <div className='grid gap-2'>
           <label htmlFor='status' className='mt-4 text-sm font-bold text-kgrayli'>Current Status</label>
           <select name='status' className='form-select h-[40px] w-full rounded-md border-[1px] border-solid border-kgrayli/30'>
-            {
-              activeBoard &&
-                activeBoard.board_columns.map(value => (<option value={value._id} key={value._id}>{value.name}</option>))
-                // TODO: colocar como primera opcion del select la columna a la cual pertenece la tarea
+            {activeBoard &&
+                activeBoard.board_columns.map((value) =>
+                  value._id === dataTask.column ? (<option key={value._id} value={value._id}>{value.name}</option>) : null)
+            }
+            {activeBoard &&
+                activeBoard.board_columns.map((value) =>
+                  value._id !== dataTask.column ? (<option key={value._id} value={value._id}>{value.name}</option>) : null)
             }
           </select>
         </div>
@@ -96,7 +93,7 @@ export default function ViewTaskModal ({ dataTask, activeBoard }) {
       {
         modal && (
           <div className='absolute -right-8 top-16 z-30 h-24 w-40 rounded-md bg-kwhite shadow-lg md:top-16 md:w-48 lg:top-20'>
-            <BoardConfig />
+            <BoardConfig openEditBoard={handleEditTask}/>
           </div>
         )
       }

@@ -40,14 +40,14 @@ function App () {
     handleViewTask,
     removeBoard,
     reloadPage,
+    handleEditTask,
     initialBoard,
     activeBoard,
     dataTask,
-    reqStatus
+    reqStatus,
+    isEdit
   } = useAxios(dispatch)
-
   const showColumnsCondition = Array.isArray(initialBoard) && initialBoard.length !== 0 && activeBoard
-  console.log(activeBoard)
   return (
     <>
       <TabletModal
@@ -98,17 +98,20 @@ function App () {
             state.delete && (
               <DeleteModal
                 deleteBoard={() => removeBoard(activeBoard)}
-                close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
+                close={() => { dispatch(MODALS.CLOSE_ALL_MODALS) }}
               />
             )
           }
           { state.edit && <EditBoardModal activeBoard={activeBoard} /> }
-          { state.new_task && <AddTaskModal activeBoard={activeBoard} /> }
+          { state.new_task && <AddTaskModal isEdit={isEdit} dataTask={dataTask} activeBoard={activeBoard} /> }
           { state.task_details &&
               <ViewTaskModal
-                setActiveTask={() => dispatch(MODALS.OPEN_TASK_DETAILS)}
+                setActiveTask={() => { dispatch(MODALS.OPEN_TASK_DETAILS) } }
                 activeBoard={activeBoard}
                 dataTask={dataTask}
+                editTask={() => dispatch(MODALS.OPEN_NEW_TASK)}
+                handleEditTask={handleEditTask}
+                close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
               />
           }
           { state.new_board && <NewBoardModal event={() => dispatch(MODALS.CLOSE_ALL_MODALS)} /> }

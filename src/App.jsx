@@ -47,7 +47,7 @@ function App () {
   } = useAxios(dispatch)
 
   const showColumnsCondition = Array.isArray(initialBoard) && initialBoard.length !== 0 && activeBoard
-
+  console.log(activeBoard)
   return (
     <>
       <TabletModal
@@ -59,7 +59,7 @@ function App () {
         close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
         modalTable={state}
       />
-      <HeaderComp
+      {activeBoard && <HeaderComp
         openSideMenu={() => dispatch(MODALS.OPEN_SIDE_MENU)}
         openBoardSettings={() => dispatch(MODALS.OPEN_BOARD_SETTINGS)}
         openDeleteBoard={() => dispatch(MODALS.OPEN_BOARD_DELETE)}
@@ -68,7 +68,7 @@ function App () {
         openMiniMenu={() => dispatch(MODALS.OPEN_MINI_MENU)}
         states={state}
         data={activeBoard}
-      />
+      />}
       <Main
         openMiniMenu={state.mini_menu}
         close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
@@ -91,13 +91,13 @@ function App () {
                 ))}
               </CardColumn>
             ))
-            : !state.loading && <EmptyBoard />
+            : !state.loading && <EmptyBoard event={!activeBoard ?? true ? () => dispatch(MODALS.OPEN_NEW_BOARD_MODAL) : () => dispatch(MODALS.OPEN_BOARD_EDIT)} activeBoard={activeBoard} />
         }
         <Portal state={{ ...state, ...reqStatus }} close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}>
           {
             state.delete && (
               <DeleteModal
-                deleteBoard={removeBoard}
+                deleteBoard={() => removeBoard(activeBoard)}
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
               />
             )

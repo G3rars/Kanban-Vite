@@ -30,14 +30,15 @@ function EditBoardModal ({ activeBoard }) {
     const formData = Object.fromEntries(new FormData(formRef.current))
     const dataArr = Object.entries(formData)
     dataArr.shift()
+    deleteCol.map(value => deleteColumn(value._id))
     await putBoard(activeBoard.board_id, { name: formData.boardName })
-    dataArr.map(([id, value]) => {
+    dataArr.map(async ([id, value]) => {
       if (id.startsWith('col_')) {
-        postColumn({ name: value }, activeBoard.board_id)
+        await postColumn({ name: value }, activeBoard.board_id)
       } else {
-        putColumn(id, { name: value })
+        await putColumn(id, { name: value })
       }
-      return deleteCol.map(value => deleteColumn(value._id))
+      return 0
     })
   }
 

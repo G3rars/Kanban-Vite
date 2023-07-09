@@ -73,7 +73,7 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit }) {
   return (
     <>
       <section onClick={e => e.stopPropagation()} className='min-h-fit w-screen max-w-[350px] rounded-lg bg-kwhite p-6 md:max-w-[480px]'>
-        <h3 className='text-lg font-bold'>{dataTask ? 'Edit Task' : 'Add New Task'}</h3>
+        <h3 className='text-lg font-bold'>{!isEdit ? 'Add New Task' : 'Edit Task'}</h3>
         <form onSubmit={(e) => isEdit ? submitEditTask(e) : submitNewTask(e)} ref={newTaskForm} className='grid w-full'>
           <label htmlFor='title' className='pb-1 pt-3 text-xs font-bold opacity-60'>Title</label>
           <input
@@ -95,7 +95,7 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit }) {
           <label htmlFor='subtask' className='pb-1 pt-5 text-xs font-bold opacity-60'>SubTask</label>
           <div className='h-[120px] overflow-y-auto text-md font-medium scrollbar-thin scrollbar-thumb-kpurple'>
           {
-            !isEdit && column.length === 0 ? <p className='opacity-60 pt-7 text-center'>Add new columns</p> : (isEdit && dataTask && dataTask.subTask.length === 0 ? <p className='opacity-60 pt-7 text-center'>Add new columns</p> : '')
+            !isEdit && column.length === 0 ? <p className='pt-7 text-center opacity-60 '>Add new columns</p> : (isEdit && dataTask && dataTask.subTask.length === 0 ? <p className='opacity-60 pt-7 text-center'>Add new columns</p> : '')
           }
           {isEdit
             ? apiSubtask.map(item => <SubTaskCard key={item._id} colID={item._id} handleDeleteColumn={handleDeleteColumn}

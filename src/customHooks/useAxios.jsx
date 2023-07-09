@@ -38,8 +38,10 @@ function useAxios (action) {
 
   const handleEditTask = () => {
     setIsEdit(value => !value)
-    action(MODALS.CLOSE_ALL_MODALS)
-    action(MODALS.OPEN_NEW_TASK)
+    if (!isEdit) {
+      action(MODALS.CLOSE_ALL_MODALS)
+      action(MODALS.OPEN_NEW_TASK)
+    }
   }
 
   const handleDeleteTask = (data) => {

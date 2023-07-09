@@ -95,7 +95,7 @@ function App () {
             ))
             : !state.loading && <EmptyBoard event={!activeBoard ?? true ? () => dispatch(MODALS.OPEN_NEW_BOARD_MODAL) : () => dispatch(MODALS.OPEN_BOARD_EDIT)} activeBoard={activeBoard} />
         }
-        <Portal state={{ ...state, ...reqStatus }} close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}>
+        <Portal state={{ ...state, ...reqStatus }} isEdit={isEdit} handleEditTask={handleEditTask} close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}>
           {
             state.delete && (
               <DeleteModal
@@ -119,6 +119,7 @@ function App () {
                 openDeleteTask={() => dispatch(MODALS.OPEN_BOARD_DELETE)}
                 handleEditTask={handleEditTask}
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
+                reload={reloadPage}
               />
           }
           { state.new_board && <NewBoardModal event={() => dispatch(MODALS.CLOSE_ALL_MODALS)} /> }

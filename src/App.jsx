@@ -34,7 +34,7 @@ import {
 
 function App () {
   const [state, dispatch] = useReducer(modalReducer, initialState)
-  const { changeTheme } = useTheme()
+  const { changeTheme, darkTheme } = useTheme()
   const {
     changeBoard,
     handleViewTask,
@@ -59,6 +59,7 @@ function App () {
         activeBoard={activeBoard}
         close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
         modalTable={state}
+        darkTheme={darkTheme}
       />
       {activeBoard && <HeaderComp
         openSideMenu={() => dispatch(MODALS.OPEN_SIDE_MENU)}
@@ -76,6 +77,7 @@ function App () {
         onMiniMenu={
           () => <MiniMenu
             data={initialBoard}
+            darkTheme={darkTheme}
             setBoardModal={() => dispatch(MODALS.OPEN_NEW_BOARD_MODAL)}
             changeBoard={changeBoard}
             changeTheme={changeTheme}
@@ -86,11 +88,11 @@ function App () {
         {
           showColumnsCondition && activeBoard.board_columns.length > 0
             ? activeBoard.board_columns.map(value => (
-              <CardColumn key={value._id} data={value}>
-                {value.cards.map(data => (
-                  <Card handleViewTask={handleViewTask} key={data._id} data={data}></Card>
-                ))}
-              </CardColumn>
+                <CardColumn key={value._id} data={value}>
+                  {value.cards.map(data => (
+                    <Card handleViewTask={handleViewTask} key={data._id} data={data}></Card>
+                  ))}
+                </CardColumn>
             ))
             : !state.loading && <EmptyBoard event={!activeBoard ?? true ? () => dispatch(MODALS.OPEN_NEW_BOARD_MODAL) : () => dispatch(MODALS.OPEN_BOARD_EDIT)} activeBoard={activeBoard} />
         }

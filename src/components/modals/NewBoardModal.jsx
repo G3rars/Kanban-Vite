@@ -63,16 +63,23 @@ export default function NewBoardModal ({ close }) {
   }
 
   return (
-    <article onClick={e => e.stopPropagation()} className='flex min-h-[415px] w-screen max-w-[345px] flex-col gap-6 rounded-md bg-kwhite p-6 md:max-w-[480px]'>
+    <article onClick={e => e.stopPropagation()} className='flex min-h-[415px] w-screen max-w-[345px] flex-col gap-6 rounded-md bg-kwhite p-6 dark:bg-kblackli md:max-w-[480px]'>
       <div className='flex items-center justify-between'>
-        <h3 className='text-lg font-bold text-kblack'>Add New Board</h3>
+        <h3 className='text-lg font-bold text-kblack dark:text-kwhite'>Add New Board</h3>
         <button onClick={close} className='h-4 w-4'><IconCross /></button>
       </div>
       <form className='grid gap-2' onSubmit={handleSubmit} ref={newBoardForm}>
-        <label htmlFor='boardName' className='text-sm font-bold text-kgrayli opacity-60'>Board Name</label>
-        <input required type='text' id='boardName' name='name' placeholder='e.g. Web Design' className='h-10 w-full rounded border-[1px] border-solid border-kgrayli/30 py-2 pl-4 outline-kpurple' />
+        <label htmlFor='boardName' className='text-sm font-bold text-kgrayli/60'>Board Name</label>
+        <input
+          required
+          type='text'
+          id='boardName'
+          name='name'
+          placeholder='e.g. Web Design'
+          className='h-10 w-full rounded border-[1px] border-solid border-kgrayli/30 py-2 pl-4 outline-kpurple dark:bg-transparent dark:text-kwhite'
+        />
         <div className='mb-1 mt-4 grid gap-2'>
-          <p className='text-sm font-bold text-kgrayli opacity-60'>Board Columns</p>
+          <p className='text-sm font-bold text-kgrayli/60'>Board Columns</p>
           <div className='grid h-28 gap-2 overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-kpurple'>
             {
               column.length === 0

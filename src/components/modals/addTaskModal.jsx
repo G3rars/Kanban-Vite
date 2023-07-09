@@ -73,7 +73,7 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit }) {
   return (
     <>
       <section onClick={e => e.stopPropagation()} className='min-h-fit w-screen max-w-[350px] rounded-lg bg-kwhite p-6 dark:bg-kblackli md:max-w-[480px]'>
-        <h3 className='text-lg font-bold dark:text-kwhite'>{dataTask ? 'Edit Task' : 'Add New Task'}</h3>
+        <h3 className='text-lg font-bold dark:text-kwhite'>{!isEdit ? 'Add New Task' : 'Edit Task'}</h3>
         <form onSubmit={(e) => isEdit ? submitEditTask(e) : submitNewTask(e)} ref={newTaskForm} className='grid w-full'>
           <label htmlFor='title' className='pb-1 pt-3 text-xs font-bold opacity-60 dark:text-kwhite'>Title</label>
           <input

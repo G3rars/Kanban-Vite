@@ -41,6 +41,8 @@ function App () {
     removeBoard,
     reloadPage,
     handleEditTask,
+    handleDeleteTask,
+    setDataTask,
     initialBoard,
     activeBoard,
     dataTask,
@@ -96,12 +98,16 @@ function App () {
             ))
             : !state.loading && <EmptyBoard event={!activeBoard ?? true ? () => dispatch(MODALS.OPEN_NEW_BOARD_MODAL) : () => dispatch(MODALS.OPEN_BOARD_EDIT)} activeBoard={activeBoard} />
         }
-        <Portal state={{ ...state, ...reqStatus }} close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}>
+        <Portal state={{ ...state, ...reqStatus }} isEdit={isEdit} handleEditTask={handleEditTask} close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}>
           {
             state.delete && (
               <DeleteModal
                 deleteBoard={() => removeBoard(activeBoard)}
-                close={() => { dispatch(MODALS.CLOSE_ALL_MODALS) }}
+                handleDeleteTask={() => handleDeleteTask(dataTask)}
+                dataTask={dataTask}
+                activeBoard={activeBoard}
+                setDataTask={setDataTask}
+                close={() => { dispatch(MODALS.CLOSE_ALL_MODALS); setDataTask(null) }}
               />
             )
           }
@@ -113,8 +119,10 @@ function App () {
                 activeBoard={activeBoard}
                 dataTask={dataTask}
                 editTask={() => dispatch(MODALS.OPEN_NEW_TASK)}
+                openDeleteTask={() => dispatch(MODALS.OPEN_BOARD_DELETE)}
                 handleEditTask={handleEditTask}
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
+                reload={reloadPage}
               />
           }
           { state.new_board && <NewBoardModal close={() => dispatch(MODALS.CLOSE_ALL_MODALS)} /> }

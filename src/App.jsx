@@ -41,6 +41,8 @@ function App () {
     removeBoard,
     reloadPage,
     handleEditTask,
+    handleDeleteTask,
+    setDataTask,
     initialBoard,
     activeBoard,
     dataTask,
@@ -98,7 +100,11 @@ function App () {
             state.delete && (
               <DeleteModal
                 deleteBoard={() => removeBoard(activeBoard)}
-                close={() => { dispatch(MODALS.CLOSE_ALL_MODALS) }}
+                handleDeleteTask={() => handleDeleteTask(dataTask)}
+                dataTask={dataTask}
+                activeBoard={activeBoard}
+                setDataTask={setDataTask}
+                close={() => { dispatch(MODALS.CLOSE_ALL_MODALS); setDataTask(null) }}
               />
             )
           }
@@ -110,6 +116,7 @@ function App () {
                 activeBoard={activeBoard}
                 dataTask={dataTask}
                 editTask={() => dispatch(MODALS.OPEN_NEW_TASK)}
+                openDeleteTask={() => dispatch(MODALS.OPEN_BOARD_DELETE)}
                 handleEditTask={handleEditTask}
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
               />

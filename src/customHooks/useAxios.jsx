@@ -1,5 +1,5 @@
 import { useEffect, useState, useReducer } from 'react'
-import { deleteBoard, getBoards } from '../../core/api'
+import { deleteBoard, deleteCard, getBoards } from '../../core/api'
 import { MODALS, REQ_ACTION, initialRequestState, requestReducer } from '../helpers/contants'
 
 function useAxios (action) {
@@ -42,6 +42,10 @@ function useAxios (action) {
     action(MODALS.OPEN_NEW_TASK)
   }
 
+  const handleDeleteTask = (data) => {
+    deleteCard(data._id)
+  }
+
   const handleViewTask = (keyData) => {
     const subArray = initialBoard.flatMap((value) => value.board_columns.flatMap((column) => column.cards.filter((card) => card._id === keyData)))
     setDataTask(...subArray)
@@ -71,7 +75,9 @@ function useAxios (action) {
     handleViewTask,
     removeBoard,
     reloadPage,
-    handleEditTask
+    handleEditTask,
+    handleDeleteTask,
+    setDataTask
   }
 
   return { ...states, ...functions }

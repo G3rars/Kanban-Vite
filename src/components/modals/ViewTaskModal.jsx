@@ -3,7 +3,7 @@ import { Subtask } from '../SubTask'
 import { BoardConfig } from './BoardConfig'
 import { deleteCard, getCard, postCard, putCard } from '../../../core/api'
 
-export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask }) {
+export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, openDeleteTask, close }) {
   const [modal, setModal] = useState(false)
   const [task, setTask] = useState(dataTask.subTask)
   const formRef = useRef()
@@ -93,7 +93,7 @@ export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask }
       {
         modal && (
           <div className='absolute -right-8 top-16 z-30 h-24 w-40 rounded-md bg-kwhite shadow-lg md:top-16 md:w-48 lg:top-20'>
-            <BoardConfig openEditBoard={handleEditTask}/>
+            <BoardConfig openDeleteBoard={() => { close(); openDeleteTask() }} openEditBoard={handleEditTask}/>
           </div>
         )
       }

@@ -1,6 +1,7 @@
 import React from 'react'
 import { CardModal } from './cardModal'
 import { ThemeSwitch } from '../SwitchTheme'
+import { IconLigthTheme, IconDarkTheme } from '../icons/Symbols'
 
 function MiniMenu ({ data, setBoardModal, changeBoard, changeTheme, activeBoard }) {
   const totalBoards = Array.isArray(data) && data.length
@@ -36,9 +37,9 @@ function MiniMenu ({ data, setBoardModal, changeBoard, changeTheme, activeBoard 
            // ! Swich Theme
           */}
           <div className='mx-auto my-3 flex min-h-[48px] w-64 items-center justify-center gap-4 rounded-md bg-kcian transition duration-500 dark:bg-kblackli'>
-            <img width="19" height="19" src="/styles/assets/icon-light-theme.svg" alt="icon-light-theme.svg" />
+            <IconLigthTheme />
               <ThemeSwitch changeTheme={changeTheme} />
-            <img width="19" height="19" src="/styles/assets/icon-dark-theme.svg" alt="icon-dark-theme.svg" />
+            <IconDarkTheme />
           </div>
     </aside>
   )

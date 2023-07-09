@@ -1,9 +1,11 @@
 import React from 'react'
 import { CardModal } from './cardModal.jsx'
 import { ThemeSwitch } from '../SwitchTheme.jsx'
+import { IconLigthTheme, IconDarkTheme } from '../icons/Symbols'
 
 export default function TabletModal ({ close, modalTable, data, setBoardModal, changeBoard, changeTheme, activeBoard }) {
   const totalBoards = Array.isArray(data) && data.length
+
   return (
     <>
       <aside className={`${modalTable.side_menu ? 'translate-x-0' : '-translate-x-full'} absolute z-20 flex h-full w-[300px] flex-col bg-kwhite shadow-md transition duration-500 dark:bg-kdarkGray dark:text-kgrayli`}>
@@ -39,10 +41,10 @@ export default function TabletModal ({ close, modalTable, data, setBoardModal, c
           {/*
            // ! Swich Theme
           */}
-          <div className='mx-auto my-3 flex min-h-[48px] w-64 items-center justify-center gap-4 rounded-md bg-kcian transition duration-500 dark:bg-kblackli'>
-            <img width="19" height="19" src="/styles/assets/icon-light-theme.svg" alt="icon-light-theme.svg" />
+          <div className='mx-auto mb-3 mt-auto flex min-h-[48px] w-64 items-center justify-center gap-4 rounded-md bg-kcian transition duration-500 dark:bg-kblackli'>
+            <IconLigthTheme />
               <ThemeSwitch changeTheme={changeTheme} />
-            <img width="19" height="19" src="/styles/assets/icon-dark-theme.svg" alt="icon-dark-theme.svg" />
+            <IconDarkTheme />
           </div>
 
         {/*

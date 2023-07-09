@@ -1,4 +1,5 @@
 import React from 'react'
+import { IconCross } from './icons/Symbols'
 
 export default function SubTaskCard ({ handleDeleteColumn, colID, inputName, defValue = '', required = false }) {
   return (
@@ -12,9 +13,9 @@ export default function SubTaskCard ({ handleDeleteColumn, colID, inputName, def
           name={inputName}
           defaultValue={defValue}
         />
-        <div className='flex h-10 items-center justify-center pl-5'>
-          <img onClick={() => handleDeleteColumn(colID)} className='h-[14px] w-[14px] cursor-pointer' src='/styles/assets/icon-cross.svg' alt='icon-cross.svg' />
-        </div>
+        <button onClick={() => handleDeleteColumn(colID)} className='flex h-10 items-center justify-center pl-5'>
+          <IconCross />
+        </button>
       </div>
     </>
   )

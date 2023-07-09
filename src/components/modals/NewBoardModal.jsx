@@ -4,8 +4,9 @@ import SubTaskCard from '../subTaskCard'
 import { v4 as uuidv4 } from 'uuid'
 import { postBoard, postColumn } from '../../../core/api'
 import { getFormData, objectToArr } from '../../helpers/utilities'
+import { IconCross } from '../icons/Symbols'
 
-export default function NewBoardModal ({ event }) {
+export default function NewBoardModal ({ close }) {
   const [column, setColumn] = useState([])
   const newBoardForm = useRef()
 
@@ -50,7 +51,6 @@ export default function NewBoardModal ({ event }) {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
     const formData = getFormData(newBoardForm.current)
     try {
       const postData = await postBoard({ name: formData.name })
@@ -58,6 +58,7 @@ export default function NewBoardModal ({ event }) {
       const cols = saveColInfo()
       cols.forEach(async (col) => await postColumn({ name: col.value }, id))
     } catch (error) {
+      console.log('error en add new board: ', error)
     }
   }
 
@@ -65,7 +66,7 @@ export default function NewBoardModal ({ event }) {
     <article onClick={e => e.stopPropagation()} className='flex min-h-[415px] w-screen max-w-[345px] flex-col gap-6 rounded-md bg-kwhite p-6 md:max-w-[480px]'>
       <div className='flex items-center justify-between'>
         <h3 className='text-lg font-bold text-kblack'>Add New Board</h3>
-        <img onClick={event} className='h-4 w-4 cursor-pointer' src="/styles/assets/icon-cross.svg" alt="icon-cross.svg" />
+        <button onClick={close} className='h-4 w-4'><IconCross /></button>
       </div>
       <form className='grid gap-2' onSubmit={handleSubmit} ref={newBoardForm}>
         <label htmlFor='boardName' className='text-sm font-bold text-kgrayli opacity-60'>Board Name</label>
@@ -83,7 +84,7 @@ export default function NewBoardModal ({ event }) {
                       handleDeleteColumn={handleDeleteColumn}
                       inputName={item.name}
                       defValue={item.value}
-                      // required={item.required}
+                      required={item.required}
                     />))
                   )
             }

@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function SubTaskCard ({ handleDeleteColumn, colID, inputName, defValue = '', required = false }) {
+export default function SubTaskCard ({ handleDeleteColumn, colID, inputName, defValue = '' }) {
   return (
     <>
       <div className='flex pb-2'>
@@ -8,7 +8,7 @@ export default function SubTaskCard ({ handleDeleteColumn, colID, inputName, def
           className='h-10 w-full rounded border-solid border-kgrayli/30 py-2 pl-4 text-sm outline-kpurple'
           placeholder='e.g. Make coffee'
           type='text'
-          required={required}
+          required
           name={inputName}
           defaultValue={defValue}
         />

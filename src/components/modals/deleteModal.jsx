@@ -4,7 +4,7 @@ import Button from '../button'
 function DeleteModal ({ close, deleteBoard, dataTask, handleDeleteTask, activeBoard }) {
   console.log(dataTask)
   return (
-    <div className='bg-kred z-50 absolute w-[100vw] h-[100vh] flex justify-center items-center'>
+    <div className='absolute z-50 flex h-[100vh] w-[100vw] items-center justify-center bg-kred'>
       <div onClick={e => e.stopPropagation()} className='h-[284px] w-[343px] rounded-md bg-kwhite px-6 shadow-md md:h-[220px] md:w-[480px]'>
         <p className='pb-5 pt-6 text-lg font-bold capitalize text-kred'>{dataTask ? 'delete this card?' : 'delete this board?'}</p>
         <p className='text-sm leading-6 opacity-60'>

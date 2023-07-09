@@ -3,8 +3,11 @@ import SubTaskCard from '../subTaskCard'
 import Button from '../button'
 import { deleteCard, getCard, postCard, putCard } from '../../../core/api'
 import { v4 as uuidv4 } from 'uuid'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { Alert } from '../../helpers/alerts'
 
-export default function AddTaskModal ({ activeBoard, dataTask, isEdit }) {
+export default function AddTaskModal ({ activeBoard, dataTask, isEdit, reload }) {
   const [column, setColumn] = useState([])
   const [apiSubtask, setApiSubtask] = useState(dataTask ? dataTask.subTask : null)
   const [deleteCol, setDeleteCol] = useState([])
@@ -54,11 +57,11 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit }) {
     dataArr.pop()
     let subTaskIn = dataArr.slice(2)
     subTaskIn = subTaskIn.map(([_, value]) => ({ name: value, completed: false }))
-    putCard(dataTask._id, { title: formData.title, description: formData.description, subTask: subTaskIn })
+    Alert(() => putCard(dataTask._id, { title: formData.title, description: formData.description, subTask: subTaskIn }), 'The task has been updated successfully')
     changeColumn()
   }
 
-  const submitNewTask = (e) => {
+  const submitNewTask = async (e) => {
     e.preventDefault()
     const formData = Object.fromEntries(new FormData(newTaskForm.current))
     const dataArr = Object.entries(formData)
@@ -68,7 +71,7 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit }) {
       description: formData.description,
       subTask: cols
     }
-    postCard(data, formData.status)
+    Alert(() => postCard(data, formData.status), 'The task has been created successfully')
   }
   return (
     <>
@@ -95,7 +98,7 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit }) {
           <label htmlFor='subtask' className='pb-1 pt-5 text-xs font-bold opacity-60'>SubTask</label>
           <div className='h-[120px] overflow-y-auto text-md font-medium scrollbar-thin scrollbar-thumb-kpurple'>
           {
-            !isEdit && column.length === 0 ? <p className='pt-7 text-center opacity-60 '>Add new columns</p> : (isEdit && dataTask && dataTask.subTask.length === 0 ? <p className='opacity-60 pt-7 text-center'>Add new columns</p> : '')
+            !isEdit && column.length === 0 ? <p className='pt-7 text-center opacity-60 '>Add new columns</p> : (isEdit && dataTask && dataTask.subTask.length === 0 ? <p className='pt-7 text-center opacity-60'>Add new columns</p> : '')
           }
           {isEdit
             ? apiSubtask.map(item => <SubTaskCard key={item._id} colID={item._id} handleDeleteColumn={handleDeleteColumn}
@@ -145,6 +148,7 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit }) {
           </Button>
         </form>
       </section>
+      <ToastContainer />
     </>
   )
 }

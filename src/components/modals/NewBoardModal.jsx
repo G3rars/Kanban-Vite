@@ -4,6 +4,8 @@ import SubTaskCard from '../subTaskCard'
 import { v4 as uuidv4 } from 'uuid'
 import { postBoard, postColumn } from '../../../core/api'
 import { getFormData, objectToArr } from '../../helpers/utilities'
+import { Alert } from '../../helpers/alerts'
+import { ToastContainer } from 'react-toastify'
 
 export default function NewBoardModal ({ event }) {
   const [column, setColumn] = useState([])
@@ -56,8 +58,12 @@ export default function NewBoardModal ({ event }) {
       const postData = await postBoard({ name: formData.name })
       const id = postData._id
       const cols = saveColInfo()
-      cols.forEach(async (col) => await postColumn({ name: col.value }, id))
+      const columnPromises = cols.map(col => postColumn({ name: col.value }, id))
+      await Promise.all(columnPromises)
+      Alert(() => Promise.resolve(), 'The board has been created successfully')
     } catch (error) {
+      console.log(error)
+      Alert(() => Promise.reject(error), 'Error')
     }
   }
 
@@ -69,7 +75,7 @@ export default function NewBoardModal ({ event }) {
       </div>
       <form className='grid gap-2' onSubmit={handleSubmit} ref={newBoardForm}>
         <label htmlFor='boardName' className='text-sm font-bold text-kgrayli opacity-60'>Board Name</label>
-        <input required type='text' id='boardName' name='name' placeholder='e.g. Web Design' className='h-10 w-full rounded border-[1px] border-solid border-kgrayli/30 py-2 pl-4 outline-kpurple' />
+        <input type='text' id='boardName' name='name' placeholder='e.g. Web Design' className='h-10 w-full rounded border-[1px] border-solid border-kgrayli/30 py-2 pl-4 outline-kpurple' />
         <div className='mb-1 mt-4 grid gap-2'>
           <p className='text-sm font-bold text-kgrayli opacity-60'>Board Columns</p>
           <div className='grid h-28 gap-2 overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-kpurple'>
@@ -83,7 +89,6 @@ export default function NewBoardModal ({ event }) {
                       handleDeleteColumn={handleDeleteColumn}
                       inputName={item.name}
                       defValue={item.value}
-                      // required={item.required}
                     />))
                   )
             }
@@ -92,6 +97,7 @@ export default function NewBoardModal ({ event }) {
         <Button event={handleAddColumn} key='newColBtn' style='secondary' size='mb-4'><p>+ Add New Column</p></Button>
         <Button btnType='submit' key='newBoardBtn' style='primarysm'><p>Create New Board</p></Button>
       </form>
+      <ToastContainer/>
     </article>
   )
 }

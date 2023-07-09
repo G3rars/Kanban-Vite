@@ -14,13 +14,13 @@ const getBoards = async () => {
 const postBoard = async (postData) => {
   return axios.post(`${DB}/board`, postData)
     .then(response => { return response.data })
-    .catch(error => { console.error(error.response.data) })
+    .catch(error => { console.error(error.response.data); throw error })
 }
 
 const putBoard = async (idBoard, postData) => {
   return axios.put(`${DB}/board/${idBoard}`, postData)
     .then(response => {})
-    .catch(error => { console.error(error.response.data) })
+    .catch(error => { console.error(error.response.data); throw error })
 }
 
 const postColumn = async (postData, id) => {
@@ -42,8 +42,11 @@ const deleteColumn = async (id) => {
 
 const postCard = async (postData, id) => {
   return axios.post(`${DB}/card/${id}`, postData)
-    .then(response => { })
-    .catch(error => { console.error(error.response.data) })
+    .then(response => response.data)
+    .catch(error => {
+      console.error(error.response.data)
+      throw error // Rechazar la promesa con el error
+    })
 }
 const getCard = async () => {
   return axios.get(`${DB}/card`)
@@ -60,7 +63,7 @@ const deleteCard = async (id) => {
 const putCard = async (cardId, postData) => {
   return axios.put(`${DB}/card/${cardId}`, postData)
     .then(response => {})
-    .catch(error => { console.error(error.response.data) })
+    .catch(error => { console.error(error.response.data); throw error })
 }
 
 const deleteBoard = async (id) => {

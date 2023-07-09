@@ -2,6 +2,9 @@ import React, { useRef, useState } from 'react'
 import { Subtask } from '../SubTask'
 import { BoardConfig } from './BoardConfig'
 import { deleteCard, getCard, postCard, putCard } from '../../../core/api'
+import { Alert } from '../../helpers/alerts'
+import { ToastContainer } from 'react-toastify'
+import Button from '../button'
 
 export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, openDeleteTask, close }) {
   const [modal, setModal] = useState(false)
@@ -45,10 +48,15 @@ export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, 
     const sendData = {
       subTask: subTasks
     }
-    await putCard(dataTask._id, sendData)
-    await changeColumn()
+    try {
+      const putCardPromise = putCard(dataTask._id, sendData)
+      await changeColumn()
+      await Promise.all([putCardPromise])
+      Alert(() => Promise.resolve(), 'Changes have been saved')
+    } catch (error) {
+      Alert(() => Promise.reject(error))
+    }
   }
-
   const TOTAL = dataTask.subTask.length
   const COMPLETED = dataTask.subTask.filter(item => item.completed).length
 
@@ -88,7 +96,7 @@ export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, 
             }
           </select>
         </div>
-        <button onClick={(e) => { e.preventDefault(); handleSubmit() } } className='bg-red-500'>prueba</button>
+        <Button event={(e) => { e.preventDefault(); handleSubmit() }} style='primarysm'><p>Save Changes</p></Button>
       </form>
       {
         modal && (
@@ -97,6 +105,7 @@ export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, 
           </div>
         )
       }
+      <ToastContainer/>
     </article>
   )
 }

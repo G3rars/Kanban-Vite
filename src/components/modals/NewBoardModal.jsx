@@ -4,7 +4,12 @@ import SubTaskCard from '../subTaskCard'
 import { v4 as uuidv4 } from 'uuid'
 import { postBoard, postColumn } from '../../../core/api'
 import { getFormData, objectToArr } from '../../helpers/utilities'
+<<<<<<< HEAD
 import { IconCross } from '../icons/Symbols'
+=======
+import { Alert } from '../../helpers/alerts'
+import { ToastContainer } from 'react-toastify'
+>>>>>>> main
 
 export default function NewBoardModal ({ close }) {
   const [column, setColumn] = useState([])
@@ -56,9 +61,12 @@ export default function NewBoardModal ({ close }) {
       const postData = await postBoard({ name: formData.name })
       const id = postData._id
       const cols = saveColInfo()
-      cols.forEach(async (col) => await postColumn({ name: col.value }, id))
+      const columnPromises = cols.map(col => postColumn({ name: col.value }, id))
+      await Promise.all(columnPromises)
+      Alert(() => Promise.resolve(), 'The board has been created successfully')
     } catch (error) {
-      console.log('error en add new board: ', error)
+      console.log(error)
+      Alert(() => Promise.reject(error), 'Error')
     }
   }
 
@@ -100,6 +108,7 @@ export default function NewBoardModal ({ close }) {
         <Button event={handleAddColumn} key='newColBtn' style='secondary' size='mb-4'><p>+ Add New Column</p></Button>
         <Button btnType='submit' key='newBoardBtn' style='primarysm'><p>Create New Board</p></Button>
       </form>
+      <ToastContainer/>
     </article>
   )
 }

@@ -112,7 +112,7 @@ function App () {
             )
           }
           { state.edit && <EditBoardModal activeBoard={activeBoard} /> }
-          { state.new_task && <AddTaskModal isEdit={isEdit} dataTask={dataTask} activeBoard={activeBoard} /> }
+          { state.new_task && <AddTaskModal reload={reloadPage} isEdit={isEdit} dataTask={dataTask} activeBoard={activeBoard} /> }
           { state.task_details &&
               <ViewTaskModal
                 setActiveTask={() => { dispatch(MODALS.OPEN_TASK_DETAILS) } }

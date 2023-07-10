@@ -3,8 +3,11 @@ import SubTaskCard from '../subTaskCard'
 import Button from '../button'
 import { deleteCard, getCard, postCard, putCard } from '../../../core/api'
 import { v4 as uuidv4 } from 'uuid'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { Alert } from '../../helpers/alerts'
 
-export default function AddTaskModal ({ activeBoard, dataTask, isEdit }) {
+export default function AddTaskModal ({ activeBoard, dataTask, isEdit, reload }) {
   const [column, setColumn] = useState([])
   const [apiSubtask, setApiSubtask] = useState(dataTask ? dataTask.subTask : null)
   const [deleteCol, setDeleteCol] = useState([])
@@ -54,11 +57,11 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit }) {
     dataArr.pop()
     let subTaskIn = dataArr.slice(2)
     subTaskIn = subTaskIn.map(([_, value]) => ({ name: value, completed: false }))
-    putCard(dataTask._id, { title: formData.title, description: formData.description, subTask: subTaskIn })
+    Alert(() => putCard(dataTask._id, { title: formData.title, description: formData.description, subTask: subTaskIn }), 'The task has been updated successfully')
     changeColumn()
   }
 
-  const submitNewTask = (e) => {
+  const submitNewTask = async (e) => {
     e.preventDefault()
     const formData = Object.fromEntries(new FormData(newTaskForm.current))
     const dataArr = Object.entries(formData)
@@ -68,7 +71,7 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit }) {
       description: formData.description,
       subTask: cols
     }
-    postCard(data, formData.status)
+    Alert(() => postCard(data, formData.status), 'The task has been created successfully')
   }
   return (
     <>
@@ -149,6 +152,7 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit }) {
           </Button>
         </form>
       </section>
+      <ToastContainer />
     </>
   )
 }

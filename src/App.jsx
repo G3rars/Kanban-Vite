@@ -63,21 +63,23 @@ function App () {
         modalTable={state}
         darkTheme={darkTheme}
       />
-      {activeBoard && <HeaderComp
-        openSideMenu={() => dispatch(MODALS.OPEN_SIDE_MENU)}
-        openBoardSettings={() => dispatch(MODALS.OPEN_BOARD_SETTINGS)}
-        openDeleteBoard={() => dispatch(MODALS.OPEN_BOARD_DELETE)}
-        openEditBoard={() => dispatch(MODALS.OPEN_BOARD_EDIT)}
-        addTask={() => dispatch(MODALS.OPEN_NEW_TASK)}
-        openMiniMenu={() => dispatch(MODALS.OPEN_MINI_MENU)}
-        states={state}
-        data={activeBoard}
-      />}
+      {activeBoard &&
+        <HeaderComp
+          openSideMenu={() => dispatch(MODALS.OPEN_SIDE_MENU)}
+          openBoardSettings={() => dispatch(MODALS.OPEN_BOARD_SETTINGS)}
+          openDeleteBoard={() => dispatch(MODALS.OPEN_BOARD_DELETE)}
+          openEditBoard={() => dispatch(MODALS.OPEN_BOARD_EDIT)}
+          addTask={() => dispatch(MODALS.OPEN_NEW_TASK)}
+          openMiniMenu={() => dispatch(MODALS.OPEN_MINI_MENU)}
+          states={state}
+          data={activeBoard}
+        />
+      }
       <Main
         openMiniMenu={state.mini_menu}
         close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
-        onMiniMenu={
-          () => <MiniMenu
+        onMiniMenu={() =>
+          <MiniMenu
             data={initialBoard}
             darkTheme={darkTheme}
             setBoardModal={() => dispatch(MODALS.OPEN_NEW_BOARD_MODAL)}
@@ -92,15 +94,18 @@ function App () {
             ? activeBoard.board_columns.map(value => (
                 <CardColumn key={value._id} data={value}>
                   {value.cards.map(data => (
-                    <Card handleViewTask={handleViewTask} key={data._id} data={data}></Card>
+                    <Card handleViewTask={handleViewTask} key={data._id} data={data} />
                   ))}
                 </CardColumn>
             ))
-            : !state.loading && <EmptyBoard event={!activeBoard ?? true ? () => dispatch(MODALS.OPEN_NEW_BOARD_MODAL) : () => dispatch(MODALS.OPEN_BOARD_EDIT)} activeBoard={activeBoard} />
+            : !state.loading && <EmptyBoard event={!activeBoard ? () => dispatch(MODALS.OPEN_NEW_BOARD_MODAL) : () => dispatch(MODALS.OPEN_BOARD_EDIT)} activeBoard={activeBoard} />
         }
-        <Portal state={{ ...state, ...reqStatus }} isEdit={isEdit} handleEditTask={handleEditTask} close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}>
-          {
-            state.delete && (
+        <Portal
+          state={{ ...state, ...reqStatus }}
+          isEdit={isEdit}
+          handleEditTask={handleEditTask}
+          close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
+          onDelete={() =>
               <DeleteModal
                 deleteBoard={() => removeBoard(activeBoard)}
                 handleDeleteTask={() => handleDeleteTask(dataTask)}
@@ -108,12 +113,19 @@ function App () {
                 activeBoard={activeBoard}
                 setDataTask={setDataTask}
                 close={() => { dispatch(MODALS.CLOSE_ALL_MODALS); setDataTask(null) }}
-              />
-            )
-          }
-          { state.edit && <EditBoardModal activeBoard={activeBoard} /> }
-          { state.new_task && <AddTaskModal reload={reloadPage} isEdit={isEdit} dataTask={dataTask} activeBoard={activeBoard} /> }
-          { state.task_details &&
+              />}
+          onEditBoard={() =>
+              <EditBoardModal
+                activeBoard={activeBoard}
+              />}
+          onAddTask={() =>
+              <AddTaskModal
+                reload={reloadPage}
+                isEdit={isEdit}
+                dataTask={dataTask}
+                activeBoard={activeBoard}
+              />}
+          onViewTask={() =>
               <ViewTaskModal
                 setActiveTask={() => { dispatch(MODALS.OPEN_TASK_DETAILS) } }
                 activeBoard={activeBoard}
@@ -123,12 +135,14 @@ function App () {
                 handleEditTask={handleEditTask}
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
                 reload={reloadPage}
-              />
-          }
-          { state.new_board && <NewBoardModal close={() => dispatch(MODALS.CLOSE_ALL_MODALS)} /> }
-          { reqStatus.error && <Error reload={reloadPage} /> }
-          { reqStatus.loading && <Loading /> }
-        </Portal>
+              />}
+          onNewBoard={() =>
+              <NewBoardModal
+                close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
+              />}
+          onError={() => <Error reload={reloadPage} />}
+          onLoading={() => <Loading />}
+        />
       </Main>
       { state.tablet_btn_bottom && <SideBarButton event={() => dispatch(MODALS.OPEN_SIDE_MENU)} /> }
     </>

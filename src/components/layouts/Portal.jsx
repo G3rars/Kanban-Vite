@@ -1,12 +1,31 @@
 import React from 'react'
 import { createPortal } from 'react-dom'
-function Portal ({ children, close, state, handleEditTask, isEdit }) {
-  const renderCondition = state.delete || state.edit || state.task_details || state.new_board || state.new_task || state.error || state.loading
+function Portal (props) {
+  const renderCondition = props.state.delete ||
+    props.state.edit ||
+    props.state.task_details ||
+    props.state.new_board ||
+    props.state.new_task ||
+    props.state.error ||
+    props.state.loading
+
   return (
     <>
       {renderCondition && createPortal(
-        <section onClick={isEdit ? () => { close(); handleEditTask() } : () => close()} className={`absolute z-30 h-full w-full ${state.loading ? 'flex items-end justify-end p-10' : 'grid place-content-center bg-black/50'}`}>
-          {children}
+        <section
+          onClick={props.isEdit
+            ? () => { props.close(); props.handleEditTask() }
+            : () => props.close()
+          }
+          className={`absolute z-30 h-full w-full ${props.state.loading ? 'flex items-end justify-end p-10' : 'grid place-content-center bg-black/50'}`}
+        >
+          { props.state.delete && props.onDelete() }
+          { props.state.edit && props.onEditBoard() }
+          { props.state.new_task && props.onAddTask() }
+          { props.state.task_details && props.onVIewTask() }
+          { props.state.new_board && props.onNewBoard() }
+          { props.state.error && props.onError() }
+          { props.state.loading && props.onLoading() }
         </section>,
         document.body
       )}

@@ -4,12 +4,9 @@ import SubTaskCard from '../subTaskCard'
 import { v4 as uuidv4 } from 'uuid'
 import { postBoard, postColumn } from '../../../core/api'
 import { getFormData, objectToArr } from '../../helpers/utilities'
-<<<<<<< HEAD
 import { IconCross } from '../icons/Symbols'
-=======
 import { Alert } from '../../helpers/alerts'
 import { ToastContainer } from 'react-toastify'
->>>>>>> main
 
 export default function NewBoardModal ({ close }) {
   const [column, setColumn] = useState([])

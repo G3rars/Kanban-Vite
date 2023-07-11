@@ -42,6 +42,7 @@ function App () {
     handleEditTask,
     handleDeleteTask,
     setDataTask,
+    setInitialBoard,
     initialBoard,
     activeBoard,
     dataTask,
@@ -92,7 +93,7 @@ function App () {
           showColumnsCondition && activeBoard.board_columns.length > 0
             ? activeBoard.board_columns.map(value => (
                 <CardColumn key={value._id} data={value}>
-                  {value.cards.map(data => (
+                  {value.cards.length !== 0 && value.cards.map(data => (
                     <Card handleViewTask={handleViewTask} key={data._id} data={data} />
                   ))}
                 </CardColumn>
@@ -134,7 +135,8 @@ function App () {
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
               />}
           onNewBoard={() =>
-              <NewBoardModal
+              <NewBoardModal setInitialBoard={setInitialBoard}
+              initialBoard={initialBoard}
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
               />}
           onError={() => <Error />}

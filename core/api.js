@@ -27,7 +27,7 @@ const putBoard = async (idBoard, postData) => {
 
 const postColumn = async (postData, id) => {
   return axios.post(`${DB}/column/${id}`, postData)
-    .then(response => { })
+    .then(response => { return response.data })
     .catch(error => { console.error(error.response.data) })
 }
 const putColumn = async (idColumn, postData) => {

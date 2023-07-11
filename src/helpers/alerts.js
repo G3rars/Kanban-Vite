@@ -13,8 +13,8 @@ function Alert (reqFunction, succesMsg) {
       // setTimeout(() => {
       // }, 3000)
     })
-    .catch((err) => {
-      toast.error(err)
+    .catch((res) => {;
+      toast.error(res.response.data)
     })
 }
 export { Alert }

@@ -100,7 +100,7 @@ export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, 
       {
         modal && (
           <div className='absolute -right-8 top-16 z-30 h-24 w-40 rounded-md shadow-lg md:top-16 md:w-48 lg:top-20'>
-            <BoardConfig openDeleteBoard={() => { close(); openDeleteTask() }} openEditBoard={handleEditTask}/>
+            <BoardConfig content={{ top: 'Edit Task', down: 'Delete Task' }} edit={handleEditTask} remove={openDeleteTask}/>
           </div>
         )
       }

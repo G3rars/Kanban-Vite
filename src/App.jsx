@@ -43,6 +43,7 @@ function App () {
     handleDeleteTask,
     setDataTask,
     setInitialBoard,
+    setActiveBoard,
     initialBoard,
     activeBoard,
     dataTask,
@@ -123,6 +124,7 @@ function App () {
                 isEdit={isEdit}
                 dataTask={dataTask}
                 activeBoard={activeBoard}
+                setActiveBoard={setActiveBoard}
               />}
           onViewTask={() =>
               <ViewTaskModal

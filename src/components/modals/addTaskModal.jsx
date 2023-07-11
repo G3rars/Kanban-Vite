@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Alert } from '../../helpers/alerts'
 
-export default function AddTaskModal ({ activeBoard, dataTask, isEdit }) {
+export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActiveBoard }) {
   const [column, setColumn] = useState([])
   const [apiSubtask, setApiSubtask] = useState(dataTask ? dataTask.subTask : null)
   const [deleteCol, setDeleteCol] = useState([])
@@ -50,15 +50,22 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit }) {
     }
   }
 
-  const submitEditTask = (e) => {
+  const submitEditTask = async (e) => {
     e.preventDefault()
     const formData = Object.fromEntries(new FormData(newTaskForm.current))
     const dataArr = Object.entries(formData)
     dataArr.pop()
     let subTaskIn = dataArr.slice(2)
     subTaskIn = subTaskIn.map(([_, value]) => ({ name: value, completed: false }))
-    Alert(() => putCard(dataTask._id, { title: formData.title, description: formData.description, subTask: subTaskIn }), 'The task has been updated successfully')
-    changeColumn()
+    const res = await putCard(dataTask._id, { title: formData.title, description: formData.description, subTask: subTaskIn })
+    console.log(res)
+    const updateBoard = activeBoard
+    const index = updateBoard.board_columns.findIndex((item) => item._id === res.column)
+    console.log(index)
+    console.log(updateBoard)
+    updateBoard.board_columns[index].cards.push(res)
+    setActiveBoard(updateBoard)
+    // Alert(() => putCard(dataTask._id, { title: formData.title, description: formData.description, subTask: subTaskIn }), 'The task has been updated successfully')
   }
 
   const submitNewTask = async (e) => {
@@ -71,7 +78,11 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit }) {
       description: formData.description,
       subTask: cols
     }
-    Alert(() => postCard(data, formData.status), 'The task has been created successfully')
+    const res = await postCard(data, formData.status)
+    const updateBoard = activeBoard
+    const index = updateBoard.board_columns.findIndex((item) => item._id === res.column)
+    updateBoard.board_columns[index].cards.push(res)
+    setActiveBoard(updateBoard)
   }
   return (
     <>

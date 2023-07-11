@@ -21,7 +21,7 @@ export default function TabletModal ({ close, modalTable, data, setBoardModal, c
 
         <div className='overflow-y-auto'>
           {
-            Array.isArray(data) && Array.isArray(activeBoard) && data.map((item) => (
+            Array.isArray(data) && data.map((item) => (
               <CardModal
                 event={changeBoard}
                 keyData={item.board_id}

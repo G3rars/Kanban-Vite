@@ -64,7 +64,7 @@ const deleteCard = async (id) => {
 
 const putCard = async (cardId, postData) => {
   return axios.put(`${DB}/card/${cardId}`, postData)
-    .then(response => { })
+    .then(response => { return response.data })
     .catch(error => { console.error(error.response.data); throw error })
 }
 

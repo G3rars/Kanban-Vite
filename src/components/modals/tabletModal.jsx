@@ -6,7 +6,6 @@ import { LogoDesktop } from '../icons/Logos.jsx'
 
 export default function TabletModal ({ close, modalTable, data, setBoardModal, changeBoard, changeTheme, activeBoard, darkTheme }) {
   const totalBoards = Array.isArray(data) && data.length
-  // console.log({ data, activeBoard })
 
   return (
     <>
@@ -21,15 +20,15 @@ export default function TabletModal ({ close, modalTable, data, setBoardModal, c
 
         <div className='overflow-y-auto'>
           {
-            Array.isArray(data) && Array.isArray(activeBoard) && data.map((item) => (
+            Array.isArray(data) && activeBoard && data.map((item) => (
               <CardModal
                 event={changeBoard}
                 keyData={item.board_id}
                 key={item.board_id}
                 type={item.board_id === activeBoard.board_id ? 'active' : 'inactive'}
                 content={item.board_name}
-              />
-            ))
+              />)
+            )
           }
         </div>
         <CardModal

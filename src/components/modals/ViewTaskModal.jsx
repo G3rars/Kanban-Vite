@@ -11,6 +11,7 @@ export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, 
   const [modal, setModal] = useState(false)
   const [task, setTask] = useState(dataTask.subTask)
   const formRef = useRef()
+
   function taskOptions () {
     setModal(prevState => !prevState)
   }
@@ -44,13 +45,11 @@ export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, 
     }
   }
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault()
     const subTasks = task.map(value => ({ name: value.name, completed: value.completed }))
-    const sendData = {
-      subTask: subTasks
-    }
     try {
-      const putCardPromise = putCard(dataTask._id, sendData)
+      const putCardPromise = putCard(dataTask._id, { subTask: subTasks })
       await changeColumn()
       await Promise.all([putCardPromise])
       Alert(() => Promise.resolve(), 'Changes have been saved')
@@ -58,8 +57,8 @@ export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, 
       Alert(() => Promise.reject(error))
     }
   }
-  const TOTAL = dataTask.subTask.length
-  const COMPLETED = dataTask.subTask.filter(item => item.completed).length
+  const TOTAL = task.length
+  const COMPLETED = task.filter(item => item.completed).length
 
   return (
     <article
@@ -68,18 +67,24 @@ export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, 
     >
       <div className='flex max-h-fit items-center justify-between'>
         <h3 className='text-lg font-bold text-kblack dark:text-kwhite'>{dataTask.title}</h3>
-        <button className='flex h-10 w-5 items-center justify-end' onClick={taskOptions}><IconThreeDots /></button>
+        <button onClick={taskOptions} className='flex h-10 w-5 items-center justify-end'><IconThreeDots /></button>
       </div>
       <div className='min-h-[40px]'>
         <p className='text-sm font-normal leading-6 text-kgrayli'>{dataTask.description}</p>
       </div>
 
-      <form ref={formRef} className='flex h-full flex-col justify-between gap-2'>
+      <form ref={formRef} onSubmit={handleSubmit} className='flex h-full flex-col justify-between gap-2'>
         <div className='grid gap-2'>
         <label className='mb-2 text-sm font-bold text-kgrayli'>Subtasks ({COMPLETED} of {TOTAL})</label>
         {
-          dataTask.subTask &&
-            dataTask.subTask.map((value) => <Subtask handleCheckbox={handleCheckbox} key={value._id} id={value._id} content={value} check={value.completed} />)
+          dataTask.subTask && dataTask.subTask.map((value) =>
+            <Subtask
+              handleCheckbox={handleCheckbox}
+                key={value._id}
+                id={value._id}
+                content={value}
+                check={value.completed}
+            />)
         }
         </div>
         <div className='grid gap-2'>
@@ -95,7 +100,7 @@ export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, 
             }
           </select>
         </div>
-        <Button event={(e) => { e.preventDefault(); handleSubmit() }} style='primarysm'><p>Save Changes</p></Button>
+        <Button btnType='submit' style='primarysm'>Save Changes</Button>
       </form>
       {
         modal && (

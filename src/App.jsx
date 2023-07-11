@@ -43,6 +43,7 @@ function App () {
     handleDeleteTask,
     setDataTask,
     setInitialBoard,
+    setActiveBoard,
     initialBoard,
     activeBoard,
     dataTask,
@@ -120,9 +121,11 @@ function App () {
               />}
           onAddTask={() =>
               <AddTaskModal
+                close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
                 isEdit={isEdit}
                 dataTask={dataTask}
                 activeBoard={activeBoard}
+                setActiveBoard={setActiveBoard}
               />}
           onViewTask={() =>
               <ViewTaskModal

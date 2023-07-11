@@ -85,7 +85,8 @@ function useAxios (dispatchAction) {
     handleEditTask,
     handleDeleteTask,
     setDataTask,
-    setInitialBoard
+    setInitialBoard,
+    setActiveBoard
   }
 
   return { ...states, ...functions }

@@ -1,13 +1,13 @@
 import React, { useRef, useState } from 'react'
 import SubTaskCard from '../subTaskCard'
 import Button from '../button'
-import { deleteCard, getCard, postCard, putCard } from '../../../core/api'
+import { postCard, putCard } from '../../../core/api'
 import { v4 as uuidv4 } from 'uuid'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { Alert } from '../../helpers/alerts'
+// import { Alert } from '../../helpers/alerts'
 
-export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActiveBoard }) {
+export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActiveBoard, close }) {
   const [column, setColumn] = useState([])
   const [apiSubtask, setApiSubtask] = useState(dataTask ? dataTask.subTask : null)
   const [deleteCol, setDeleteCol] = useState([])
@@ -34,21 +34,21 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
       setDeleteCol([...deleteCol, findDelete])
     }
   }
-  const changeColumn = async () => {
-    let updateData = await getCard()
-    updateData = updateData.find(value => value._id === dataTask._id)
-    const formData = Object.fromEntries(new FormData(newTaskForm.current))
-    if (formData.status !== updateData.column) {
-      const data = {
-        title: updateData.title,
-        description: updateData.description,
-        subTask: updateData.subTask
-      }
-      console.log('initialData', formData)
-      await deleteCard(updateData._id)
-      postCard(data, formData.status)
-    }
-  }
+  // const changeColumn = async () => {
+  //   let updateData = await getCard()
+  //   updateData = updateData.find(value => value._id === dataTask._id)
+  //   const formData = Object.fromEntries(new FormData(newTaskForm.current))
+  //   if (formData.status !== updateData.column) {
+  //     const data = {
+  //       title: updateData.title,
+  //       description: updateData.description,
+  //       subTask: updateData.subTask
+  //     }
+  //     console.log('initialData', formData)
+  //     await deleteCard(updateData._id)
+  //     postCard(data, formData.status)
+  //   }
+  // }
 
   const submitEditTask = async (e) => {
     e.preventDefault()
@@ -57,14 +57,32 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
     dataArr.pop()
     let subTaskIn = dataArr.slice(2)
     subTaskIn = subTaskIn.map(([_, value]) => ({ name: value, completed: false }))
-    const res = await putCard(dataTask._id, { title: formData.title, description: formData.description, subTask: subTaskIn })
-    console.log(res)
     const updateBoard = activeBoard
-    const index = updateBoard.board_columns.findIndex((item) => item._id === res.column)
-    console.log(index)
-    console.log(updateBoard)
-    updateBoard.board_columns[index].cards.push(res)
+    const res = await putCard(dataTask._id, { title: formData.title, description: formData.description, subTask: subTaskIn })
+
+    console.log({ updateBoard, res, dataTask, status: formData.status })
+
+    if (dataTask.column === formData.status) {
+      // buscar la tarea en el activeBoard y actualizarla
+      const indexCol = updateBoard.board_columns.findIndex((col) => col._id === formData.status)
+      const indexTask = updateBoard.board_columns[indexCol].cards.findIndex((item) => item._id === res._id)
+      updateBoard.board_columns[indexCol].cards.splice(indexTask, 1, res)
+    } else {
+      console.log('paso por aqui')
+      const indexCol = updateBoard.board_columns.findIndex((col) => col._id === dataTask.column)
+      const indexTask = updateBoard.board_columns[indexCol].cards.findIndex((item) => item._id === dataTask._id)
+      updateBoard.board_columns[indexCol].cards.splice(indexTask, 1)
+
+      // ya elimine la tarea vieja, ahora hacer el push de la nueva tarea en su columna correspondiente
+      const indexNewCol = updateBoard.board_columns.findIndex((col) => col._id === formData.status)
+      updateBoard.board_columns[indexNewCol].cards.push(res)
+    }
+
+    // const index = updateBoard.board_columns.findIndex((item) => item._id === res.column)
+    // console.log(index)
+    // updateBoard.board_columns[index].cards.push(res) // ! NO HACER EL PUSH, solo editar
     setActiveBoard(updateBoard)
+    close()
     // Alert(() => putCard(dataTask._id, { title: formData.title, description: formData.description, subTask: subTaskIn }), 'The task has been updated successfully')
   }
 

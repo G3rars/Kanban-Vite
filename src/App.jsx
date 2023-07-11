@@ -121,6 +121,7 @@ function App () {
               />}
           onAddTask={() =>
               <AddTaskModal
+                close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
                 isEdit={isEdit}
                 dataTask={dataTask}
                 activeBoard={activeBoard}

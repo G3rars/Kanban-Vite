@@ -31,6 +31,7 @@ function useAxios (dispatchAction) {
 
   const changeBoard = (keyData) => {
     if (keyData !== undefined) {
+      console.log(keyData)
       const idBoard = initialBoard.find(value => value.board_id === keyData)
       setActiveBoard(idBoard)
     }
@@ -77,7 +78,8 @@ function useAxios (dispatchAction) {
     removeBoard,
     handleEditTask,
     handleDeleteTask,
-    setDataTask
+    setDataTask,
+    setInitialBoard
   }
 
   return { ...states, ...functions }

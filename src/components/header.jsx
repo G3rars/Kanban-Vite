@@ -38,9 +38,9 @@ export default function HeaderComp ({ openSideMenu, states, openBoardSettings, o
         </Button>
         <Button event={addTask} style='primarylg' size='hidden md:grid place-content-center max-w-[295px]'>+add new task</Button>
 
-        <div className='ml-3 flex h-6 w-3 cursor-pointer justify-end' onClick={openBoardSettings}>
+        <button className='ml-3 flex h-6 w-3 cursor-pointer justify-center' onClick={openBoardSettings}>
           <IconThreeDots />
-        </div>
+        </button>
         {
             states.settings && (
               <div className='absolute right-8 top-14 z-30 h-24 w-48 rounded-md bg-kwhite shadow-lg dark:bg-kblackli md:top-16 lg:top-20'>

@@ -8,7 +8,7 @@ import { IconCross } from '../icons/Symbols'
 import { Alert } from '../../helpers/alerts'
 import { ToastContainer } from 'react-toastify'
 
-export default function NewBoardModal ({ close }) {
+export default function NewBoardModal ({ close, setInitialBoard, initialBoard }) {
   const [column, setColumn] = useState([])
   const formRef = useRef()
 
@@ -59,16 +59,13 @@ export default function NewBoardModal ({ close }) {
       const postData = await postBoard({ name: formData.name })
       const id = postData._id
       const cols = saveColInfo()
-      const columnPromises = cols.map((col) => postColumn({ name: col.value }, id))
-      const promises = await Promise.all(columnPromises)
+      const columnPromises = await Promise.all(cols.map(async (col) => await postColumn({ name: col.value }, id)))
+      console.log(columnPromises)
+      const formatData = { board_name: postData.name, board_id: postData._id, board_columns: columnPromises }
+      const updateState = [...initialBoard, formatData]
+      setInitialBoard(updateState)
 
       // TODO: una vez tengamos una ruta en el backend para obtener el tablero segun el id, actualizar el estado usando los datos del get board/board_id
-
-      console.log('cols', cols)
-      console.log('postData', postData)
-      console.log('columnPromises', columnPromises)
-      console.log('promises', promises)
-
       Alert(() => Promise.resolve(), 'The board has been created successfully')
       close()
     } catch (error) {

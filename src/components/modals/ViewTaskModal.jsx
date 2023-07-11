@@ -84,7 +84,7 @@ export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, 
         </div>
         <div className='grid gap-2'>
           <label htmlFor='status' className='mt-4 text-sm font-bold text-kgrayli'>Current Status</label>
-          <select name='status' className='form-select h-[40px] w-full rounded-md border-[1px] border-solid border-kgrayli/30 text-kwhite dark:bg-transparent'>
+          <select name='status' className='form-select h-[40px] w-full rounded-md border-[1px] border-solid border-kgrayli/30 text-kwhite dark:bg-kblackli'>
             {activeBoard &&
                 activeBoard.board_columns.map((value) =>
                   value._id === dataTask.column ? (<option key={value._id} value={value._id}>{value.name}</option>) : null)
@@ -100,7 +100,7 @@ export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, 
       {
         modal && (
           <div className='absolute -right-8 top-16 z-30 h-24 w-40 rounded-md shadow-lg md:top-16 md:w-48 lg:top-20'>
-            <BoardConfig openDeleteBoard={() => { close(); openDeleteTask() }} openEditBoard={handleEditTask}/>
+            <BoardConfig content={{ top: 'Edit Task', down: 'Delete Task' }} edit={handleEditTask} remove={openDeleteTask}/>
           </div>
         )
       }

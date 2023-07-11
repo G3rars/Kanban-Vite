@@ -4,7 +4,7 @@ import { MODALS, REQ_ACTION, initialRequestState, requestReducer } from '../help
 
 function useAxios (dispatchAction) {
   const [state, dispatch] = useReducer(requestReducer, initialRequestState)
-  const [initialBoard, setInitialBoard] = useState(null)
+  const [initialBoard, setInitialBoard] = useState([])
   const [activeBoard, setActiveBoard] = useState(null)
   const [dataTask, setDataTask] = useState(null)
   const [isEdit, setIsEdit] = useState(false)
@@ -12,9 +12,8 @@ function useAxios (dispatchAction) {
   const fetchData = async () => {
     try {
       const data = await getBoards()
-      console.log('[useAxios] - initialData:', data)
       setInitialBoard(data)
-      setActiveBoard(data[0])
+      if (data.length !== 0) setActiveBoard(data[0])
       dispatch(REQ_ACTION.LOADED)
     } catch (error) {
       console.error(error)
@@ -23,15 +22,22 @@ function useAxios (dispatchAction) {
   }
 
   useEffect(() => {
-    if (initialBoard === null) {
-      dispatch(REQ_ACTION.LOADING)
-      fetchData()
-    }
+    dispatch(REQ_ACTION.LOADING)
+    fetchData()
   }, [])
+
+  useEffect(() => {
+    if (Array.isArray(initialBoard) && initialBoard.length === 1) {
+      setActiveBoard(initialBoard.at(0))
+    }
+
+    if (Array.isArray(initialBoard) && initialBoard.length === 0) {
+      setActiveBoard(null)
+    }
+  }, [initialBoard])
 
   const changeBoard = (keyData) => {
     if (keyData !== undefined) {
-      console.log(keyData)
       const idBoard = initialBoard.find(value => value.board_id === keyData)
       setActiveBoard(idBoard)
     }

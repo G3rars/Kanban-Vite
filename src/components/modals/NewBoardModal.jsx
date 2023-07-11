@@ -60,13 +60,13 @@ export default function NewBoardModal ({ close, setInitialBoard, initialBoard })
       const id = postData._id
       const cols = saveColInfo()
       const columnPromises = await Promise.all(cols.map(async (col) => await postColumn({ name: col.value }, id)))
-      console.log(columnPromises)
       const formatData = { board_name: postData.name, board_id: postData._id, board_columns: columnPromises }
+      console.log(initialBoard)
       const updateState = [...initialBoard, formatData]
+      console.log(updateState)
       setInitialBoard(updateState)
 
-      // TODO: una vez tengamos una ruta en el backend para obtener el tablero segun el id, actualizar el estado usando los datos del get board/board_id
-      Alert(() => Promise.resolve(), 'The board has been created successfully')
+      // Alert(() => Promise.resolve(), 'The board has been created successfully')
       close()
     } catch (error) {
       console.log(error)

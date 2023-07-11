@@ -69,12 +69,11 @@ function EditBoardModal ({ activeBoard }) {
            {
             column && column.map(value =>
               <SubTaskCard
-                handleDeleteColumn={handleDeleteColumn}
+                key={value._id}
                 colID={value._id}
                 inputName={value._id}
-                key={value._id}
                 defValue={value.name}
-                required={true}
+                handleDeleteColumn={handleDeleteColumn}
               />
             )
            }
@@ -82,7 +81,7 @@ function EditBoardModal ({ activeBoard }) {
         </div>
 
         <Button event={handleAddColumn} key='newColBtn' style='secondary' size='mb-4'><p>+ Add New Column</p></Button>
-        <Button btnType='submit'event={handleSubmit} key='newBoardBtn' style='primarysm'><p>Save Changes</p></Button>
+        <Button btnType='submit' key='newBoardBtn' style='primarysm'><p>Save Changes</p></Button>
       </form>
       <ToastContainer/>
     </article>

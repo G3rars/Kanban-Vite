@@ -3,10 +3,10 @@ import React from 'react'
 const genericBtn = 'w-full h-10 px-4 rounded-full capitalize text-md duration-200 mx-auto font-bold'
 
 const btnStyle = {
-  btnPrimarylg: `${genericBtn} bg-kpurple text-white h-[48px] hover:bg-kpurpleli`,
-  btnPrimarysm: `${genericBtn} bg-kpurple text-white hover:bg-kpurpleli`,
-  btnSecondary: `${genericBtn} bg-kcian text-kpurple hover:bg-opacity-60`,
-  btnDelete: `${genericBtn} bg-kred text-white hover:bg-opacity-60`
+  btnPrimarylg: `${genericBtn} bg-kpurple/70 text-white h-[48px] hover:bg-kpurpleli dark:hover:bg-kpurple`,
+  btnPrimarysm: `${genericBtn} bg-kpurple/70 text-white hover:bg-kpurpleli dark:hover:bg-kpurple`,
+  btnSecondary: `${genericBtn} bg-kcian/70 text-kpurple hover:bg-kcian`,
+  btnDelete: `${genericBtn} bg-kred/80 text-white hover:bg-kred`
 }
 
 const Button = ({ children, style, size, event, btnType }) => {

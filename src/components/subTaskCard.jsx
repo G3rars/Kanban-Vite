@@ -1,20 +1,22 @@
 import React from 'react'
+import { IconCross } from './icons/Symbols'
 
 export default function SubTaskCard ({ handleDeleteColumn, colID, inputName, defValue = '' }) {
   return (
     <>
-      <div className='flex pb-2'>
+      <div className='group flex pb-2'>
         <input
-          className='h-10 w-full rounded border-solid border-kgrayli/30 py-2 pl-4 text-sm outline-kpurple'
+          className='h-10 w-full rounded border-solid border-kgrayli/30 py-2 pl-4 text-sm outline-kpurple invalid:border-kred dark:bg-transparent dark:text-kwhite'
           placeholder='e.g. Make coffee'
           type='text'
           required
           name={inputName}
           defaultValue={defValue}
+          minLength={4}
         />
-        <div className='flex h-10 items-center justify-center pl-5'>
-          <img onClick={() => handleDeleteColumn(colID)} className='h-[14px] w-[14px] cursor-pointer' src='/styles/assets/icon-cross.svg' alt='icon-cross.svg' />
-        </div>
+        <button onClick={() => handleDeleteColumn(colID)} className='flex h-10 items-center justify-center pl-5'>
+          <IconCross />
+        </button>
       </div>
     </>
   )

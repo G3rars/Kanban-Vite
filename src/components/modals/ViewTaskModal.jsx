@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import { Subtask } from '../SubTask'
 import { BoardConfig } from './BoardConfig'
 import { deleteCard, getCard, postCard, putCard } from '../../../core/api'
+import { IconThreeDots } from '../icons/Symbols'
 import { Alert } from '../../helpers/alerts'
 import { ToastContainer } from 'react-toastify'
 import Button from '../button'
@@ -63,13 +64,11 @@ export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, 
   return (
     <article
       onClick={e => e.stopPropagation()}
-      className='relative flex min-h-[560px] w-screen max-w-[345px] flex-col gap-6 rounded-md bg-kwhite p-6 md:max-w-[480px]'
+      className='relative flex min-h-[560px] w-screen max-w-[345px] flex-col gap-6 rounded-md bg-kwhite p-6 dark:bg-kblackli md:max-w-[480px]'
     >
       <div className='flex max-h-fit items-center justify-between'>
-        <h3 className='text-lg font-bold text-kblack'>{dataTask.title}</h3>
-        <div className='flex h-10 w-5 items-center justify-end' onClick={taskOptions}>
-          <img width={5} height={20} className='cursor-pointer' src='/styles/assets/icon-vertical-ellipsis.svg' alt='icon-vertical-ellipsis.svg' />
-        </div>
+        <h3 className='text-lg font-bold text-kblack dark:text-kwhite'>{dataTask.title}</h3>
+        <button className='flex h-10 w-5 items-center justify-end' onClick={taskOptions}><IconThreeDots /></button>
       </div>
       <div className='min-h-[40px]'>
         <p className='text-sm font-normal leading-6 text-kgrayli'>{dataTask.description}</p>
@@ -85,7 +84,7 @@ export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, 
         </div>
         <div className='grid gap-2'>
           <label htmlFor='status' className='mt-4 text-sm font-bold text-kgrayli'>Current Status</label>
-          <select name='status' className='form-select h-[40px] w-full rounded-md border-[1px] border-solid border-kgrayli/30'>
+          <select name='status' className='form-select h-[40px] w-full rounded-md border-[1px] border-solid border-kgrayli/30 text-kwhite dark:bg-transparent'>
             {activeBoard &&
                 activeBoard.board_columns.map((value) =>
                   value._id === dataTask.column ? (<option key={value._id} value={value._id}>{value.name}</option>) : null)
@@ -100,7 +99,7 @@ export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, 
       </form>
       {
         modal && (
-          <div className='absolute -right-8 top-16 z-30 h-24 w-40 rounded-md bg-kwhite shadow-lg md:top-16 md:w-48 lg:top-20'>
+          <div className='absolute -right-8 top-16 z-30 h-24 w-40 rounded-md shadow-lg md:top-16 md:w-48 lg:top-20'>
             <BoardConfig openDeleteBoard={() => { close(); openDeleteTask() }} openEditBoard={handleEditTask}/>
           </div>
         )

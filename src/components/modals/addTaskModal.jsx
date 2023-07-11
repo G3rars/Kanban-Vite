@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Alert } from '../../helpers/alerts'
 
-export default function AddTaskModal ({ activeBoard, dataTask, isEdit, reload }) {
+export default function AddTaskModal ({ activeBoard, dataTask, isEdit }) {
   const [column, setColumn] = useState([])
   const [apiSubtask, setApiSubtask] = useState(dataTask ? dataTask.subTask : null)
   const [deleteCol, setDeleteCol] = useState([])
@@ -44,7 +44,7 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, reload })
         description: updateData.description,
         subTask: updateData.subTask
       }
-      console.log(formData)
+      console.log('initialData', formData)
       await deleteCard(updateData._id)
       postCard(data, formData.status)
     }
@@ -75,30 +75,34 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, reload })
   }
   return (
     <>
-      <section onClick={e => e.stopPropagation()} className='min-h-fit w-screen max-w-[350px] rounded-lg bg-kwhite p-6 md:max-w-[480px]'>
-        <h3 className='text-lg font-bold'>{!isEdit ? 'Add New Task' : 'Edit Task'}</h3>
+      <section onClick={e => e.stopPropagation()} className='min-h-fit w-screen max-w-[350px] rounded-lg bg-kwhite p-6 dark:bg-kblackli md:max-w-[480px]'>
+        <h3 className='text-lg font-bold dark:text-kwhite'>{!isEdit ? 'Add New Task' : 'Edit Task'}</h3>
         <form onSubmit={(e) => isEdit ? submitEditTask(e) : submitNewTask(e)} ref={newTaskForm} className='grid w-full'>
-          <label htmlFor='title' className='pb-1 pt-3 text-xs font-bold opacity-60'>Title</label>
+          <label htmlFor='title' className='pb-1 pt-3 text-xs font-bold opacity-60 dark:text-kwhite'>Title</label>
           <input
-            className='h-[40px] w-full rounded-md border-[1px] border-solid border-kgrayli/30 pl-4 text-md font-medium leading-6'
+            className='h-[40px] w-full rounded-md border-[1px] border-solid border-kgrayli/30 pl-4 text-md font-medium leading-6 outline-kpurple invalid:border-kred dark:bg-transparent dark:text-kwhite'
             type='text'
             name='title'
             defaultValue={isEdit ? dataTask.title : ''}
             placeholder='e.g. Take coffee break'
           />
-          <label htmlFor='description' className='pb-1 pt-5 text-xs font-bold opacity-60'>Description</label>
+          <label htmlFor='description' className='pb-1 pt-5 text-xs font-bold opacity-60 dark:text-kwhite'>Description</label>
           <textarea
           name='description'
             defaultValue={isEdit ? dataTask.description : ''}
-            className='h-[112px] w-full rounded-md border-[1px] border-solid border-kgrayli/30 text-sm font-medium'
+            className='h-[112px] w-full rounded-md border-[1px] border-solid border-kgrayli/30 text-sm font-medium outline-kpurple invalid:border-kred dark:bg-transparent dark:text-kwhite'
             placeholder='e.g. It’s always good to take a break. This
                     15 minute break will  recharge the batteries
                     a little.'
           />
-          <label htmlFor='subtask' className='pb-1 pt-5 text-xs font-bold opacity-60'>SubTask</label>
+          <label htmlFor='subtask' className='pb-1 pt-5 text-xs font-bold opacity-60 dark:text-kwhite'>SubTask</label>
           <div className='h-[120px] overflow-y-auto text-md font-medium scrollbar-thin scrollbar-thumb-kpurple'>
           {
-            !isEdit && column.length === 0 ? <p className='pt-7 text-center opacity-60 '>Add new columns</p> : (isEdit && dataTask && dataTask.subTask.length === 0 ? <p className='pt-7 text-center opacity-60'>Add new columns</p> : '')
+            !isEdit && column.length === 0
+              ? <p className='pt-7 text-center opacity-60 dark:text-kwhite'>Add new columns</p>
+              : (isEdit && dataTask && dataTask.subTask.length === 0 &&
+                  <p className='pt-7 text-center opacity-60'>Add new columns</p>
+                )
           }
           {isEdit
             ? apiSubtask.map(item => <SubTaskCard key={item._id} colID={item._id} handleDeleteColumn={handleDeleteColumn}
@@ -125,8 +129,8 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, reload })
           >
             +add new task
           </Button>
-          <label htmlFor='status' className='pb-1 pt-3 text-xs font-bold opacity-60'>Status</label>
-          <select name='status' className='h-[40px] w-full rounded-md border-[1px] border-solid border-kgrayli/30 text-sm font-medium'>
+          <label htmlFor='status' className='pb-1 pt-3 text-xs font-bold opacity-60 dark:text-kwhite'>Status</label>
+          <select name='status' className='h-[40px] w-full rounded-md border-[1px] border-solid border-kgrayli/30 text-sm font-medium outline-kpurple invalid:border-kred dark:bg-transparent dark:text-kwhite'>
             {
               !isEdit && activeBoard && activeBoard.board_columns.map(value => (<option key={value._id} value={value._id}>{value.name}</option>))
             }

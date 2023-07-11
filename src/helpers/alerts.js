@@ -8,13 +8,13 @@ function Alert (reqFunction, succesMsg) {
     }
   )
     .then((res) => {
+      console.log(res)
       toast.success(succesMsg)
-      setTimeout(() => {
-        location.reload()
-      }, 3000)
+      // setTimeout(() => {
+      // }, 3000)
     })
-    .catch((res) => {
-      toast.error(res.response.data)
+    .catch((err) => {
+      toast.error(err)
     })
 }
 export { Alert }

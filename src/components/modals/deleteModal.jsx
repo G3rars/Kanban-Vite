@@ -2,7 +2,6 @@ import React from 'react'
 import Button from '../button'
 
 function DeleteModal ({ close, deleteBoard, dataTask, handleDeleteTask, activeBoard }) {
-  console.log(dataTask)
   return (
     <div className='absolute z-50 flex h-[100vh] w-[100vw] items-center justify-center bg-kred'>
       <div onClick={e => e.stopPropagation()} className='h-[284px] w-[343px] rounded-md bg-kwhite px-6 shadow-md dark:bg-kblackli md:h-[220px] md:w-[480px]'>

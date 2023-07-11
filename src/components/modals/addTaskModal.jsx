@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Alert } from '../../helpers/alerts'
 
-export default function AddTaskModal ({ activeBoard, dataTask, isEdit, reload }) {
+export default function AddTaskModal ({ activeBoard, dataTask, isEdit }) {
   const [column, setColumn] = useState([])
   const [apiSubtask, setApiSubtask] = useState(dataTask ? dataTask.subTask : null)
   const [deleteCol, setDeleteCol] = useState([])
@@ -44,7 +44,7 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, reload })
         description: updateData.description,
         subTask: updateData.subTask
       }
-      console.log(formData)
+      console.log('initialData', formData)
       await deleteCard(updateData._id)
       postCard(data, formData.status)
     }

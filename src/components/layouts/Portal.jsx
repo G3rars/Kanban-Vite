@@ -22,7 +22,7 @@ function Portal (props) {
           { props.state.delete && props.onDelete() }
           { props.state.edit && props.onEditBoard() }
           { props.state.new_task && props.onAddTask() }
-          { props.state.task_details && props.onVIewTask() }
+          { props.state.task_details && props.onViewTask() }
           { props.state.new_board && props.onNewBoard() }
           { props.state.error && props.onError() }
           { props.state.loading && props.onLoading() }

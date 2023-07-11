@@ -2,7 +2,7 @@ import { useEffect, useState, useReducer } from 'react'
 import { deleteBoard, deleteCard, getBoards } from '../../core/api'
 import { MODALS, REQ_ACTION, initialRequestState, requestReducer } from '../helpers/contants'
 
-function useAxios (action) {
+function useAxios (dispatchAction) {
   const [state, dispatch] = useReducer(requestReducer, initialRequestState)
   const [initialBoard, setInitialBoard] = useState(null)
   const [activeBoard, setActiveBoard] = useState(null)
@@ -12,6 +12,7 @@ function useAxios (action) {
   const fetchData = async () => {
     try {
       const data = await getBoards()
+      console.log('[useAxios] - initialData:', data)
       setInitialBoard(data)
       setActiveBoard(data[0])
       dispatch(REQ_ACTION.LOADED)
@@ -26,21 +27,21 @@ function useAxios (action) {
       dispatch(REQ_ACTION.LOADING)
       fetchData()
     }
-  }, [activeBoard])
+  }, [])
 
   const changeBoard = (keyData) => {
     if (keyData !== undefined) {
       const idBoard = initialBoard.find(value => value.board_id === keyData)
       setActiveBoard(idBoard)
     }
-    action(MODALS.CLOSE_SIDE_MENU)
+    dispatchAction(MODALS.CLOSE_SIDE_MENU)
   }
 
   const handleEditTask = () => {
     setIsEdit(value => !value)
     if (!isEdit) {
-      action(MODALS.CLOSE_ALL_MODALS)
-      action(MODALS.OPEN_NEW_TASK)
+      dispatchAction(MODALS.CLOSE_ALL_MODALS)
+      dispatchAction(MODALS.OPEN_NEW_TASK)
     }
   }
 
@@ -51,17 +52,15 @@ function useAxios (action) {
   const handleViewTask = (keyData) => {
     const subArray = initialBoard.flatMap((value) => value.board_columns.flatMap((column) => column.cards.filter((card) => card._id === keyData)))
     setDataTask(...subArray)
-    action(MODALS.OPEN_TASK_DETAILS)
-  }
-  async function removeBoard (activeBoard) {
-    await deleteBoard(activeBoard.board_id)
-    location.reload()
-    action(MODALS.CLOSE_ALL_MODALS)
+    dispatchAction(MODALS.OPEN_TASK_DETAILS)
   }
 
-  function reloadPage () {
-    setInitialBoard(null)
-    setActiveBoard(null)
+  async function removeBoard (activeBoard) {
+    await deleteBoard(activeBoard.board_id)
+    const index = initialBoard.findIndex((item) => item.board_id === activeBoard.board_id)
+    initialBoard.splice(index, 1)
+    setActiveBoard(initialBoard.at(0))
+    dispatchAction(MODALS.CLOSE_ALL_MODALS)
   }
 
   const states = {
@@ -76,7 +75,6 @@ function useAxios (action) {
     changeBoard,
     handleViewTask,
     removeBoard,
-    reloadPage,
     handleEditTask,
     handleDeleteTask,
     setDataTask

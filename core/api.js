@@ -5,6 +5,8 @@ const DB = 'https://bdd-kanban.vercel.app'
 
 // TODO: Evitar problemas de CORS
 
+// TODO: Agregar ruta en el backend tipo GET --> /board/board_id
+
 const getBoards = async () => {
   return axios.get(`${DB}/board`)
     .then(response => { return formatData(response.data) })
@@ -19,7 +21,7 @@ const postBoard = async (postData) => {
 
 const putBoard = async (idBoard, postData) => {
   return axios.put(`${DB}/board/${idBoard}`, postData)
-    .then(response => {})
+    .then(response => { })
     .catch(error => { console.error(error.response.data); throw error })
 }
 
@@ -30,7 +32,7 @@ const postColumn = async (postData, id) => {
 }
 const putColumn = async (idColumn, postData) => {
   return axios.put(`${DB}/column/${idColumn}`, postData)
-    .then(response => {})
+    .then(response => { })
     .catch(error => { console.error(error.response.data) })
 }
 
@@ -62,7 +64,7 @@ const deleteCard = async (id) => {
 
 const putCard = async (cardId, postData) => {
   return axios.put(`${DB}/card/${cardId}`, postData)
-    .then(response => {})
+    .then(response => { })
     .catch(error => { console.error(error.response.data); throw error })
 }
 

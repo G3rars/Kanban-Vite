@@ -12,6 +12,7 @@ export default function SubTaskCard ({ handleDeleteColumn, colID, inputName, def
           required
           name={inputName}
           defaultValue={defValue}
+          minLength={4}
         />
         <button onClick={() => handleDeleteColumn(colID)} className='flex h-10 items-center justify-center pl-5'>
           <IconCross />

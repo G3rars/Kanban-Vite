@@ -44,7 +44,12 @@ export default function HeaderComp ({ openSideMenu, states, openBoardSettings, o
         {
             states.settings && (
               <div className='absolute right-8 top-14 z-30 h-24 w-48 rounded-md bg-kwhite shadow-lg dark:bg-kblackli md:top-16 lg:top-20'>
-                <BoardConfig openDeleteBoard={openDeleteBoard} openEditBoard={openEditBoard} />
+                <BoardConfig
+                key='headerMiniModal'
+                  remove={openDeleteBoard}
+                  edit={openEditBoard}
+                  content={{ top: 'Edit board', down: 'Delete board' }}
+                />
               </div>
             )
           }

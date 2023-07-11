@@ -10,13 +10,13 @@ import { ToastContainer } from 'react-toastify'
 
 export default function NewBoardModal ({ close }) {
   const [column, setColumn] = useState([])
-  const newBoardForm = useRef()
+  const formRef = useRef()
 
   useEffect(() => {
     if (column.length === 0) {
       const cols = []
       cols.push({
-        name: 'col_1',
+        name: 'col_0',
         required: true,
         id: uuidv4()
       })
@@ -25,7 +25,7 @@ export default function NewBoardModal ({ close }) {
   }, [column])
 
   function saveColInfo () {
-    const formData = getFormData(newBoardForm.current)
+    const formData = getFormData(formRef.current)
     const dataArr = objectToArr(formData)
     dataArr.length !== 0 && dataArr.shift()
     const cols = dataArr.map((item, index) => ({
@@ -53,14 +53,24 @@ export default function NewBoardModal ({ close }) {
   }
 
   const handleSubmit = async (e) => {
-    const formData = getFormData(newBoardForm.current)
+    e.preventDefault()
+    const formData = getFormData(formRef.current)
     try {
       const postData = await postBoard({ name: formData.name })
       const id = postData._id
       const cols = saveColInfo()
-      const columnPromises = cols.map(col => postColumn({ name: col.value }, id))
-      await Promise.all(columnPromises)
+      const columnPromises = cols.map((col) => postColumn({ name: col.value }, id))
+      const promises = await Promise.all(columnPromises)
+
+      // TODO: una vez tengamos una ruta en el backend para obtener el tablero segun el id, actualizar el estado usando los datos del get board/board_id
+
+      console.log('cols', cols)
+      console.log('postData', postData)
+      console.log('columnPromises', columnPromises)
+      console.log('promises', promises)
+
       Alert(() => Promise.resolve(), 'The board has been created successfully')
+      close()
     } catch (error) {
       console.log(error)
       Alert(() => Promise.reject(error), 'Error')
@@ -73,10 +83,11 @@ export default function NewBoardModal ({ close }) {
         <h3 className='text-lg font-bold text-kblack dark:text-kwhite'>Add New Board</h3>
         <button onClick={close} className='h-4 w-4'><IconCross /></button>
       </div>
-      <form className='grid gap-2' onSubmit={handleSubmit} ref={newBoardForm}>
+      <form className='grid gap-2' onSubmit={handleSubmit} ref={formRef}>
         <label htmlFor='boardName' className='text-sm font-bold text-kgrayli/60'>Board Name</label>
         <input
           required
+          minLength={4}
           type='text'
           id='boardName'
           name='name'

@@ -39,7 +39,6 @@ function App () {
     changeBoard,
     handleViewTask,
     removeBoard,
-    reloadPage,
     handleEditTask,
     handleDeleteTask,
     setDataTask,
@@ -120,7 +119,6 @@ function App () {
               />}
           onAddTask={() =>
               <AddTaskModal
-                reload={reloadPage}
                 isEdit={isEdit}
                 dataTask={dataTask}
                 activeBoard={activeBoard}
@@ -134,13 +132,12 @@ function App () {
                 openDeleteTask={() => dispatch(MODALS.OPEN_BOARD_DELETE)}
                 handleEditTask={handleEditTask}
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
-                reload={reloadPage}
               />}
           onNewBoard={() =>
               <NewBoardModal
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
               />}
-          onError={() => <Error reload={reloadPage} />}
+          onError={() => <Error />}
           onLoading={() => <Loading />}
         />
       </Main>

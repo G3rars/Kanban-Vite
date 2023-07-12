@@ -83,6 +83,7 @@ export default function NewBoardModal ({ close, setInitialBoard, initialBoard })
           minLength={4}
           type='text'
           id='boardName'
+          maxLength='30'
           name='name'
           placeholder='e.g. Web Design'
           className='h-10 w-full rounded border-[1px] border-solid border-kgrayli/30 py-2 pl-4 outline-kpurple dark:bg-transparent dark:text-kwhite'
@@ -100,6 +101,7 @@ export default function NewBoardModal ({ close, setInitialBoard, initialBoard })
                       handleDeleteColumn={handleDeleteColumn}
                       inputName={item.name}
                       defValue={item.value}
+                      max={'15'}
                       required={item.required}
                     />))
                   )

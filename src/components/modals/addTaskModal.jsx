@@ -57,7 +57,7 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
       const indexNewCol = updateBoard.columns.findIndex((col) => col._id === formData.status)
       updateBoard.columns[indexNewCol].cards.push(res)
     }
-
+    console.log(updateBoard)
     setActiveBoard(updateBoard)
     close()
     // Alert(() => putCard(dataTask._id, { title: formData.title, description: formData.description, subTask: subTaskIn }), 'The task has been updated successfully')

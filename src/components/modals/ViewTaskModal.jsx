@@ -6,6 +6,7 @@ import { IconThreeDots } from '../icons/Symbols'
 import { Alert } from '../../helpers/alerts'
 import { ToastContainer } from 'react-toastify'
 import Button from '../button'
+import { getFormData } from '../../helpers/utilities'
 
 export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, close, editTask }) {
   const [modal, setModal] = useState(false)
@@ -30,28 +31,18 @@ export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, 
     setTask(changeTask)
   }
 
-  const changeColumn = async () => {
-    let updateData = await getCard()
-    updateData = updateData.find(value => value._id === dataTask._id)
-    const formData = Object.fromEntries(new FormData(formRef.current))
-    if (formData.status !== updateData.column) {
-      const data = {
-        title: updateData.title,
-        description: updateData.description,
-        subTask: updateData.subTask
-      }
-      await deleteCard(updateData._id)
-      postCard(data, formData.status)
-    }
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     const subTasks = task.map(value => ({ name: value.name, completed: value.completed }))
+    const { status: columnID } = getFormData(formRef.current)
+    const newCardInfo = {
+      ...dataTask,
+      column: columnID,
+      subTask: subTasks
+    }
     try {
-      const putCardPromise = putCard(dataTask._id, { subTask: subTasks })
-      await changeColumn()
-      await Promise.all([putCardPromise])
+      const newCard = await putCard(dataTask._id, newCardInfo)
+      console.log({ dataTask, newCard })
       Alert(() => Promise.resolve(), 'Changes have been saved')
     } catch (error) {
       Alert(() => Promise.reject(error))

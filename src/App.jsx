@@ -126,7 +126,7 @@ function App () {
           onAddTask={() =>
               <AddTaskModal
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
-                isEdit={!state.new_task}
+                isEdit={state.edit_task}
                 dataTask={dataTask}
                 activeBoard={activeBoard}
                 setActiveBoard={setActiveBoard}
@@ -136,7 +136,7 @@ function App () {
                 setActiveTask={() => { dispatch(MODALS.OPEN_TASK_DETAILS) } }
                 activeBoard={activeBoard}
                 dataTask={dataTask}
-                editTask={() => dispatch(MODALS.OPEN_NEW_TASK)}
+                editTask={() => dispatch(MODALS.OPEN_EDIT_TASK)}
                 openDeleteTask={() => dispatch(MODALS.OPEN_BOARD_DELETE)}
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
               />}

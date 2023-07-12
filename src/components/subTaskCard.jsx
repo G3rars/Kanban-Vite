@@ -1,7 +1,7 @@
 import React from 'react'
 import { IconCross } from './icons/Symbols'
 
-export default function SubTaskCard ({ handleDeleteColumn, colID, inputName, defValue = '' }) {
+export default function SubTaskCard ({ handleDeleteColumn, colID, inputName, defValue = '', max }) {
   return (
     <>
       <div className='group flex pb-2'>
@@ -10,6 +10,7 @@ export default function SubTaskCard ({ handleDeleteColumn, colID, inputName, def
           placeholder='e.g. Make coffee'
           type='text'
           required
+          maxLength={max}
           name={inputName}
           defaultValue={defValue}
           minLength={4}

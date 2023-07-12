@@ -75,7 +75,7 @@ export default function NewBoardModal ({ close, setInitialBoard, initialBoard })
     }
   }
   return (
-    <article onClick={e => e.stopPropagation()} className='flex min-h-[415px] w-screen max-w-[345px] flex-col gap-6 rounded-md bg-kwhite p-6 dark:bg-kblackli md:max-w-[480px]'>
+    <article className='flex min-h-[415px] w-screen max-w-[345px] flex-col gap-6 rounded-md bg-kwhite p-6 dark:bg-kblackli md:max-w-[480px]'>
       <div className='flex items-center justify-between'>
         <h3 className='text-lg font-bold text-kblack dark:text-kwhite'>Add New Board</h3>
         <button onClick={close} className='h-4 w-4'><IconCross /></button>

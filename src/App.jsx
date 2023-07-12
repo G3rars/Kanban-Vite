@@ -40,16 +40,15 @@ function App () {
     changeBoard,
     handleViewTask,
     removeBoard,
-    handleEditTask,
     handleDeleteTask,
     setDataTask,
     setInitialBoard,
     setActiveBoard,
+    updateBoards,
     initialBoard,
     activeBoard,
     dataTask,
-    reqStatus,
-    isEdit
+    reqStatus
   } = useAxios(dispatch)
   const showColumnsCondition = Array.isArray(initialBoard) && initialBoard.length !== 0 && activeBoard && activeBoard.columns.length !== 0
 
@@ -107,8 +106,6 @@ function App () {
         }
         <Portal
           state={{ ...state, ...reqStatus }}
-          isEdit={isEdit}
-          handleEditTask={handleEditTask}
           close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
           onDelete={() =>
               <DeleteModal
@@ -122,13 +119,14 @@ function App () {
           onEditBoard={() =>
               <EditBoardModal
                 setActiveBoard={setActiveBoard}
+                updateBoards={updateBoards}
                 activeBoard={activeBoard}
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
               />}
           onAddTask={() =>
               <AddTaskModal
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
-                isEdit={isEdit}
+                isEdit={state.edit_task}
                 dataTask={dataTask}
                 activeBoard={activeBoard}
                 setActiveBoard={setActiveBoard}
@@ -138,9 +136,8 @@ function App () {
                 setActiveTask={() => { dispatch(MODALS.OPEN_TASK_DETAILS) } }
                 activeBoard={activeBoard}
                 dataTask={dataTask}
-                editTask={() => dispatch(MODALS.OPEN_NEW_TASK)}
+                editTask={() => dispatch(MODALS.OPEN_EDIT_TASK)}
                 openDeleteTask={() => dispatch(MODALS.OPEN_BOARD_DELETE)}
-                handleEditTask={handleEditTask}
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
               />}
           onNewBoard={() =>

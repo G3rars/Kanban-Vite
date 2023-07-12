@@ -6,8 +6,9 @@ import { IconThreeDots } from '../icons/Symbols'
 import { Alert } from '../../helpers/alerts'
 import { ToastContainer } from 'react-toastify'
 import Button from '../button'
+import { getFormData } from '../../helpers/utilities'
 
-export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, openDeleteTask, close }) {
+export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, close, editTask }) {
   const [modal, setModal] = useState(false)
   const [task, setTask] = useState(dataTask.subTask)
   const formRef = useRef()
@@ -30,28 +31,18 @@ export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, 
     setTask(changeTask)
   }
 
-  const changeColumn = async () => {
-    let updateData = await getCard()
-    updateData = updateData.find(value => value._id === dataTask._id)
-    const formData = Object.fromEntries(new FormData(formRef.current))
-    if (formData.status !== updateData.column) {
-      const data = {
-        title: updateData.title,
-        description: updateData.description,
-        subTask: updateData.subTask
-      }
-      await deleteCard(updateData._id)
-      postCard(data, formData.status)
-    }
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     const subTasks = task.map(value => ({ name: value.name, completed: value.completed }))
+    const { status: columnID } = getFormData(formRef.current)
+    const newCardInfo = {
+      ...dataTask,
+      column: columnID,
+      subTask: subTasks
+    }
     try {
-      const putCardPromise = putCard(dataTask._id, { subTask: subTasks })
-      await changeColumn()
-      await Promise.all([putCardPromise])
+      const newCard = await putCard(dataTask._id, newCardInfo)
+      console.log({ dataTask, newCard })
       Alert(() => Promise.resolve(), 'Changes have been saved')
     } catch (error) {
       Alert(() => Promise.reject(error))
@@ -61,21 +52,18 @@ export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, 
   const COMPLETED = task.filter(item => item.completed).length
 
   return (
-    <article
-      onClick={e => e.stopPropagation()}
-      className='relative flex min-h-[560px] w-screen max-w-[345px] flex-col gap-6 rounded-md bg-kwhite p-6 dark:bg-kblackli md:max-w-[480px]'
-    >
+    <article className='relative flex min-h-[560px] w-screen max-w-[345px] flex-col justify-between gap-6 rounded-md bg-kwhite px-6 pt-6 dark:bg-kblackli md:max-w-[480px]'>
       <div className='flex max-h-fit items-center justify-between'>
         <h3 className='text-lg font-bold text-kblack dark:text-kwhite'>{dataTask.title}</h3>
         <button onClick={taskOptions} className='flex h-10 w-5 items-center justify-end'><IconThreeDots /></button>
       </div>
-      <div className='h-[120px] overflow-y-auto scrollbar-thin scrollbar-thumb-kcian'>
+      <div className='h-20 overflow-y-auto scrollbar-thin scrollbar-thumb-kcian'>
         <p className='text-sm font-normal leading-6 text-kgrayli'>{dataTask.description}</p>
       </div>
 
       <form ref={formRef} onSubmit={handleSubmit} className='flex h-full flex-col justify-between gap-2'>
         <div className='grid gap-2'>
-        <label className='mb-2 text-sm font-bold text-kgrayli'>Subtasks ({COMPLETED} of {TOTAL})</label>
+        <p className='mb-2 text-sm font-bold text-kgrayli'>Subtasks ({COMPLETED} of {TOTAL})</p>
         {
           dataTask.subTask && dataTask.subTask.map((value) =>
             <Subtask
@@ -100,12 +88,17 @@ export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, 
             }
           </select>
         </div>
-        <Button btnType='submit' style='primarysm'>Save Changes</Button>
+        <div>
+          <div className='grid gap-3'>
+            <Button event={close} key='closeModalBtn' style='secondary'><p>Close</p></Button>
+            <Button btnType='submit' style='primarysm'>Save Changes</Button>
+          </div>
+        </div>
       </form>
       {
         modal && (
           <div className='absolute -right-8 top-16 z-30 h-24 w-40 rounded-md shadow-lg md:top-16 md:w-48 lg:top-20'>
-            <BoardConfig content={{ top: 'Edit Task', down: 'Delete Task' }} edit={handleEditTask} remove={openDeleteTask}/>
+            <BoardConfig content={{ top: 'Edit Task', down: 'Delete Task' }} edit={editTask} remove={openDeleteTask}/>
           </div>
         )
       }

@@ -1,6 +1,6 @@
 import React from 'react'
 
-function CardModal ({ children, event, keyData, type, content }) {
+function CardModal ({ event, keyData, type, content }) {
   function handleCLick () {
     event(keyData)
   }

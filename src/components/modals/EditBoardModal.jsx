@@ -5,11 +5,14 @@ import { putBoard } from '../../../core/api'
 import { v4 as uuidv4 } from 'uuid'
 import { ToastContainer, toast } from 'react-toastify'
 import { Alert } from '../../helpers/alerts'
+import { IconCross } from '../icons/Symbols'
 
-function EditBoardModal ({ activeBoard, setActiveBoard, close }) {
+
+function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
   const [column, setColumn] = useState(activeBoard.columns)
   const [deleteCol, setDeleteCol] = useState([])
   const formRef = useRef()
+
   const handleAddColumn = (e) => {
     e.preventDefault()
     const cols = [...column]
@@ -19,15 +22,18 @@ function EditBoardModal ({ activeBoard, setActiveBoard, close }) {
     })
     setColumn(cols)
   }
+
   const handleDeleteColumn = (colID) => {
     const newCols = column.filter(value => value._id !== colID)
     setColumn(newCols)
     const findDelete = column.find(value => value._id === colID && !value._id.startsWith('col_'))
     setDeleteCol([...deleteCol, findDelete])
   }
+
   const handleSubmit = async (e) => {
     const loadingId = toast.loading('Please wait...', { autoClose: false })
     e.preventDefault()
+
     try {
       const formData = Object.fromEntries(new FormData(formRef.current))
       const dataArr = Object.entries(formData)
@@ -48,11 +54,15 @@ function EditBoardModal ({ activeBoard, setActiveBoard, close }) {
     } catch (error) {
       Alert(() => Promise.reject(error), loadingId)
     }
+
   }
 
   return (
-    <article onClick={e => e.stopPropagation()} className='flex min-h-[475px] w-screen max-w-[345px] flex-col gap-6 rounded-md bg-kwhite p-6 dark:bg-kblackli md:max-w-[480px]'>
-      <h3 className='text-lg font-bold text-kblack dark:text-kwhite'>Edit Board</h3>
+    <article className='flex min-h-[475px] w-screen max-w-[345px] flex-col gap-6 rounded-md bg-kwhite p-6 dark:bg-kblackli md:max-w-[480px]'>
+      <div className='flex items-center justify-between'>
+        <h3 className='text-lg font-bold text-kblack dark:text-kwhite'>Edit Board</h3>
+        <button onClick={close} className='h-4 w-4'><IconCross /></button>
+      </div>
       <form
         ref={formRef}
         onSubmit={handleSubmit}

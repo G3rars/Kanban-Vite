@@ -7,12 +7,12 @@ function MiniMenu ({ data, setBoardModal, changeBoard, changeTheme, activeBoard,
   const totalBoards = Array.isArray(data) && data.length
 
   return (
-    <aside onClick={(e) => e.stopPropagation()} className='grid min-h-[325px] w-screen max-w-[265px] rounded-md bg-kwhite transition duration-500 dark:bg-kdarkGray'>
+    <aside onClick={e => e.stopPropagation()} className='grid max-h-[500px] min-h-[325px] w-screen max-w-[300px] overflow-scroll rounded-md bg-kwhite transition duration-500 dark:bg-kdarkGray'>
         <p className='py-4 pl-7 text-md font-bold uppercase tracking-wide opacity-60 dark:text-kwhite'>
           all Board ({totalBoards})
         </p>
 
-        <div className='overflow-y-auto'>
+        <div className='h-80 overflow-y-scroll'>
           {
             Array.isArray(data) && data.map((item) => (
               <CardModal

@@ -5,6 +5,7 @@ import { postCard, putCard } from '../../../core/api'
 import { v4 as uuidv4 } from 'uuid'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { IconCross } from '../icons/Symbols'
 // import { Alert } from '../../helpers/alerts'
 
 export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActiveBoard, close }) {
@@ -80,10 +81,14 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
     setActiveBoard(updateBoard)
     close()
   }
+
   return (
     <>
-      <section onClick={e => e.stopPropagation()} className='min-h-fit w-screen max-w-[350px] rounded-lg bg-kwhite p-6 dark:bg-kblackli md:max-w-[480px]'>
-        <h3 className='text-lg font-bold dark:text-kwhite'>{!isEdit ? 'Add New Task' : 'Edit Task'}</h3>
+      <section className='min-h-fit w-screen max-w-[350px] rounded-lg bg-kwhite p-6 dark:bg-kblackli md:max-w-[480px]'>
+        <div className='flex items-center justify-between'>
+          <h3 className='text-lg font-bold dark:text-kwhite'>{!isEdit ? 'Add New Task' : 'Edit Task'}</h3>
+          <button onClick={close} className='h-4 w-4'><IconCross /></button>
+      </div>
         <form onSubmit={(e) => isEdit ? submitEditTask(e) : submitNewTask(e)} ref={newTaskForm} className='grid w-full'>
           <label htmlFor='title' className='pb-1 pt-3 text-xs font-bold opacity-60 dark:text-kwhite'>Title</label>
           <input
@@ -96,9 +101,10 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
           />
           <label htmlFor='description' className='pb-1 pt-5 text-xs font-bold opacity-60 dark:text-kwhite'>Description</label>
           <textarea
-          name='description'
+            name='description'
+            rows='5'
             defaultValue={isEdit ? dataTask.description : ''}
-            className='h-[112px] w-full rounded-md border-[1px] border-solid border-kgrayli/30 text-sm font-medium outline-kpurple invalid:border-kred dark:bg-transparent dark:text-kwhite'
+            className='w-full rounded-md border-[1px] border-solid border-kgrayli/30 text-sm font-medium outline-kpurple invalid:border-kred dark:bg-transparent dark:text-kwhite md:h-20'
             placeholder='e.g. It’s always good to take a break. This
                     15 minute break will  recharge the batteries
                     a little.'
@@ -113,16 +119,19 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
                 )
           }
           {isEdit
-            ? apiSubtask.map(item => <SubTaskCard max={'50'} key={item._id} colID={item._id} handleDeleteColumn={handleDeleteColumn}
+            ? apiSubtask.map(item =>
+                  <SubTaskCard max={'50'} key={item._id} colID={item._id} handleDeleteColumn={handleDeleteColumn}
                       inputName={item._id}
                       defValue={item.name}/>)
-            : column.map(item => <SubTaskCard max={'50'} key={item._id}
+            : column.map(item =>
+                  <SubTaskCard max={'50'} key={item._id}
                       colID={item._id}
                       handleDeleteColumn={handleDeleteColumn}
                       inputName={item._id}
                       defValue={item.value}/>)
           }
-          {isEdit && column.map(item => <SubTaskCard max={'50'} key={item._id}
+          {isEdit && column.map(item =>
+                  <SubTaskCard max={'50'} key={item._id}
                       colID={item._id}
                       handleDeleteColumn={handleDeleteColumn}
                       inputName={item._id}
@@ -132,8 +141,9 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
           </div>
           <Button
             style='secondary'
-            event={handleAddColumn}
+            event={handleAddColumn} /* // ! ES DE AQUI */
             key='newColBtn'
+            size='mt-3'
           >
             +add new task
           </Button>
@@ -153,8 +163,8 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
           </select>
           <Button
             style='primarysm'
-            size={'mt-6'}
             btnType='submit'
+            size='mt-3'
           >
             { isEdit ? 'Save Changes' : 'Create Task' }
           </Button>

@@ -8,7 +8,7 @@ function CardColumn ({ children, data }) {
         <div className='h-4 w-4 rounded-full bg-cyan-500' />
         <p className='text-base font-bold uppercase tracking-widest text-kgray dark:text-kgrayli'>{data.name}</p>
       </div>
-        {children}
+        <div className='overflow-y-scroll h-[78vh] scrollbar-thin scrollbar-thumb-kcian'>{children}</div>
     </section>
   )
 }

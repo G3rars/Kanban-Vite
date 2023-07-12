@@ -1,16 +1,14 @@
 import React, { useRef, useState } from 'react'
 import SubTaskCard from '../subTaskCard'
 import Button from '../button'
-import { deleteColumn, postColumn, putBoard, putColumn } from '../../../core/api'
+import { putBoard } from '../../../core/api'
 import { v4 as uuidv4 } from 'uuid'
-import { Alert } from '../../helpers/alerts'
 import { ToastContainer } from 'react-toastify'
 
-function EditBoardModal ({ activeBoard }) {
-  const [column, setColumn] = useState(activeBoard.board_columns)
+function EditBoardModal ({ activeBoard, setActiveBoard, close }) {
+  const [column, setColumn] = useState(activeBoard.columns)
   const [deleteCol, setDeleteCol] = useState([])
   const formRef = useRef()
-
   const handleAddColumn = (e) => {
     e.preventDefault()
     const cols = [...column]
@@ -30,23 +28,16 @@ function EditBoardModal ({ activeBoard }) {
     e.preventDefault()
     const formData = Object.fromEntries(new FormData(formRef.current))
     const dataArr = Object.entries(formData)
-    dataArr.shift()
-    deleteCol.map(value => deleteColumn(value._id))
-    try {
-      await putBoard(activeBoard.board_id, { name: formData.boardName })
-      const columnPromises = dataArr.map(([id, value]) => {
-        if (id.startsWith('col_')) {
-          return postColumn({ name: value }, activeBoard.board_id)
-        } else {
-          return putColumn(id, { name: value })
-        }
-      })
-      await Promise.all(columnPromises)
-      Alert(() => Promise.resolve(), 'The board has been successfully updated')
-    } catch (error) {
-      console.error(error)
-      Alert(() => Promise.reject(error))
-    }
+    const boardName = dataArr.shift()
+    const filterColumns = dataArr.map(([id, value]) => {
+      if (id.startsWith('col_')) {
+        return { name: value }
+      }
+      return { name: value, _id: id }
+    })
+    const newBoard = await putBoard(activeBoard._id, { name: boardName[1], columns: filterColumns })
+    setActiveBoard(newBoard)
+    close()
   }
 
   return (
@@ -59,7 +50,7 @@ function EditBoardModal ({ activeBoard }) {
       >
         <label htmlFor='boardName' className='text-sm font-bold text-kgrayli'>Board Name</label>
         <input
-          defaultValue={activeBoard.board_name}
+          defaultValue={activeBoard.name}
           required
           type='text'
           id='boardName'

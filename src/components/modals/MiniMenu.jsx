@@ -17,10 +17,10 @@ function MiniMenu ({ data, setBoardModal, changeBoard, changeTheme, activeBoard,
             Array.isArray(data) && data.map((item) => (
               <CardModal
                 event={changeBoard}
-                keyData={item.board_id}
-                key={item.board_id}
-                content={item.board_name}
-                type={item.board_id === activeBoard.board_id ? 'active' : 'inactive'}
+                keyData={item._id}
+                key={item._id}
+                content={item.name}
+                type={item._id === activeBoard._id ? 'active' : 'inactive'}
               />
             ))
           }

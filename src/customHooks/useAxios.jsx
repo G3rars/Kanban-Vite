@@ -38,7 +38,7 @@ function useAxios (dispatchAction) {
 
   const changeBoard = (keyData) => {
     if (keyData !== undefined) {
-      const idBoard = initialBoard.find(value => value.board_id === keyData)
+      const idBoard = initialBoard.find(value => value._id === keyData)
       setActiveBoard(idBoard)
     }
     dispatchAction(MODALS.CLOSE_SIDE_MENU)
@@ -57,14 +57,14 @@ function useAxios (dispatchAction) {
   }
 
   const handleViewTask = (keyData) => {
-    const subArray = initialBoard.flatMap((value) => value.board_columns.flatMap((column) => column.cards.filter((card) => card._id === keyData)))
+    const subArray = initialBoard.flatMap((value) => value.columns.flatMap((column) => column.cards.filter((card) => card._id === keyData)))
     setDataTask(...subArray)
     dispatchAction(MODALS.OPEN_TASK_DETAILS)
   }
 
   async function removeBoard (activeBoard) {
-    await deleteBoard(activeBoard.board_id)
-    const index = initialBoard.findIndex((item) => item.board_id === activeBoard.board_id)
+    await deleteBoard(activeBoard._id)
+    const index = initialBoard.findIndex((item) => item._id === activeBoard._id)
     initialBoard.splice(index, 1)
     setActiveBoard(initialBoard.at(0))
     dispatchAction(MODALS.CLOSE_ALL_MODALS)

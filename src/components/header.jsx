@@ -20,13 +20,13 @@ export default function HeaderComp ({ openSideMenu, states, openBoardSettings, o
         data && (
           <>
             <button onClick={openMiniMenu} className='flex items-center gap-3 md:hidden'>
-              <p>{data.board_name}</p>
+              <p>{data.name}</p>
               { !states.mini_menu
                 ? <ArrowDown />
                 : <ArrowUp />
               }
             </button>
-            <p className='hidden md:block'>{data.board_name}</p>
+            <p className='hidden md:block'>{data.name}</p>
           </>
         )
       }

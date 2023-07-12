@@ -6,7 +6,6 @@ import { LogoDesktop } from '../icons/Logos.jsx'
 
 export default function TabletModal ({ close, modalTable, data, setBoardModal, changeBoard, changeTheme, activeBoard, darkTheme }) {
   const totalBoards = Array.isArray(data) && data.length
-
   return (
     <>
       <aside className={`${modalTable.side_menu ? 'translate-x-0' : '-translate-x-full'} absolute z-20 flex h-full w-[300px] flex-col bg-kwhite shadow-md transition duration-500 dark:bg-kdarkGray dark:text-kgrayli`}>
@@ -23,10 +22,10 @@ export default function TabletModal ({ close, modalTable, data, setBoardModal, c
             Array.isArray(data) && activeBoard && data.map((item) => (
               <CardModal
                 event={changeBoard}
-                keyData={item.board_id}
-                key={item.board_id}
-                type={item.board_id === activeBoard.board_id ? 'active' : 'inactive'}
-                content={item.board_name}
+                keyData={item._id}
+                key={item._id}
+                type={item._id === activeBoard._id ? 'active' : 'inactive'}
+                content={item.name}
               />)
             )
           }

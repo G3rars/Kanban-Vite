@@ -59,7 +59,7 @@ export default function NewBoardModal ({ close, setInitialBoard, initialBoard })
       const { _id: boardID, name: boardName } = await postBoard({ name: formData.name })
       const cols = saveColInfo()
       const columnPromises = await Promise.all(cols.map(async (col) => await postColumn({ name: col.value }, boardID)))
-      const formatData = { board_name: boardName, board_id: boardID, board_columns: columnPromises }
+      const formatData = { name: boardName, _id: boardID, columns: columnPromises }
       const updateState = [...initialBoard, formatData]
       setInitialBoard(updateState)
       // Alert(() => Promise.resolve(), 'The board has been created successfully')

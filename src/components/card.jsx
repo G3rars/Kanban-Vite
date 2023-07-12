@@ -1,8 +1,8 @@
 import React from 'react'
 
 export default function Card ({ data, handleViewTask }) {
-  const TOTAL = data.subTask.length
-  const COMPLETED = data.subTask.filter(item => item.completed).length
+  const TOTAL = data?.subTask?.length || 0
+  const COMPLETED = data?.subTask?.filter(item => item.completed)?.length || 0
 
   return (
     <>

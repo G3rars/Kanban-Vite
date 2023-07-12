@@ -7,7 +7,7 @@ function formatData (data) {
         create: item.createdAt,
         update: item.updatedAt
       },
-      board_columns: [...item.columns]
+      columns: [...item.columns]
     }
   })
   return newData

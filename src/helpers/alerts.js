@@ -1,20 +1,14 @@
 import { toast } from 'react-toastify'
 
-function Alert (reqFunction, succesMsg) {
-  toast.promise(
-    reqFunction(),
-    {
-      pending: 'loading'
-    }
-  )
-    .then((res) => {
-      console.log(res)
-      toast.success(succesMsg)
-      // setTimeout(() => {
-      // }, 3000)
-    })
-    .catch((res) => {;
-      toast.error(res.response.data)
-    })
+const Alert = async (promise, loadingId, successMsg) => {
+  try {
+    await promise()
+    toast.update(loadingId, { render: successMsg, type: 'success', autoClose: 2500, isLoading: false })
+  } catch (error) {
+    console.log(error)
+    const errorMessage = error.response?.data || 'An error occurred'
+    toast.update(loadingId, { render: errorMessage, type: 'error', autoClose: 2500, isLoading: false })
+  }
 }
+
 export { Alert }

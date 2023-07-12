@@ -3,8 +3,10 @@ import SubTaskCard from '../subTaskCard'
 import Button from '../button'
 import { putBoard } from '../../../core/api'
 import { v4 as uuidv4 } from 'uuid'
-import { ToastContainer } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
+import { Alert } from '../../helpers/alerts'
 import { IconCross } from '../icons/Symbols'
+
 
 function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
   const [column, setColumn] = useState(activeBoard.columns)
@@ -29,20 +31,30 @@ function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
   }
 
   const handleSubmit = async (e) => {
+    const loadingId = toast.loading('Please wait...', { autoClose: false })
     e.preventDefault()
-    const formData = Object.fromEntries(new FormData(formRef.current))
-    const dataArr = Object.entries(formData)
-    const boardName = dataArr.shift()
-    const filterColumns = dataArr.map(([id, value]) => {
-      if (id.startsWith('col_')) {
-        return { name: value }
-      }
-      return { name: value, _id: id }
-    })
-    const newBoard = await putBoard(activeBoard._id, { name: boardName[1], columns: filterColumns })
-    updateBoards(newBoard)
-    setActiveBoard(newBoard)
-    close()
+
+    try {
+      const formData = Object.fromEntries(new FormData(formRef.current))
+      const dataArr = Object.entries(formData)
+      const boardName = dataArr.shift()
+      const filterColumns = dataArr.map(([id, value]) => {
+        if (id.startsWith('col_')) {
+          return { name: value }
+        }
+        return { name: value, _id: id }
+      })
+      const newBoard = await putBoard(activeBoard._id, { name: boardName[1], columns: filterColumns })
+      await Promise.all([newBoard])
+      setActiveBoard(newBoard)
+      Alert(() => Promise.resolve(), loadingId, 'The board has been update successfully')
+      setTimeout(() => {
+        close()
+      }, 2500)
+    } catch (error) {
+      Alert(() => Promise.reject(error), loadingId)
+    }
+
   }
 
   return (
@@ -88,7 +100,7 @@ function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
         <Button event={handleAddColumn} key='newColBtn' style='secondary' size=' mt-auto mb-2'><p>+ Add New Column</p></Button>
         <Button btnType='submit' key='newBoardBtn' style='primarysm'><p>Save Changes</p></Button>
       </form>
-      <ToastContainer/>
+     <ToastContainer/>
     </article>
   )
 }

@@ -6,7 +6,7 @@ import { postBoard, postColumn } from '../../../core/api'
 import { getFormData, objectToArr } from '../../helpers/utilities'
 import { IconCross } from '../icons/Symbols'
 import { Alert } from '../../helpers/alerts'
-import { ToastContainer } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 
 export default function NewBoardModal ({ close, setInitialBoard, initialBoard }) {
   const [column, setColumn] = useState([])
@@ -55,21 +55,25 @@ export default function NewBoardModal ({ close, setInitialBoard, initialBoard })
   const handleSubmit = async (e) => {
     e.preventDefault()
     const formData = getFormData(formRef.current)
+    const loadingId = toast.loading('Please wait...', { autoClose: false })
     try {
       const { _id: boardID, name: boardName } = await postBoard({ name: formData.name })
       const cols = saveColInfo()
-      const columnPromises = await Promise.all(cols.map(async (col) => await postColumn({ name: col.value }, boardID)))
-      const formatData = { name: boardName, _id: boardID, columns: columnPromises }
+      const columnPromises = cols.map(async (col) => await postColumn({ name: col.value }, boardID))
+      const updatedColumns = await Promise.all(columnPromises)
+      const formatData = { name: boardName, _id: boardID, columns: updatedColumns }
       const updateState = [...initialBoard, formatData]
       setInitialBoard(updateState)
-      // Alert(() => Promise.resolve(), 'The board has been created successfully')
-      close()
+      Alert(() => Promise.resolve(), loadingId, 'The board has been created successfully')
+      setTimeout(() => {
+        close()
+      }, 2500)
     } catch (error) {
+      Alert()
       console.log(error)
-      Alert(() => Promise.reject(error), 'Error')
+      Alert(() => Promise.reject(error), loadingId)
     }
   }
-
   return (
     <article className='flex min-h-[415px] w-screen max-w-[345px] flex-col gap-6 rounded-md bg-kwhite p-6 dark:bg-kblackli md:max-w-[480px]'>
       <div className='flex items-center justify-between'>

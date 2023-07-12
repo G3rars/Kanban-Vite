@@ -5,10 +5,11 @@ import { putBoard } from '../../../core/api'
 import { v4 as uuidv4 } from 'uuid'
 import { ToastContainer } from 'react-toastify'
 
-function EditBoardModal ({ activeBoard, setActiveBoard, close }) {
+function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
   const [column, setColumn] = useState(activeBoard.columns)
   const [deleteCol, setDeleteCol] = useState([])
   const formRef = useRef()
+
   const handleAddColumn = (e) => {
     e.preventDefault()
     const cols = [...column]
@@ -18,12 +19,14 @@ function EditBoardModal ({ activeBoard, setActiveBoard, close }) {
     })
     setColumn(cols)
   }
+
   const handleDeleteColumn = (colID) => {
     const newCols = column.filter(value => value._id !== colID)
     setColumn(newCols)
     const findDelete = column.find(value => value._id === colID && !value._id.startsWith('col_'))
     setDeleteCol([...deleteCol, findDelete])
   }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     const formData = Object.fromEntries(new FormData(formRef.current))
@@ -36,6 +39,7 @@ function EditBoardModal ({ activeBoard, setActiveBoard, close }) {
       return { name: value, _id: id }
     })
     const newBoard = await putBoard(activeBoard._id, { name: boardName[1], columns: filterColumns })
+    updateBoards(newBoard)
     setActiveBoard(newBoard)
     close()
   }

@@ -44,6 +44,7 @@ function App () {
     setDataTask,
     setInitialBoard,
     setActiveBoard,
+    updateBoards,
     initialBoard,
     activeBoard,
     dataTask,
@@ -118,6 +119,7 @@ function App () {
           onEditBoard={() =>
               <EditBoardModal
                 setActiveBoard={setActiveBoard}
+                updateBoards={updateBoards}
                 activeBoard={activeBoard}
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
               />}

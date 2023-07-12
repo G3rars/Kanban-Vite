@@ -70,6 +70,13 @@ function useAxios (dispatchAction) {
     dispatchAction(MODALS.CLOSE_ALL_MODALS)
   }
 
+  function updateBoards (board) {
+    const newBoards = [...initialBoard]
+    const index = newBoards.findIndex((item) => item._id === board._id)
+    newBoards.splice(index, 1, board)
+    setInitialBoard(newBoards)
+  }
+
   const states = {
     initialBoard,
     activeBoard,
@@ -86,7 +93,8 @@ function useAxios (dispatchAction) {
     handleDeleteTask,
     setDataTask,
     setInitialBoard,
-    setActiveBoard
+    setActiveBoard,
+    updateBoards
   }
 
   return { ...states, ...functions }

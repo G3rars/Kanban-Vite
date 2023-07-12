@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Subtask } from '../SubTask'
 import { BoardConfig } from './BoardConfig'
-import { deleteCard, getCard, postCard, putCard } from '../../../core/api'
+import { putCard } from '../../../core/api'
 import { IconThreeDots } from '../icons/Symbols'
 import { Alert } from '../../helpers/alerts'
 import { ToastContainer } from 'react-toastify'
@@ -36,10 +36,12 @@ export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, 
     const subTasks = task.map(value => ({ name: value.name, completed: value.completed }))
     const { status: columnID } = getFormData(formRef.current)
     const newCardInfo = {
-      ...dataTask,
-      column: columnID,
+      _id: dataTask._id,
+      title: dataTask.title,
+      description: dataTask.description,
       subTask: subTasks
     }
+    if (columnID !== dataTask.column) newCardInfo.column = columnID
     try {
       const newCard = await putCard(dataTask._id, newCardInfo)
       console.log({ dataTask, newCard })

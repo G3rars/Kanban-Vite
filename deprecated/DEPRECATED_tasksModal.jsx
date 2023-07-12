@@ -1,6 +1,6 @@
 import React from 'react'
-import SubTaskCard from '../subTaskCard'
-import Button from '../button'
+import SubTaskCard from '../src/components/subTaskCard'
+import Button from '../src/components/button'
 
 export default function TaskModal () {
   return (

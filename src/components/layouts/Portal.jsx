@@ -12,13 +12,7 @@ function Portal (props) {
   return (
     <>
       {renderCondition && createPortal(
-        <section
-          onClick={props.isEdit
-            ? () => { props.close(); props.handleEditTask() }
-            : () => props.close()
-          }
-          className={`absolute z-30 h-full w-full ${props.state.loading ? 'flex items-end justify-end p-10' : 'grid place-content-center bg-black/50'}`}
-        >
+        <section className={`absolute z-30 h-full w-full ${props.state.loading ? 'flex items-end justify-end p-10' : 'grid place-content-center bg-black/50'}`}>
           { props.state.delete && props.onDelete() }
           { props.state.edit && props.onEditBoard() }
           { props.state.new_task && props.onAddTask() }

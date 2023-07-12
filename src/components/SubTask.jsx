@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useId } from 'react'
 
 function Subtask ({ id, content, check, handleCheckbox }) {
   const [status, setStatus] = useState(check)
+  const inputID = useId()
   const handleStatus = () => {
     setStatus(prevState => !prevState)
     handleCheckbox(id, !status)
@@ -13,11 +14,11 @@ function Subtask ({ id, content, check, handleCheckbox }) {
         type='checkbox'
         name={id}
         defaultChecked={check}
-        id={id}
+        id={inputID}
         className='peer form-checkbox h-4 w-4 text-kpurple outline-kpurple'
       />
       <label
-        htmlFor={id}
+        htmlFor={inputID}
         className='text-sm font-bold leading-normal text-kblack peer-checked:line-through peer-checked:opacity-30 dark:text-kwhite'
         >
           {content.name}

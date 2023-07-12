@@ -7,7 +7,6 @@ function useAxios (dispatchAction) {
   const [initialBoard, setInitialBoard] = useState([])
   const [activeBoard, setActiveBoard] = useState(null)
   const [dataTask, setDataTask] = useState(null)
-  const [isEdit, setIsEdit] = useState(false)
 
   const fetchData = async () => {
     try {
@@ -44,14 +43,6 @@ function useAxios (dispatchAction) {
     dispatchAction(MODALS.CLOSE_SIDE_MENU)
   }
 
-  const handleEditTask = () => {
-    setIsEdit(value => !value)
-    if (!isEdit) {
-      dispatchAction(MODALS.CLOSE_ALL_MODALS)
-      dispatchAction(MODALS.OPEN_NEW_TASK)
-    }
-  }
-
   const handleDeleteTask = (data) => {
     deleteCard(data._id)
   }
@@ -81,7 +72,6 @@ function useAxios (dispatchAction) {
     initialBoard,
     activeBoard,
     dataTask,
-    isEdit,
     reqStatus: state
   }
 
@@ -89,7 +79,6 @@ function useAxios (dispatchAction) {
     changeBoard,
     handleViewTask,
     removeBoard,
-    handleEditTask,
     handleDeleteTask,
     setDataTask,
     setInitialBoard,

@@ -1,15 +1,12 @@
 import axios from 'axios'
-import { formatData } from '../src/helpers/formatData'
 
 const DB = 'https://bdd-kanban.vercel.app'
 
 // TODO: Evitar problemas de CORS
 
-// TODO: Agregar ruta en el backend tipo GET --> /board/board_id
-
 const getBoards = async () => {
   return axios.get(`${DB}/board`)
-    .then(response => { return formatData(response.data) })
+    .then(response => { return response.data })
     .catch(error => { console.error(error.response.data) })
 }
 
@@ -21,7 +18,7 @@ const postBoard = async (postData) => {
 
 const putBoard = async (idBoard, postData) => {
   return axios.put(`${DB}/board/${idBoard}`, postData)
-    .then(response => { })
+    .then(response => { return response.data })
     .catch(error => { console.error(error.response.data); throw error })
 }
 

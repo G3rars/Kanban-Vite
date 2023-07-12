@@ -55,19 +55,19 @@ function modalReducer (state, action) {
     case MODALS.OPEN_MINI_MENU:
       return { ...state, mini_menu: !state.mini_menu }
     case MODALS.OPEN_BOARD_EDIT:
-      return { ...state, settings: false, edit: true }
+      return { ...initialModalsState, edit: true }
     case MODALS.OPEN_BOARD_DELETE:
-      return { ...state, settings: false, delete: true }
+      return { ...initialModalsState, delete: true }
     case MODALS.OPEN_NEW_BOARD_MODAL:
-      return { ...state, settings: false, side_menu: false, new_board: true }
+      return { ...initialModalsState, side_menu: false, new_board: true }
     case MODALS.OPEN_SIDE_MENU:
-      return { ...state, settings: false, tablet_btn_bottom: false, side_menu: true }
+      return { ...initialModalsState, tablet_btn_bottom: false, side_menu: true }
     case MODALS.OPEN_TASK_DETAILS:
-      return { ...state, settings: false, task_details: true }
+      return { ...initialModalsState, task_details: true }
     case MODALS.OPEN_NEW_TASK:
-      return { ...state, settings: false, new_task: true }
+      return { ...initialModalsState, new_task: true }
     case MODALS.CLOSE_SIDE_MENU:
-      return { ...state, side_menu: false }
+      return { ...initialModalsState, side_menu: false }
     case MODALS.CLOSE_ALL_MODALS:
       return initialModalsState
     default:

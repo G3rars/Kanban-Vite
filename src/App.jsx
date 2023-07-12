@@ -50,7 +50,7 @@ function App () {
     reqStatus,
     isEdit
   } = useAxios(dispatch)
-  const showColumnsCondition = Array.isArray(initialBoard) && initialBoard.length !== 0 && activeBoard
+  const showColumnsCondition = Array.isArray(initialBoard) && initialBoard.length !== 0 && activeBoard && activeBoard.columns.length !== 0
 
   return (
     <>
@@ -91,8 +91,8 @@ function App () {
         }
       >
         {
-          showColumnsCondition && activeBoard.board_columns.length > 0
-            ? activeBoard.board_columns.map(value => (
+          showColumnsCondition
+            ? activeBoard.columns.map(value => (
                 <CardColumn key={value._id} data={value}>
                   {value.cards.length !== 0 && value.cards.map(data => (
                     <Card handleViewTask={handleViewTask} key={data._id} data={data} />
@@ -117,7 +117,9 @@ function App () {
               />}
           onEditBoard={() =>
               <EditBoardModal
+                setActiveBoard={setActiveBoard}
                 activeBoard={activeBoard}
+                close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
               />}
           onAddTask={() =>
               <AddTaskModal

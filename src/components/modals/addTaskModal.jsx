@@ -34,21 +34,6 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
       setDeleteCol([...deleteCol, findDelete])
     }
   }
-  // const changeColumn = async () => {
-  //   let updateData = await getCard()
-  //   updateData = updateData.find(value => value._id === dataTask._id)
-  //   const formData = Object.fromEntries(new FormData(newTaskForm.current))
-  //   if (formData.status !== updateData.column) {
-  //     const data = {
-  //       title: updateData.title,
-  //       description: updateData.description,
-  //       subTask: updateData.subTask
-  //     }
-  //     console.log('initialData', formData)
-  //     await deleteCard(updateData._id)
-  //     postCard(data, formData.status)
-  //   }
-  // }
 
   const submitEditTask = async (e) => {
     e.preventDefault()
@@ -60,27 +45,19 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
     const updateBoard = activeBoard
     const res = await putCard(dataTask._id, { title: formData.title, description: formData.description, subTask: subTaskIn })
 
-    console.log({ updateBoard, res, dataTask, status: formData.status })
-
     if (dataTask.column === formData.status) {
-      // buscar la tarea en el activeBoard y actualizarla
-      const indexCol = updateBoard.board_columns.findIndex((col) => col._id === formData.status)
-      const indexTask = updateBoard.board_columns[indexCol].cards.findIndex((item) => item._id === res._id)
-      updateBoard.board_columns[indexCol].cards.splice(indexTask, 1, res)
+      const indexCol = updateBoard.columns.findIndex((col) => col._id === formData.status)
+      const indexTask = updateBoard.columns[indexCol].cards.findIndex((item) => item._id === res._id)
+      updateBoard.columns[indexCol].cards.splice(indexTask, 1, res)
     } else {
-      console.log('paso por aqui')
-      const indexCol = updateBoard.board_columns.findIndex((col) => col._id === dataTask.column)
-      const indexTask = updateBoard.board_columns[indexCol].cards.findIndex((item) => item._id === dataTask._id)
-      updateBoard.board_columns[indexCol].cards.splice(indexTask, 1)
+      const indexCol = updateBoard.columns.findIndex((col) => col._id === dataTask.column)
+      const indexTask = updateBoard.columns[indexCol].cards.findIndex((item) => item._id === dataTask._id)
+      updateBoard.columns[indexCol].cards.splice(indexTask, 1)
 
-      // ya elimine la tarea vieja, ahora hacer el push de la nueva tarea en su columna correspondiente
-      const indexNewCol = updateBoard.board_columns.findIndex((col) => col._id === formData.status)
-      updateBoard.board_columns[indexNewCol].cards.push(res)
+      const indexNewCol = updateBoard.columns.findIndex((col) => col._id === formData.status)
+      updateBoard.columns[indexNewCol].cards.push(res)
     }
 
-    // const index = updateBoard.board_columns.findIndex((item) => item._id === res.column)
-    // console.log(index)
-    // updateBoard.board_columns[index].cards.push(res) // ! NO HACER EL PUSH, solo editar
     setActiveBoard(updateBoard)
     close()
     // Alert(() => putCard(dataTask._id, { title: formData.title, description: formData.description, subTask: subTaskIn }), 'The task has been updated successfully')
@@ -98,9 +75,10 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
     }
     const res = await postCard(data, formData.status)
     const updateBoard = activeBoard
-    const index = updateBoard.board_columns.findIndex((item) => item._id === res.column)
-    updateBoard.board_columns[index].cards.push(res)
+    const index = updateBoard.columns.findIndex((item) => item._id === res.column)
+    updateBoard.columns[index].cards.push(res)
     setActiveBoard(updateBoard)
+    close()
   }
   return (
     <>
@@ -161,14 +139,14 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
           <label htmlFor='status' className='pb-1 pt-3 text-xs font-bold opacity-60 dark:text-kwhite'>Status</label>
           <select name='status' className='h-[40px] w-full rounded-md border-[1px] border-solid border-kgrayli/30 text-sm font-medium outline-kpurple invalid:border-kred dark:bg-kblackli dark:text-kwhite'>
             {
-              !isEdit && activeBoard && activeBoard.board_columns.map(value => (<option key={value._id} value={value._id}>{value.name}</option>))
+              !isEdit && activeBoard && activeBoard.columns.map(value => (<option key={value._id} value={value._id}>{value.name}</option>))
             }
             {isEdit && activeBoard &&
-                activeBoard.board_columns.map((value) =>
+                activeBoard.columns.map((value) =>
                   value._id === dataTask.column ? (<option key={value._id} value={value._id}>{value.name}</option>) : null)
             }
             {isEdit && activeBoard &&
-                activeBoard.board_columns.map((value) =>
+                activeBoard.columns.map((value) =>
                   value._id !== dataTask.column ? (<option key={value._id} value={value._id}>{value.name}</option>) : null)
             }
           </select>

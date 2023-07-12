@@ -8,19 +8,19 @@ import { IconPlus, IconThreeDots } from './icons/Symbols'
 export default function HeaderComp ({ openSideMenu, states, openBoardSettings, openDeleteBoard, openEditBoard, data, addTask, openMiniMenu }) {
   return (
     <nav className='relative flex h-[64px] w-full flex-row justify-between pr-7 shadow-md transition duration-500 dark:bg-kdarkGray md:h-[80px] lg:h-[96px]'>
-      <div className='mx-4 flex items-center justify-center border-solid border-kcian pr-4 dark:border-kdarkGray md:border-r'>
+      <div className='ml-4 flex items-center justify-center border-solid border-kcian pr-4 dark:border-kdarkGray md:mx-4 md:border-r'>
         <LogoMobile />
         <LogoDesktop event={openSideMenu} />
       </div>
       {/*
         // ! Open mini menu
       */}
-      <div className='mr-auto flex items-center text-xl font-bold dark:text-kwhite'>
+      <div className='mr-auto flex items-center truncate text-xl font-bold dark:text-kwhite'>
       {
         data && (
           <>
-            <button onClick={openMiniMenu} className='flex items-center gap-3 md:hidden'>
-              <p>{data.name}</p>
+            <button onClick={openMiniMenu} className='flex w-full items-center gap-3 md:hidden'>
+              <p className='w-full max-w-fit truncate'>{data.name}</p>
               { !states.mini_menu
                 ? <ArrowDown />
                 : <ArrowUp />

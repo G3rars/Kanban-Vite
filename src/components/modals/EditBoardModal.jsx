@@ -7,7 +7,6 @@ import { ToastContainer, toast } from 'react-toastify'
 import { Alert } from '../../helpers/alerts'
 import { IconCross } from '../icons/Symbols'
 
-
 function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
   const [column, setColumn] = useState(activeBoard.columns)
   const [deleteCol, setDeleteCol] = useState([])
@@ -54,7 +53,6 @@ function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
     } catch (error) {
       Alert(() => Promise.reject(error), loadingId)
     }
-
   }
 
   return (

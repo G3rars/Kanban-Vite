@@ -4,7 +4,7 @@ import { BoardConfig } from './BoardConfig'
 import { putCard } from '../../../core/api'
 import { IconThreeDots } from '../icons/Symbols'
 import { Alert } from '../../helpers/alerts'
-import { ToastContainer } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import Button from '../button'
 import { getFormData } from '../../helpers/utilities'
 
@@ -33,6 +33,7 @@ export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, 
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    const loadingID = toast.loading('Please Wait...')
     const subTasks = task.map(value => ({ name: value.name, completed: value.completed }))
     const { status: columnID } = getFormData(formRef.current)
     const newCardInfo = {
@@ -45,9 +46,11 @@ export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, 
     try {
       const newCard = await putCard(dataTask._id, newCardInfo)
       console.log({ dataTask, newCard })
-      Alert(() => Promise.resolve(), 'Changes have been saved')
+      // TODO: hacer que funcione en vivo
+      Alert(() => Promise.resolve(), loadingID, 'Changes have been saved')
+      setTimeout(() => close, 2500)
     } catch (error) {
-      Alert(() => Promise.reject(error))
+      Alert(() => Promise.reject(error), loadingID)
     }
   }
   const TOTAL = task.length

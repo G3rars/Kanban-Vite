@@ -44,7 +44,8 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
     let subTaskIn = dataArr.slice(2)
     subTaskIn = subTaskIn.map(([_, value]) => ({ name: value, completed: false }))
     const updateBoard = activeBoard
-    const res = await putCard(dataTask._id, { title: formData.title, description: formData.description, subTask: subTaskIn })
+
+    const res = await putCard(dataTask._id, { _id: dataTask._id, column: formData.status, title: formData.title, description: formData.description, subTask: subTaskIn })
 
     if (dataTask.column === formData.status) {
       const indexCol = updateBoard.columns.findIndex((col) => col._id === formData.status)
@@ -58,10 +59,9 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
       const indexNewCol = updateBoard.columns.findIndex((col) => col._id === formData.status)
       updateBoard.columns[indexNewCol].cards.push(res)
     }
-    console.log(updateBoard)
+    console.log(updateBoard) // llega undefined, porque? ni idea
     setActiveBoard(updateBoard)
     close()
-    // Alert(() => putCard(dataTask._id, { title: formData.title, description: formData.description, subTask: subTaskIn }), 'The task has been updated successfully')
   }
 
   const submitNewTask = async (e) => {

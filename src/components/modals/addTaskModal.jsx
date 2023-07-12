@@ -90,6 +90,7 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
             className='h-[40px] w-full rounded-md border-[1px] border-solid border-kgrayli/30 pl-4 text-md font-medium leading-6 outline-kpurple invalid:border-kred dark:bg-transparent dark:text-kwhite'
             type='text'
             name='title'
+            maxLength="46"
             defaultValue={isEdit ? dataTask.title : ''}
             placeholder='e.g. Take coffee break'
           />
@@ -112,16 +113,16 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
                 )
           }
           {isEdit
-            ? apiSubtask.map(item => <SubTaskCard key={item._id} colID={item._id} handleDeleteColumn={handleDeleteColumn}
+            ? apiSubtask.map(item => <SubTaskCard max={'50'} key={item._id} colID={item._id} handleDeleteColumn={handleDeleteColumn}
                       inputName={item._id}
                       defValue={item.name}/>)
-            : column.map(item => <SubTaskCard key={item._id}
+            : column.map(item => <SubTaskCard max={'50'} key={item._id}
                       colID={item._id}
                       handleDeleteColumn={handleDeleteColumn}
                       inputName={item._id}
                       defValue={item.value}/>)
           }
-          {isEdit && column.map(item => <SubTaskCard key={item._id}
+          {isEdit && column.map(item => <SubTaskCard max={'50'} key={item._id}
                       colID={item._id}
                       handleDeleteColumn={handleDeleteColumn}
                       inputName={item._id}

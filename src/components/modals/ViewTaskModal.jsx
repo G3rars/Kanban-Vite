@@ -69,7 +69,7 @@ export default function ViewTaskModal ({ dataTask, activeBoard, handleEditTask, 
         <h3 className='text-lg font-bold text-kblack dark:text-kwhite'>{dataTask.title}</h3>
         <button onClick={taskOptions} className='flex h-10 w-5 items-center justify-end'><IconThreeDots /></button>
       </div>
-      <div className='min-h-[40px]'>
+      <div className='h-[120px] overflow-y-auto scrollbar-thin scrollbar-thumb-kcian'>
         <p className='text-sm font-normal leading-6 text-kgrayli'>{dataTask.description}</p>
       </div>
 

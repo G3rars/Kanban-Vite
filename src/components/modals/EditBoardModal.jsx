@@ -51,6 +51,7 @@ function EditBoardModal ({ activeBoard, setActiveBoard, close }) {
         <label htmlFor='boardName' className='text-sm font-bold text-kgrayli'>Board Name</label>
         <input
           defaultValue={activeBoard.name}
+          maxLength="30"
           required
           type='text'
           id='boardName'
@@ -67,6 +68,7 @@ function EditBoardModal ({ activeBoard, setActiveBoard, close }) {
                 key={value._id}
                 colID={value._id}
                 inputName={value._id}
+                max={'15'}
                 defValue={value.name}
                 handleDeleteColumn={handleDeleteColumn}
               />

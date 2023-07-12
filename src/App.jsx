@@ -31,6 +31,7 @@ import {
   modalReducer,
   initialModalsState as initialState
 } from './helpers/contants'
+import NewColumnButton from './components/NewColumnButton'
 
 function App () {
   const [state, dispatch] = useReducer(modalReducer, initialState)
@@ -100,6 +101,9 @@ function App () {
                 </CardColumn>
             ))
             : !state.loading && <EmptyBoard event={!activeBoard ? () => dispatch(MODALS.OPEN_NEW_BOARD_MODAL) : () => dispatch(MODALS.OPEN_BOARD_EDIT)} activeBoard={activeBoard} />
+        }
+        {
+          showColumnsCondition && <NewColumnButton event={() => dispatch(MODALS.OPEN_BOARD_EDIT)}/>
         }
         <Portal
           state={{ ...state, ...reqStatus }}

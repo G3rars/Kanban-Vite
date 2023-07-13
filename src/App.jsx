@@ -46,6 +46,7 @@ function App () {
     setActiveBoard,
     updateBoards,
     replaceBoardCard,
+    addCardToColumn,
     initialBoard,
     activeBoard,
     dataTask,
@@ -132,7 +133,9 @@ function App () {
                 dataTask={dataTask}
                 activeBoard={activeBoard}
                 updateBoards={updateBoards}
+                replaceBoardCard={replaceBoardCard}
                 setActiveBoard={setActiveBoard}
+                addCardToColumn={addCardToColumn}
               />}
           onViewTask={() =>
               <ViewTaskModal

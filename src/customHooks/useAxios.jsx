@@ -84,6 +84,14 @@ function useAxios (dispatchAction) {
     updateBoards(newBoard)
   }
 
+  function addCardToColumn ({ newTask }) {
+    const newBoard = { ...activeBoard }
+    const index = newBoard.columns.findIndex((item) => item._id === newTask.column)
+    newBoard.columns[index].cards.push(newTask)
+    setActiveBoard(newBoard)
+    updateBoards(newBoard)
+  }
+
   const states = {
     initialBoard,
     activeBoard,
@@ -100,7 +108,8 @@ function useAxios (dispatchAction) {
     setInitialBoard,
     setActiveBoard,
     updateBoards,
-    replaceBoardCard
+    replaceBoardCard,
+    addCardToColumn
   }
 
   return { ...states, ...functions }

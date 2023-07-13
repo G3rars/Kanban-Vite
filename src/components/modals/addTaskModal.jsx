@@ -6,15 +6,14 @@ import { v4 as uuidv4 } from 'uuid'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { IconCross } from '../icons/Symbols'
+import { getFormData, objectToArr } from '../../helpers/utilities'
 
-export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActiveBoard, close, updateBoards }) {
+export default function AddTaskModal ({ activeBoard, dataTask, isEdit, close, replaceBoardCard, addCardToColumn }) {
   const [column, setColumn] = useState([])
   const [apiSubtask, setApiSubtask] = useState(dataTask ? dataTask.subTask : null)
-  const [deleteCol, setDeleteCol] = useState([])
   const newTaskForm = useRef()
 
-  const handleAddColumn = (e) => {
-    e.preventDefault()
+  const handleAddColumn = () => {
     const cols = [...column]
     cols.push({
       _id: `col_${uuidv4()}`,
@@ -24,61 +23,47 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
   }
 
   const handleDeleteColumn = (colID) => {
+    console.log(colID)
     if (colID.startsWith('col_')) {
       const newCols = column.filter((item) => item._id !== colID)
       setColumn(newCols)
     } else {
       const newCols = apiSubtask.filter((item) => item._id !== colID)
       setApiSubtask(newCols)
-      const findDelete = column.find(value => value._id === colID && !value.id.startsWith('col_'))
-      setDeleteCol([...deleteCol, findDelete])
     }
   }
 
   const submitEditTask = async (e) => {
     e.preventDefault()
-    const formData = Object.fromEntries(new FormData(newTaskForm.current))
-    const dataArr = Object.entries(formData)
-    dataArr.pop()
-    let subTaskIn = dataArr.slice(2)
-    subTaskIn = subTaskIn.map(([_, value]) => ({ name: value, completed: false }))
-    const updateBoard = { ...activeBoard }
+    const { status: column, description, title, ...cols } = getFormData(newTaskForm.current)
+    const subTasks = objectToArr(cols)
+    const mappedSubtasks = subTasks.map(([_, value]) => ({ name: value, completed: false }))
 
-    const res = await putCard(dataTask._id, { _id: dataTask._id, column: formData.status, title: formData.title, description: formData.description, subTask: subTaskIn })
-
-    if (dataTask.column === formData.status) {
-      const indexCol = updateBoard.columns.findIndex((col) => col._id === formData.status)
-      const indexTask = updateBoard.columns[indexCol].cards.findIndex((item) => item._id === res._id)
-      updateBoard.columns[indexCol].cards.splice(indexTask, 1, res)
-    } else {
-      const indexCol = updateBoard.columns.findIndex((col) => col._id === dataTask.column)
-      const indexTask = updateBoard.columns[indexCol].cards.findIndex((item) => item._id === dataTask._id)
-      updateBoard.columns[indexCol].cards.splice(indexTask, 1)
-
-      const indexNewCol = updateBoard.columns.findIndex((col) => col._id === formData.status)
-      updateBoard.columns[indexNewCol].cards.push(res)
+    const updatedCard = {
+      title,
+      description,
+      column,
+      _id: dataTask._id,
+      subTask: mappedSubtasks
     }
-    updateBoards(updateBoard)
-    setActiveBoard(updateBoard)
+    const newTask = await putCard(dataTask._id, updatedCard)
+    replaceBoardCard({ newTask, oldCard: updatedCard })
     close()
   }
 
   const submitNewTask = async (e) => {
     e.preventDefault()
-    const formData = Object.fromEntries(new FormData(newTaskForm.current))
-    const dataArr = Object.entries(formData)
-    const cols = dataArr.filter(([name]) => name.startsWith('col_')).map(([_, value]) => ({ name: value, complete: false }))
-    const data = {
-      title: formData.title,
-      description: formData.description,
-      subTask: cols
+    const { status: column, description, title, ...cols } = getFormData(newTaskForm.current)
+    const subTasks = objectToArr(cols)
+    const mappedSubtasks = subTasks.map(([_, value]) => ({ name: value, complete: false }))
+    const cardData = {
+      title,
+      description,
+      column,
+      subTask: mappedSubtasks
     }
-    const res = await postCard(data, formData.status)
-    const updateBoard = activeBoard
-    const index = updateBoard.columns.findIndex((item) => item._id === res.column)
-    updateBoard.columns[index].cards.push(res)
-    updateBoards(updateBoard)
-    setActiveBoard(updateBoard)
+    const newTask = await postCard(cardData, column)
+    addCardToColumn({ newTask })
     close()
   }
 

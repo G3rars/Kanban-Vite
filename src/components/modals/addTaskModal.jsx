@@ -47,9 +47,9 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, close, re
       title,
       description,
       column,
-      _id: dataTask._id,
       subTask: mappedSubtasks
     }
+    if (column !== dataTask.column) updatedCard._id = dataTask._id
     try {
       const newTask = await putCard(dataTask._id, updatedCard)
       replaceBoardCard({ newTask, oldCard: { updatedCard, column: dataTask.column } })

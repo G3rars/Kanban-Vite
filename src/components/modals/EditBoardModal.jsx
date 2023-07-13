@@ -5,6 +5,7 @@ import { putBoard } from '../../../core/api'
 import { v4 as uuidv4 } from 'uuid'
 import { ToastContainer, toast } from 'react-toastify'
 import { Alert } from '../../helpers/alerts'
+import { getFormData, objectToArr } from '../../helpers/utilities'
 import { IconCross } from '../icons/Symbols'
 import { useDisable } from '../../customHooks/useDisable'
 
@@ -38,22 +39,18 @@ function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
     const loadingId = toast.loading('Please wait...', { autoClose: false })
 
     try {
-      const formData = Object.fromEntries(new FormData(formRef.current))
-      const dataArr = Object.entries(formData)
-      const boardName = dataArr.shift()
-      const filterColumns = dataArr.map(([id, value]) => {
-        if (id.startsWith('col_')) {
-          return { name: value }
-        }
-        return { name: value, _id: id }
-      })
-      const newBoard = await putBoard(activeBoard._id, { name: boardName[1], columns: filterColumns })
+      const { boardName, ...cols } = getFormData(formRef.current)
+      const columns = objectToArr(cols)
+      const filterColumns = columns.map(([id, value]) =>
+        (id.startsWith('col_'))
+          ? { name: value }
+          : { name: value, _id: id }
+      )
+      const newBoard = await putBoard(activeBoard._id, { name: boardName, columns: filterColumns })
       updateBoards(newBoard)
       setActiveBoard(newBoard)
       Alert(() => Promise.resolve(), loadingId, 'The board has been update successfully')
-      setTimeout(() => {
-        close()
-      }, 2500)
+      setTimeout(() => { close() }, 2500)
     } catch (error) {
       Alert(() => Promise.reject(error), loadingId)
     } finally {

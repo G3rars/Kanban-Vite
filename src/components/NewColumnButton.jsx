@@ -3,11 +3,12 @@ import React from 'react'
 function NewColumnButton ({ event }) {
   return (
     <>
-        <section onClick={event}>
-            <div className='bg-kcian w-screen opacity-40 min-w-[250px] rounded-lg max-w-[280px] h-[80vh] flex justify-center items-center font-extrabold text-2xl cursor-pointer hover:opacity-60 duration-300'>
-                <p>+New Column</p>
-            </div>
-        </section>
+        <button
+          onClick={event}
+          className='group flex h-[80vh] w-screen min-w-[250px] max-w-[280px] cursor-pointer items-center justify-center rounded-lg bg-kcian/60 duration-300 hover:bg-kcian dark:bg-kdarkGray/30 dark:hover:bg-kdarkGray/70'
+        >
+                <p className='text-2xl font-extrabold text-kgrayli group-hover:text-kpurple dark:group-hover:text-kpurple/90'>+New Column</p>
+        </button>
     </>
   )
 }

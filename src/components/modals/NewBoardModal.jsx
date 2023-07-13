@@ -7,10 +7,12 @@ import { getFormData, objectToArr } from '../../helpers/utilities'
 import { IconCross } from '../icons/Symbols'
 import { Alert } from '../../helpers/alerts'
 import { ToastContainer, toast } from 'react-toastify'
+import { useDisable } from '../../customHooks/useDisable'
 
 export default function NewBoardModal ({ close, setInitialBoard, initialBoard }) {
   const [column, setColumn] = useState([])
   const formRef = useRef()
+  const { isDisabled, preventMulticlick, resetMultiClick } = useDisable()
 
   useEffect(() => {
     if (column.length === 0) {
@@ -54,6 +56,8 @@ export default function NewBoardModal ({ close, setInitialBoard, initialBoard })
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (isDisabled()) return
+    preventMulticlick()
     const formData = getFormData(formRef.current)
     const loadingId = toast.loading('Please wait...', { autoClose: false })
     try {
@@ -72,6 +76,8 @@ export default function NewBoardModal ({ close, setInitialBoard, initialBoard })
       Alert()
       console.log(error)
       Alert(() => Promise.reject(error), loadingId)
+    } finally {
+      resetMultiClick()
     }
   }
   return (

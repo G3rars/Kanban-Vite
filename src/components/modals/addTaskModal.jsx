@@ -6,16 +6,16 @@ import { v4 as uuidv4 } from 'uuid'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { IconCross } from '../icons/Symbols'
-// import { Alert } from '../../helpers/alerts'
+import { getFormData, objectToArr } from '../../helpers/utilities'
+import { useDisable } from '../../customHooks/useDisable'
 
-export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActiveBoard, close }) {
+export default function AddTaskModal ({ activeBoard, dataTask, isEdit, close, replaceBoardCard, addCardToColumn }) {
   const [column, setColumn] = useState([])
   const [apiSubtask, setApiSubtask] = useState(dataTask ? dataTask.subTask : null)
-  const [deleteCol, setDeleteCol] = useState([])
   const newTaskForm = useRef()
+  const { isDisabled, preventMulticlick, resetMultiClick } = useDisable()
 
-  const handleAddColumn = (e) => {
-    e.preventDefault()
+  const handleAddColumn = () => {
     const cols = [...column]
     cols.push({
       _id: `col_${uuidv4()}`,
@@ -31,55 +31,60 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
     } else {
       const newCols = apiSubtask.filter((item) => item._id !== colID)
       setApiSubtask(newCols)
-      const findDelete = column.find(value => value._id === colID && !value.id.startsWith('col_'))
-      setDeleteCol([...deleteCol, findDelete])
     }
   }
 
   const submitEditTask = async (e) => {
     e.preventDefault()
-    const formData = Object.fromEntries(new FormData(newTaskForm.current))
-    const dataArr = Object.entries(formData)
-    dataArr.pop()
-    let subTaskIn = dataArr.slice(2)
-    subTaskIn = subTaskIn.map(([_, value]) => ({ name: value, completed: false }))
-    const updateBoard = activeBoard
-    const res = await putCard(dataTask._id, { title: formData.title, description: formData.description, subTask: subTaskIn })
+    if (isDisabled()) return
+    preventMulticlick()
 
-    if (dataTask.column === formData.status) {
-      const indexCol = updateBoard.columns.findIndex((col) => col._id === formData.status)
-      const indexTask = updateBoard.columns[indexCol].cards.findIndex((item) => item._id === res._id)
-      updateBoard.columns[indexCol].cards.splice(indexTask, 1, res)
-    } else {
-      const indexCol = updateBoard.columns.findIndex((col) => col._id === dataTask.column)
-      const indexTask = updateBoard.columns[indexCol].cards.findIndex((item) => item._id === dataTask._id)
-      updateBoard.columns[indexCol].cards.splice(indexTask, 1)
+    const { status: column, description, title, ...cols } = getFormData(newTaskForm.current)
+    const subTasks = objectToArr(cols)
+    const mappedSubtasks = subTasks.map(([_, value]) => ({ name: value, completed: false }))
 
-      const indexNewCol = updateBoard.columns.findIndex((col) => col._id === formData.status)
-      updateBoard.columns[indexNewCol].cards.push(res)
+    const updatedCard = {
+      title,
+      description,
+      column,
+      _id: dataTask._id,
+      subTask: mappedSubtasks
     }
-    console.log(updateBoard)
-    setActiveBoard(updateBoard)
-    close()
-    // Alert(() => putCard(dataTask._id, { title: formData.title, description: formData.description, subTask: subTaskIn }), 'The task has been updated successfully')
+    try {
+      const newTask = await putCard(dataTask._id, updatedCard)
+      replaceBoardCard({ newTask, oldCard: { updatedCard, column: dataTask.column } })
+      close()
+    } catch (error) {
+      console.log(error)
+    } finally {
+      resetMultiClick()
+    }
   }
 
   const submitNewTask = async (e) => {
     e.preventDefault()
-    const formData = Object.fromEntries(new FormData(newTaskForm.current))
-    const dataArr = Object.entries(formData)
-    const cols = dataArr.filter(([name]) => name.startsWith('col_')).map(([_, value]) => ({ name: value, complete: false }))
-    const data = {
-      title: formData.title,
-      description: formData.description,
-      subTask: cols
+    if (isDisabled()) return
+    preventMulticlick()
+
+    const { status: column, description, title, ...cols } = getFormData(newTaskForm.current)
+    const subTasks = objectToArr(cols)
+    const mappedSubtasks = subTasks.map(([_, value]) => ({ name: value, completed: false }))
+    const cardData = {
+      title,
+      description,
+      column,
+      subTask: mappedSubtasks
     }
-    const res = await postCard(data, formData.status)
-    const updateBoard = activeBoard
-    const index = updateBoard.columns.findIndex((item) => item._id === res.column)
-    updateBoard.columns[index].cards.push(res)
-    setActiveBoard(updateBoard)
-    close()
+
+    try {
+      const newTask = await postCard(cardData, column)
+      addCardToColumn({ newTask })
+      close()
+    } catch (error) {
+      console.log(error)
+    } finally {
+      resetMultiClick()
+    }
   }
 
   return (
@@ -95,6 +100,7 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
             className='h-[40px] w-full rounded-md border-[1px] border-solid border-kgrayli/30 pl-4 text-md font-medium leading-6 outline-kpurple invalid:border-kred dark:bg-transparent dark:text-kwhite'
             type='text'
             name='title'
+            required
             maxLength="46"
             defaultValue={isEdit ? dataTask.title : ''}
             placeholder='e.g. Take coffee break'
@@ -112,26 +118,23 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
           <label htmlFor='subtask' className='pb-1 pt-5 text-xs font-bold opacity-60 dark:text-kwhite'>SubTask</label>
           <div className='h-[120px] overflow-y-auto text-md font-medium scrollbar-thin scrollbar-thumb-kpurple'>
           {
-            !isEdit && column.length === 0
-              ? <p className='pt-7 text-center opacity-60 dark:text-kwhite'>Add new columns</p>
-              : (isEdit && dataTask && dataTask.subTask.length === 0 &&
-                  <p className='pt-7 text-center opacity-60'>Add new columns</p>
-                )
+            ((!isEdit && column.length === 0) || (isEdit && dataTask && dataTask.subTask.length === 0)) &&
+              <p className='pt-7 text-center opacity-60 dark:text-kwhite'>Add new columns</p>
           }
-          {isEdit
-            ? apiSubtask.map(item =>
-                  <SubTaskCard max={'50'} key={item._id} colID={item._id} handleDeleteColumn={handleDeleteColumn}
-                      inputName={item._id}
-                      defValue={item.name}/>)
-            : column.map(item =>
-                  <SubTaskCard max={'50'} key={item._id}
+          {
+            isEdit && apiSubtask.map(item =>
+                  <SubTaskCard
+                      max={'50'}
+                      key={item._id}
                       colID={item._id}
                       handleDeleteColumn={handleDeleteColumn}
                       inputName={item._id}
-                      defValue={item.value}/>)
+                      defValue={item.name}/>)
           }
           {isEdit && column.map(item =>
-                  <SubTaskCard max={'50'} key={item._id}
+                  <SubTaskCard
+                      max={'50'}
+                      key={item._id}
                       colID={item._id}
                       handleDeleteColumn={handleDeleteColumn}
                       inputName={item._id}
@@ -141,7 +144,7 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
           </div>
           <Button
             style='secondary'
-            event={handleAddColumn} /* // ! ES DE AQUI */
+            event={handleAddColumn}
             key='newColBtn'
             size='mt-3'
           >
@@ -149,9 +152,9 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
           </Button>
           <label htmlFor='status' className='pb-1 pt-3 text-xs font-bold opacity-60 dark:text-kwhite'>Status</label>
           <select name='status' className='h-[40px] w-full rounded-md border-[1px] border-solid border-kgrayli/30 text-sm font-medium outline-kpurple invalid:border-kred dark:bg-kblackli dark:text-kwhite'>
-            {
+            {/* {
               !isEdit && activeBoard && activeBoard.columns.map(value => (<option key={value._id} value={value._id}>{value.name}</option>))
-            }
+            } */}
             {isEdit && activeBoard &&
                 activeBoard.columns.map((value) =>
                   value._id === dataTask.column ? (<option key={value._id} value={value._id}>{value.name}</option>) : null)

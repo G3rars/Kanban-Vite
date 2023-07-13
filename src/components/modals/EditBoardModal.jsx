@@ -6,12 +6,13 @@ import { v4 as uuidv4 } from 'uuid'
 import { ToastContainer, toast } from 'react-toastify'
 import { Alert } from '../../helpers/alerts'
 import { IconCross } from '../icons/Symbols'
-
+import { useDisable } from '../../customHooks/useDisable'
 
 function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
   const [column, setColumn] = useState(activeBoard.columns)
   const [deleteCol, setDeleteCol] = useState([])
   const formRef = useRef()
+  const { isDisabled, preventMulticlick, resetMultiClick } = useDisable()
 
   const handleAddColumn = (e) => {
     e.preventDefault()
@@ -31,8 +32,10 @@ function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
   }
 
   const handleSubmit = async (e) => {
-    const loadingId = toast.loading('Please wait...', { autoClose: false })
     e.preventDefault()
+    if (isDisabled()) return
+    preventMulticlick()
+    const loadingId = toast.loading('Please wait...', { autoClose: false })
 
     try {
       const formData = Object.fromEntries(new FormData(formRef.current))
@@ -45,7 +48,7 @@ function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
         return { name: value, _id: id }
       })
       const newBoard = await putBoard(activeBoard._id, { name: boardName[1], columns: filterColumns })
-      await Promise.all([newBoard])
+      updateBoards(newBoard)
       setActiveBoard(newBoard)
       Alert(() => Promise.resolve(), loadingId, 'The board has been update successfully')
       setTimeout(() => {
@@ -53,8 +56,9 @@ function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
       }, 2500)
     } catch (error) {
       Alert(() => Promise.reject(error), loadingId)
+    } finally {
+      resetMultiClick()
     }
-
   }
 
   return (

@@ -72,9 +72,8 @@ function useAxios (dispatchAction) {
     const newBoard = { ...activeBoard }
     const columnIndex = newBoard.columns.findIndex((col) => col._id === newTask.column)
     const cardIndex = newBoard.columns[columnIndex].cards.findIndex((card) => card._id === oldCard._id)
-    if (newTask.column === oldCard.column) {
-      newBoard.columns[columnIndex].cards.splice(cardIndex, 1, newTask)
-    } else {
+    if (newTask.column === oldCard.column) newBoard.columns[columnIndex].cards.splice(cardIndex, 1, newTask)
+    else {
       const oldColumnIndex = newBoard.columns.findIndex((col) => col._id === oldCard.column)
       const oldCardIndex = newBoard.columns[oldColumnIndex].cards.findIndex((card) => card._id === oldCard._id)
       newBoard.columns[oldColumnIndex].cards.splice(oldCardIndex, 1)

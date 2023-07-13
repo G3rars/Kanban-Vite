@@ -7,11 +7,13 @@ import { Alert } from '../../helpers/alerts'
 import { ToastContainer, toast } from 'react-toastify'
 import Button from '../button'
 import { getFormData } from '../../helpers/utilities'
+import { useDisable } from '../../customHooks/useDisable'
 
 export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, close, editTask, replaceBoardCard }) {
   const [modal, setModal] = useState(false)
   const [task, setTask] = useState(dataTask.subTask)
   const formRef = useRef()
+  const { isDisabled, preventMulticlick, resetMultiClick } = useDisable()
 
   function taskOptions () {
     setModal(prevState => !prevState)
@@ -33,6 +35,8 @@ export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, 
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (isDisabled()) return
+    preventMulticlick()
     const loadingID = toast.loading('Please Wait...')
     const subTasks = task.map(value => ({ name: value.name, completed: value.completed }))
     const { status: columnID } = getFormData(formRef.current)
@@ -47,14 +51,15 @@ export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, 
 
     try {
       const newCard = await putCard(dataTask._id, newCardInfo)
-      // console.log({ updatedBoard, newCard, oldID: newCardInfo._id })
       replaceBoardCard({ newTask: newCard, oldCard: { ...newCardInfo, column: dataTask.column } })
       // TODO: hacer que funcione en vivo
-      Alert(() => Promise.resolve(), loadingID, 'Changes have been saved')
-      setTimeout(() => { close() }, 2500)
+      await Alert(() => Promise.resolve(), loadingID, 'Changes have been saved')
+      setTimeout(() => { close() }, 1500)
     } catch (error) {
       console.log(error)
       Alert(() => Promise.reject(error), loadingID)
+    } finally {
+      resetMultiClick()
     }
   }
   const TOTAL = task.length

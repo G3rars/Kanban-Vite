@@ -44,7 +44,7 @@ function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
         return { name: value, _id: id }
       })
       const newBoard = await putBoard(activeBoard._id, { name: boardName[1], columns: filterColumns })
-      await Promise.all([newBoard])
+      updateBoards(newBoard)
       setActiveBoard(newBoard)
       Alert(() => Promise.resolve(), loadingId, 'The board has been update successfully')
       setTimeout(() => {

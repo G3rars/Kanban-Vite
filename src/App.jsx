@@ -45,11 +45,13 @@ function App () {
     setInitialBoard,
     setActiveBoard,
     updateBoards,
+    replaceBoardCard,
     initialBoard,
     activeBoard,
     dataTask,
     reqStatus
   } = useAxios(dispatch)
+
   const showColumnsCondition = Array.isArray(initialBoard) && initialBoard.length !== 0 && activeBoard && activeBoard.columns.length !== 0
 
   return (
@@ -129,12 +131,15 @@ function App () {
                 isEdit={state.edit_task}
                 dataTask={dataTask}
                 activeBoard={activeBoard}
+                updateBoards={updateBoards}
                 setActiveBoard={setActiveBoard}
               />}
           onViewTask={() =>
               <ViewTaskModal
                 setActiveTask={() => { dispatch(MODALS.OPEN_TASK_DETAILS) } }
                 activeBoard={activeBoard}
+                initialBoard={initialBoard}
+                replaceBoardCard={replaceBoardCard}
                 dataTask={dataTask}
                 editTask={() => dispatch(MODALS.OPEN_EDIT_TASK)}
                 openDeleteTask={() => dispatch(MODALS.OPEN_BOARD_DELETE)}

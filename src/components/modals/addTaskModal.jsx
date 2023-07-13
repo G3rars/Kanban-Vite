@@ -6,9 +6,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { IconCross } from '../icons/Symbols'
-// import { Alert } from '../../helpers/alerts'
 
-export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActiveBoard, close }) {
+export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActiveBoard, close, updateBoards }) {
   const [column, setColumn] = useState([])
   const [apiSubtask, setApiSubtask] = useState(dataTask ? dataTask.subTask : null)
   const [deleteCol, setDeleteCol] = useState([])
@@ -43,7 +42,7 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
     dataArr.pop()
     let subTaskIn = dataArr.slice(2)
     subTaskIn = subTaskIn.map(([_, value]) => ({ name: value, completed: false }))
-    const updateBoard = activeBoard
+    const updateBoard = { ...activeBoard }
 
     const res = await putCard(dataTask._id, { _id: dataTask._id, column: formData.status, title: formData.title, description: formData.description, subTask: subTaskIn })
 
@@ -59,7 +58,7 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
       const indexNewCol = updateBoard.columns.findIndex((col) => col._id === formData.status)
       updateBoard.columns[indexNewCol].cards.push(res)
     }
-    console.log(updateBoard) // llega undefined, porque? ni idea
+    updateBoards(updateBoard)
     setActiveBoard(updateBoard)
     close()
   }
@@ -78,6 +77,7 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
     const updateBoard = activeBoard
     const index = updateBoard.columns.findIndex((item) => item._id === res.column)
     updateBoard.columns[index].cards.push(res)
+    updateBoards(updateBoard)
     setActiveBoard(updateBoard)
     close()
   }
@@ -141,7 +141,7 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, setActive
           </div>
           <Button
             style='secondary'
-            event={handleAddColumn} /* // ! ES DE AQUI */
+            event={handleAddColumn}
             key='newColBtn'
             size='mt-3'
           >

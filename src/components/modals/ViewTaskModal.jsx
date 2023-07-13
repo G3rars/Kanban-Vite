@@ -8,7 +8,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import Button from '../button'
 import { getFormData } from '../../helpers/utilities'
 
-export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, close, editTask }) {
+export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, close, editTask, replaceBoardCard }) {
   const [modal, setModal] = useState(false)
   const [task, setTask] = useState(dataTask.subTask)
   const formRef = useRef()
@@ -43,13 +43,17 @@ export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, 
       subTask: subTasks
     }
     if (columnID !== dataTask.column) newCardInfo.column = columnID
+    else newCardInfo.column = dataTask.column
+
     try {
       const newCard = await putCard(dataTask._id, newCardInfo)
-      console.log({ dataTask, newCard })
+      // console.log({ updatedBoard, newCard, oldID: newCardInfo._id })
+      replaceBoardCard({ newTask: newCard, oldCard: { ...newCardInfo, column: dataTask.column } })
       // TODO: hacer que funcione en vivo
       Alert(() => Promise.resolve(), loadingID, 'Changes have been saved')
-      setTimeout(() => close, 2500)
+      setTimeout(() => { close() }, 2500)
     } catch (error) {
+      console.log(error)
       Alert(() => Promise.reject(error), loadingID)
     }
   }
@@ -62,8 +66,8 @@ export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, 
         <h3 className='text-lg font-bold text-kblack dark:text-kwhite'>{dataTask.title}</h3>
         <button onClick={taskOptions} className='flex h-10 w-5 items-center justify-end'><IconThreeDots /></button>
       </div>
-      <div className='h-20 overflow-y-auto scrollbar-thin scrollbar-thumb-kcian'>
-        <p className='text-sm font-normal leading-6 text-kgrayli'>{dataTask.description}</p>
+      <div className='max-h-48 min-h-[50px] overflow-y-auto scrollbar-thin scrollbar-thumb-kcian'>
+        <p className='h-full text-sm font-normal leading-6 text-kgrayli'>{dataTask.description}</p>
       </div>
 
       <form ref={formRef} onSubmit={handleSubmit} className='flex h-full flex-col justify-between gap-2'>

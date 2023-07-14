@@ -6,7 +6,7 @@ import { postBoard, postColumn } from '../../../core/api'
 import { getFormData, objectToArr } from '../../helpers/utilities'
 import { IconCross } from '../icons/Symbols'
 import { Alert } from '../../helpers/alerts'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { useDisable } from '../../customHooks/useDisable'
 
 export default function NewBoardModal ({ close, setInitialBoard, initialBoard }) {
@@ -69,9 +69,7 @@ export default function NewBoardModal ({ close, setInitialBoard, initialBoard })
       const updateState = [...initialBoard, formatData]
       setInitialBoard(updateState)
       Alert(() => Promise.resolve(), loadingId, 'The board has been created successfully')
-      setTimeout(() => {
-        close()
-      }, 2500)
+      close()
     } catch (error) {
       Alert()
       console.log(error)
@@ -121,7 +119,6 @@ export default function NewBoardModal ({ close, setInitialBoard, initialBoard })
         <Button event={handleAddColumn} key='newColBtn' style='secondary' size='mb-4'><p>+ Add New Column</p></Button>
         <Button btnType='submit' key='newBoardBtn' style='primarysm'><p>Create New Board</p></Button>
       </form>
-      <ToastContainer/>
     </article>
   )
 }

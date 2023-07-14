@@ -1,6 +1,8 @@
 import { useEffect, useState, useReducer } from 'react'
 import { deleteBoard, deleteCard, getBoards } from '../../core/api'
 import { MODALS, REQ_ACTION, initialRequestState, requestReducer } from '../helpers/contants'
+import { toast } from 'react-toastify'
+import { Alert } from '../helpers/alerts'
 
 function useAxios (dispatchAction) {
   const [state, dispatch] = useReducer(requestReducer, initialRequestState)
@@ -43,9 +45,16 @@ function useAxios (dispatchAction) {
     dispatchAction(MODALS.CLOSE_SIDE_MENU)
   }
 
-  const handleDeleteTask = (data) => {
-    removeCard({ oldCard: data })
-    deleteCard(data._id)
+  const handleDeleteTask = async (data) => {
+    const loadingId = toast.loading('Please wait...', { autoClose: false })
+    try {
+      await deleteCard(data._id)
+      Alert(() => Promise.resolve(), loadingId, 'The task has been deleted')
+      removeCard({ oldCard: data })
+      dispatchAction(MODALS.CLOSE_ALL_MODALS)
+    } catch (error) {
+      Alert(() => Promise.reject(error), loadingId)
+    }
   }
 
   function removeCard ({ oldCard }) {
@@ -81,7 +90,9 @@ function useAxios (dispatchAction) {
   function replaceBoardCard ({ newTask, oldCard }) {
     const newBoard = { ...activeBoard }
     const columnIndex = newBoard.columns.findIndex((col) => col._id === newTask.column)
-    const cardIndex = newBoard.columns[columnIndex].cards.findIndex((card) => card._id === oldCard._id)
+    console.log(columnIndex)
+    const cardIndex = newBoard.columns[columnIndex].cards.findIndex((card) => card._id === newTask._id)
+    console.log(cardIndex)
     if (newTask.column === oldCard.column) newBoard.columns[columnIndex].cards.splice(cardIndex, 1, newTask)
     else {
       const oldColumnIndex = newBoard.columns.findIndex((col) => col._id === oldCard.column)
@@ -89,6 +100,7 @@ function useAxios (dispatchAction) {
       newBoard.columns[oldColumnIndex].cards.splice(oldCardIndex, 1)
       newBoard.columns[columnIndex].cards.push(newTask)
     }
+    console.log(newBoard)
     setActiveBoard(newBoard)
     updateBoards(newBoard)
   }

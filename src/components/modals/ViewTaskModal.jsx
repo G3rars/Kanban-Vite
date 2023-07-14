@@ -4,7 +4,7 @@ import { BoardConfig } from './BoardConfig'
 import { putCard } from '../../../core/api'
 import { IconThreeDots } from '../icons/Symbols'
 import { Alert } from '../../helpers/alerts'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import Button from '../button'
 import { getFormData } from '../../helpers/utilities'
 import { useDisable } from '../../customHooks/useDisable'
@@ -35,26 +35,28 @@ export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, 
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    const loadingId = toast.loading('Please wait...', { autoClose: false })
     if (isDisabled()) return
     preventMulticlick()
-    const loadingID = toast.loading('Please Wait...')
     const subTasks = task.map(value => ({ name: value.name, completed: value.completed }))
     const { status: columnID } = getFormData(formRef.current)
     const newCardInfo = {
-      _id: dataTask._id,
       title: dataTask.title,
       description: dataTask.description,
       subTask: subTasks
     }
-    if (columnID !== dataTask.column) newCardInfo.column = columnID
-    else newCardInfo.column = dataTask.column
+    if (columnID === dataTask.column) newCardInfo.column = dataTask.column
+    else {
+      newCardInfo.column = columnID
+      newCardInfo._id = dataTask._id
+    }
 
     try {
       const newCard = await putCard(dataTask._id, newCardInfo)
       replaceBoardCard({ newTask: newCard, oldCard: { ...newCardInfo, column: dataTask.column } })
       // TODO: hacer que funcione en vivo
-      await Alert(() => Promise.resolve(), loadingID, 'Changes have been saved')
-      setTimeout(() => { close() }, 1500)
+      Alert(() => Promise.resolve(), loadingId, 'The task has been update successfully')
+      close()
     } catch (error) {
       console.log(error)
       Alert(() => Promise.reject(error), loadingID)
@@ -116,7 +118,6 @@ export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, 
           </div>
         )
       }
-      <ToastContainer/>
     </article>
   )
 }

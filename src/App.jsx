@@ -32,6 +32,7 @@ import {
   initialModalsState as initialState
 } from './helpers/contants'
 import NewColumnButton from './components/NewColumnButton'
+import { ToastContainer } from 'react-toastify'
 
 function App () {
   const [state, dispatch] = useReducer(modalReducer, initialState)
@@ -158,6 +159,7 @@ function App () {
         />
       </Main>
       { state.tablet_btn_bottom && <SideBarButton event={() => dispatch(MODALS.OPEN_SIDE_MENU)} /> }
+      <ToastContainer />
     </>
   )
 }

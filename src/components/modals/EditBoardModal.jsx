@@ -3,7 +3,7 @@ import SubTaskCard from '../subTaskCard'
 import Button from '../button'
 import { putBoard } from '../../../core/api'
 import { v4 as uuidv4 } from 'uuid'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { Alert } from '../../helpers/alerts'
 import { getFormData, objectToArr } from '../../helpers/utilities'
 import { IconCross } from '../icons/Symbols'
@@ -52,7 +52,7 @@ function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
       updateBoards(newBoard)
       setActiveBoard(newBoard)
       Alert(() => Promise.resolve(), loadingId, 'The board has been update successfully')
-      setTimeout(() => { close() }, 2500)
+      close()
     } catch (error) {
       Alert(() => Promise.reject(error), loadingId)
     } finally {
@@ -103,7 +103,6 @@ function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
         <Button event={handleAddColumn} key='newColBtn' style='secondary' size=' mt-auto mb-2'><p>+ Add New Column</p></Button>
         <Button btnType='submit' key='newBoardBtn' style='primarysm'><p>Save Changes</p></Button>
       </form>
-     <ToastContainer/>
     </article>
   )
 }

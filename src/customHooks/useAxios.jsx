@@ -44,7 +44,17 @@ function useAxios (dispatchAction) {
   }
 
   const handleDeleteTask = (data) => {
+    removeCard({ oldCard: data })
     deleteCard(data._id)
+  }
+
+  function removeCard ({ oldCard }) {
+    const newBoard = { ...activeBoard }
+    const index = newBoard.columns.findIndex((item) => item._id === oldCard.column)
+    const cardIndex = newBoard.columns[index].cards.findIndex((card) => card._id === oldCard._id)
+    newBoard.columns[index].cards.splice(cardIndex, 1)
+    setActiveBoard(newBoard)
+    updateBoards(newBoard)
   }
 
   const handleViewTask = (keyData) => {

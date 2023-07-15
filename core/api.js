@@ -2,8 +2,6 @@ import axios from 'axios'
 
 const DB = 'https://bdd-kanban.vercel.app'
 
-// TODO: Evitar problemas de CORS
-
 const getBoards = async () => {
   return axios.get(`${DB}/board`)
     .then(response => { return response.data })

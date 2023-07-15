@@ -1,15 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react'
-import Button from '../button'
-import SubTaskCard from '../subTaskCard'
+import { Button } from '../components/button'
+import { SubTaskCard } from '../components/subTaskCard'
 import { v4 as uuidv4 } from 'uuid'
-import { postBoard, postColumn } from '../../../core/api'
-import { getFormData, objectToArr } from '../../helpers/utilities'
+import { postBoard, postColumn } from '../../core/api'
+import { getFormData, objectToArr } from '../helpers/utilities'
 import { IconCross } from '../icons/Symbols'
-import { Alert } from '../../helpers/alerts'
+import { Alert } from '../helpers/alerts'
 import { ToastContainer, toast } from 'react-toastify'
-import { useDisable } from '../../customHooks/useDisable'
+import { useDisable } from '../customHooks/useDisable'
 
-export default function NewBoardModal ({ close, updateBoards }) {
+function NewBoardModal ({ close, updateBoards }) {
   const [column, setColumn] = useState([])
   const formRef = useRef()
   const { isDisabled, preventMulticlick, resetMultiClick } = useDisable()
@@ -124,3 +124,5 @@ export default function NewBoardModal ({ close, updateBoards }) {
     </article>
   )
 }
+
+export { NewBoardModal }

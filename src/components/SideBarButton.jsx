@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconShowSidebar } from './icons/Symbols'
+import { IconShowSidebar } from '../icons/Symbols'
 
 function SideBarButton ({ event }) {
   return (

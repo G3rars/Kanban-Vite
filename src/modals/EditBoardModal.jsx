@@ -1,13 +1,13 @@
 import React, { useRef, useState } from 'react'
-import SubTaskCard from '../subTaskCard'
-import Button from '../button'
-import { putBoard } from '../../../core/api'
+import { SubTaskCard } from '../components/subTaskCard'
+import { Button } from '../components/button'
+import { putBoard } from '../../core/api'
 import { v4 as uuidv4 } from 'uuid'
 import { ToastContainer, toast } from 'react-toastify'
-import { Alert } from '../../helpers/alerts'
-import { getFormData, objectToArr } from '../../helpers/utilities'
+import { Alert } from '../helpers/alerts'
+import { getFormData, objectToArr } from '../helpers/utilities'
 import { IconCross } from '../icons/Symbols'
-import { useDisable } from '../../customHooks/useDisable'
+import { useDisable } from '../customHooks/useDisable'
 
 function EditBoardModal ({ activeBoard, updateActiveBoard, close, updateBoards }) {
   const [column, setColumn] = useState(activeBoard.columns)
@@ -48,7 +48,6 @@ function EditBoardModal ({ activeBoard, updateActiveBoard, close, updateBoards }
       )
       console.log(filterColumns)
       const newBoard = await putBoard(activeBoard._id, { name: boardName, columns: filterColumns })
-      console.log(newBoard)
       updateBoards(newBoard)
       updateActiveBoard(newBoard)
       Alert(() => Promise.resolve(), loadingId, 'The board has been update successfully')

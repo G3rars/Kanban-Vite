@@ -1,34 +1,34 @@
 // React utils
 import React, { useReducer } from 'react'
 
-// Layout
-import { Portal } from './components/layouts/Portal'
-import { Main } from './components/layouts/Main'
-import { Loading } from './components/layouts/Loading'
-
 // Components
+import { NewColumnButton } from './components/NewColumnButton'
 import { EmptyBoard } from './components/EmptyBoard'
 import { CardColumn } from './components/CardColumn'
 import { SideBarButton } from './components/SideBarButton'
-import HeaderComp from './components/header'
-import Card from './components/card'
+import { Header } from './components/header'
+import { Card } from './components/card'
 
 // Modals
-import { DeleteModal } from './components/modals/deleteModal'
-import { EditBoardModal } from './components/modals/EditBoardModal'
-import { Error } from './components/modals/Error'
-import TabletModal from './components/modals/tabletModal'
-import ViewTaskModal from './components/modals/ViewTaskModal'
-import NewBoardModal from './components/modals/NewBoardModal'
-import MiniMenu from './components/modals/MiniMenu'
-import AddTaskModal from './components/modals/addTaskModal'
+import { DeleteModal } from './modals/deleteModal'
+import { EditBoardModal } from './modals/EditBoardModal'
+import { Error } from './modals/Error'
+import { TabletModal } from './modals/tabletModal'
+import { ViewTaskModal } from './modals/ViewTaskModal'
+import { NewBoardModal } from './modals/NewBoardModal'
+import { MiniMenu } from './modals/MiniMenu'
+import { AddTaskModal } from './modals/addTaskModal'
 
-// Custom Hooks
-import { useBoards } from './customHooks/useBoards'
+// Layout
+import { Portal } from './layouts/Portal'
+import { Main } from './layouts/Main'
+import { Loading } from './layouts/Loading'
+
+// Hooks
 import { useTheme } from './customHooks/useTheme'
+import { useBoards } from './customHooks/useBoards'
 
-// Constants
-import NewColumnButton from './components/NewColumnButton'
+// constants
 import {
   MODALS,
   modalReducer,
@@ -44,6 +44,7 @@ function App () {
     updateActiveBoard,
     removeBoard,
     handleDeleteTask,
+    resetDataTask,
     updateBoards,
     replaceBoardCard,
     addCardToColumn,
@@ -68,7 +69,7 @@ function App () {
         darkTheme={darkTheme}
       />
       {activeBoard &&
-        <HeaderComp
+        <Header
           openSideMenu={() => dispatch(MODALS.OPEN_SIDE_MENU)}
           openBoardSettings={() => dispatch(MODALS.OPEN_BOARD_SETTINGS)}
           openDeleteBoard={() => dispatch(MODALS.OPEN_BOARD_DELETE)}
@@ -95,14 +96,21 @@ function App () {
       >
         {
           showColumnsCondition
-            ? activeBoard.columns.map(value => (
-                <CardColumn key={value._id} data={value}>
-                  {value.cards.length !== 0 && value.cards.map(data => (
-                    <Card handleViewTask={handleViewTask} key={data._id} data={data} />
+            ? activeBoard.columns.map((column, index) => (
+                <CardColumn key={column._id} data={column} index={index}>
+                  {column.cards.length !== 0 && column.cards.map(task => (
+                    <Card handleViewTask={handleViewTask} key={task._id} data={task} />
                   ))}
                 </CardColumn>
             ))
-            : !state.loading && <EmptyBoard event={!activeBoard ? () => dispatch(MODALS.OPEN_NEW_BOARD_MODAL) : () => dispatch(MODALS.OPEN_BOARD_EDIT)} activeBoard={activeBoard} />
+            : !state.loading &&
+              <EmptyBoard
+                activeBoard={activeBoard}
+                event={!activeBoard
+                  ? () => dispatch(MODALS.OPEN_NEW_BOARD_MODAL)
+                  : () => dispatch(MODALS.OPEN_BOARD_EDIT)
+                }
+              />
         }
         {
           showColumnsCondition && <NewColumnButton event={() => dispatch(MODALS.OPEN_BOARD_EDIT)}/>
@@ -116,7 +124,7 @@ function App () {
                 handleDeleteTask={() => handleDeleteTask(dataTask)}
                 dataTask={dataTask}
                 activeBoard={activeBoard}
-                close={() => { dispatch(MODALS.CLOSE_ALL_MODALS) }}
+                close={() => { dispatch(MODALS.CLOSE_ALL_MODALS); resetDataTask() }}
               />}
           onEditBoard={() =>
               <EditBoardModal

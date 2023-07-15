@@ -1,5 +1,6 @@
 import React from 'react'
 import { createPortal } from 'react-dom'
+
 function Portal (props) {
   const renderCondition = props.state.delete ||
     props.state.edit ||

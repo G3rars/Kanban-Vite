@@ -27,4 +27,4 @@ const Button = ({ children, style, size, event, btnType, disabled = false }) => 
   )
 }
 
-export default Button
+export { Button }

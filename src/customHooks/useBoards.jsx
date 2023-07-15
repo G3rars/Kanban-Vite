@@ -31,6 +31,10 @@ function useBoards (dispatchAction) {
     setActiveBoard(board)
   }
 
+  function resetDataTask () {
+    setDataTask(null)
+  }
+
   function updateBoards (board) {
     const newBoards = [...initialBoard]
     const index = newBoards.findIndex((item) => item._id === board._id)
@@ -109,6 +113,7 @@ function useBoards (dispatchAction) {
     handleViewTask,
     removeBoard,
     handleDeleteTask,
+    resetDataTask,
     updateActiveBoard,
     updateBoards,
     replaceBoardCard,

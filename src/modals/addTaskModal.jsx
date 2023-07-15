@@ -1,15 +1,15 @@
 import React, { useRef, useState } from 'react'
-import SubTaskCard from '../subTaskCard'
-import Button from '../button'
-import { postCard, putCard } from '../../../core/api'
+import { SubTaskCard } from '../components/subTaskCard'
+import { Button } from '../components/button'
+import { postCard, putCard } from '../../core/api'
+import { IconCross } from '../icons/Symbols'
+import { getFormData, objectToArr } from '../helpers/utilities'
+import { useDisable } from '../customHooks/useDisable'
 import { v4 as uuidv4 } from 'uuid'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { IconCross } from '../icons/Symbols'
-import { getFormData, objectToArr } from '../../helpers/utilities'
-import { useDisable } from '../../customHooks/useDisable'
 
-export default function AddTaskModal ({ activeBoard, dataTask, isEdit, close, replaceBoardCard, addCardToColumn }) {
+function AddTaskModal ({ activeBoard, dataTask, isEdit, close, replaceBoardCard, addCardToColumn }) {
   const initialCols = isEdit ? dataTask.subTask : [{ _id: uuidv4(), value: '' }]
   const [column, setColumn] = useState(initialCols)
   const newTaskForm = useRef()
@@ -159,3 +159,5 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, close, re
     </>
   )
 }
+
+export { AddTaskModal }

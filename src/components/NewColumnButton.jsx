@@ -13,4 +13,4 @@ function NewColumnButton ({ event }) {
   )
 }
 
-export default NewColumnButton
+export { NewColumnButton }

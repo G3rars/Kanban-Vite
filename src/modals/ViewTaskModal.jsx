@@ -1,15 +1,15 @@
 import React, { useRef, useState } from 'react'
-import { Subtask } from '../SubTask'
+import { Subtask } from '../components/SubTask'
 import { BoardConfig } from './BoardConfig'
-import { putCard } from '../../../core/api'
+import { putCard } from '../../core/api'
 import { IconThreeDots } from '../icons/Symbols'
-import { Alert } from '../../helpers/alerts'
+import { Alert } from '../helpers/alerts'
 import { ToastContainer, toast } from 'react-toastify'
-import Button from '../button'
-import { getFormData } from '../../helpers/utilities'
-import { useDisable } from '../../customHooks/useDisable'
+import { Button } from '../components/button'
+import { getFormData } from '../helpers/utilities'
+import { useDisable } from '../customHooks/useDisable'
 
-export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, close, editTask, replaceBoardCard }) {
+function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, close, editTask, replaceBoardCard }) {
   const [modal, setModal] = useState(false)
   const [task, setTask] = useState(dataTask.subTask)
   const formRef = useRef()
@@ -52,7 +52,6 @@ export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, 
     try {
       const newCard = await putCard(dataTask._id, newCardInfo)
       replaceBoardCard({ newTask: newCard, oldCard: { ...newCardInfo, column: dataTask.column } })
-      // TODO: hacer que funcione en vivo
       await Alert(() => Promise.resolve(), loadingID, 'Changes have been saved')
       setTimeout(() => { close() }, 1500)
     } catch (error) {
@@ -120,3 +119,5 @@ export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, 
     </article>
   )
 }
+
+export { ViewTaskModal }

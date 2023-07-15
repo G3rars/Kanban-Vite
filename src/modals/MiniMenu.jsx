@@ -1,6 +1,6 @@
 import React from 'react'
 import { CardModal } from './cardModal'
-import { ThemeSwitch } from '../SwitchTheme'
+import { ThemeSwitch } from '../components/SwitchTheme'
 import { IconLigthTheme, IconDarkTheme } from '../icons/Symbols'
 
 function MiniMenu ({ data, setBoardModal, changeBoard, changeTheme, activeBoard, darkTheme }) {
@@ -45,4 +45,4 @@ function MiniMenu ({ data, setBoardModal, changeBoard, changeTheme, activeBoard,
   )
 }
 
-export default MiniMenu
+export { MiniMenu }

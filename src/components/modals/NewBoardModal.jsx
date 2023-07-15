@@ -9,7 +9,7 @@ import { Alert } from '../../helpers/alerts'
 import { ToastContainer, toast } from 'react-toastify'
 import { useDisable } from '../../customHooks/useDisable'
 
-export default function NewBoardModal ({ close, setInitialBoard, initialBoard }) {
+export default function NewBoardModal ({ close, updateBoards }) {
   const [column, setColumn] = useState([])
   const formRef = useRef()
   const { isDisabled, preventMulticlick, resetMultiClick } = useDisable()
@@ -65,9 +65,8 @@ export default function NewBoardModal ({ close, setInitialBoard, initialBoard })
       const cols = saveColInfo()
       const columnPromises = cols.map(async (col) => await postColumn({ name: col.value }, boardID))
       const updatedColumns = await Promise.all(columnPromises)
-      const formatData = { name: boardName, _id: boardID, columns: updatedColumns }
-      const updateState = [...initialBoard, formatData]
-      setInitialBoard(updateState)
+      const newBoard = { name: boardName, _id: boardID, columns: updatedColumns }
+      updateBoards(newBoard)
       Alert(() => Promise.resolve(), loadingId, 'The board has been created successfully')
       setTimeout(() => {
         close()

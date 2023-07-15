@@ -9,7 +9,7 @@ import { getFormData, objectToArr } from '../../helpers/utilities'
 import { IconCross } from '../icons/Symbols'
 import { useDisable } from '../../customHooks/useDisable'
 
-function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
+function EditBoardModal ({ activeBoard, updateActiveBoard, close, updateBoards }) {
   const [column, setColumn] = useState(activeBoard.columns)
   const [deleteCol, setDeleteCol] = useState([])
   const formRef = useRef()
@@ -50,7 +50,7 @@ function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
       const newBoard = await putBoard(activeBoard._id, { name: boardName, columns: filterColumns })
       console.log(newBoard)
       updateBoards(newBoard)
-      setActiveBoard(newBoard)
+      updateActiveBoard(newBoard)
       Alert(() => Promise.resolve(), loadingId, 'The board has been update successfully')
       setTimeout(() => { close() }, 2500)
     } catch (error) {

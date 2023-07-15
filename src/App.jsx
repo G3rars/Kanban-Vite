@@ -1,6 +1,11 @@
 // React utils
 import React, { useReducer } from 'react'
 
+// Layout
+import { Portal } from './components/layouts/Portal'
+import { Main } from './components/layouts/Main'
+import { Loading } from './components/layouts/Loading'
+
 // Components
 import { EmptyBoard } from './components/EmptyBoard'
 import { CardColumn } from './components/CardColumn'
@@ -18,32 +23,27 @@ import NewBoardModal from './components/modals/NewBoardModal'
 import MiniMenu from './components/modals/MiniMenu'
 import AddTaskModal from './components/modals/addTaskModal'
 
-// Layout
-import { Portal } from './components/layouts/Portal'
-import { Main } from './components/layouts/Main'
-import { Loading } from './components/layouts/Loading'
-
-// Extras
-import { useAxios } from './customHooks/useAxios'
+// Custom Hooks
+import { useBoards } from './customHooks/useBoards'
 import { useTheme } from './customHooks/useTheme'
+
+// Constants
+import NewColumnButton from './components/NewColumnButton'
 import {
   MODALS,
   modalReducer,
-  initialModalsState as initialState
+  modalStates
 } from './helpers/contants'
-import NewColumnButton from './components/NewColumnButton'
 
 function App () {
-  const [state, dispatch] = useReducer(modalReducer, initialState)
+  const [state, dispatch] = useReducer(modalReducer, modalStates)
   const { changeTheme, darkTheme } = useTheme()
   const {
     changeBoard,
     handleViewTask,
+    updateActiveBoard,
     removeBoard,
     handleDeleteTask,
-    setDataTask,
-    setInitialBoard,
-    setActiveBoard,
     updateBoards,
     replaceBoardCard,
     addCardToColumn,
@@ -51,7 +51,7 @@ function App () {
     activeBoard,
     dataTask,
     reqStatus
-  } = useAxios(dispatch)
+  } = useBoards(dispatch)
 
   const showColumnsCondition = Array.isArray(initialBoard) && initialBoard.length !== 0 && activeBoard && activeBoard.columns.length !== 0
 
@@ -116,12 +116,11 @@ function App () {
                 handleDeleteTask={() => handleDeleteTask(dataTask)}
                 dataTask={dataTask}
                 activeBoard={activeBoard}
-                setDataTask={setDataTask}
-                close={() => { dispatch(MODALS.CLOSE_ALL_MODALS); setDataTask(null) }}
+                close={() => { dispatch(MODALS.CLOSE_ALL_MODALS) }}
               />}
           onEditBoard={() =>
               <EditBoardModal
-                setActiveBoard={setActiveBoard}
+                updateActiveBoard={updateActiveBoard}
                 updateBoards={updateBoards}
                 activeBoard={activeBoard}
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
@@ -134,7 +133,6 @@ function App () {
                 activeBoard={activeBoard}
                 updateBoards={updateBoards}
                 replaceBoardCard={replaceBoardCard}
-                setActiveBoard={setActiveBoard}
                 addCardToColumn={addCardToColumn}
               />}
           onViewTask={() =>
@@ -149,8 +147,9 @@ function App () {
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
               />}
           onNewBoard={() =>
-              <NewBoardModal setInitialBoard={setInitialBoard}
-              initialBoard={initialBoard}
+              <NewBoardModal
+                updateBoards={updateBoards}
+                initialBoard={initialBoard}
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
               />}
           onError={() => <Error />}

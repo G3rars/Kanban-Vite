@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { deleteBoard, deleteCard } from '../../core/api'
 import { MODALS } from '../helpers/contants'
 import { useAxios } from './useAxios'
+import { toast } from 'react-toastify'
+import { Alert } from '../helpers/alerts'
 
 function useBoards (dispatchAction) {
   const [initialBoard, setInitialBoard] = useState([])
@@ -50,9 +52,16 @@ function useBoards (dispatchAction) {
     dispatchAction(MODALS.CLOSE_SIDE_MENU)
   }
 
-  const handleDeleteTask = (data) => {
-    removeCard({ oldCard: data })
-    deleteCard(data._id)
+  const handleDeleteTask = async (data) => {
+    const loadingId = toast.loading('Please wait...', { autoClose: false })
+    try {
+      await deleteCard(data._id)
+      Alert(() => Promise.resolve(), loadingId, 'The task has been deleted')
+      removeCard({ oldCard: data })
+      dispatchAction(MODALS.CLOSE_ALL_MODALS)
+    } catch (error) {
+      Alert(() => Promise.reject(error), loadingId)
+    }
   }
 
   function removeCard ({ oldCard }) {

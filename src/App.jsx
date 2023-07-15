@@ -34,6 +34,7 @@ import {
   modalReducer,
   modalStates
 } from './helpers/contants'
+import { ToastContainer } from 'react-toastify'
 
 function App () {
   const [state, dispatch] = useReducer(modalReducer, modalStates)
@@ -165,6 +166,7 @@ function App () {
         />
       </Main>
       { state.tablet_btn_bottom && <SideBarButton event={() => dispatch(MODALS.OPEN_SIDE_MENU)} /> }
+      <ToastContainer />
     </>
   )
 }

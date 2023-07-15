@@ -3,9 +3,15 @@ import { SubTaskCard } from '../components/subTaskCard'
 import { Button } from '../components/button'
 import { putBoard } from '../../core/api'
 import { v4 as uuidv4 } from 'uuid'
+<<<<<<< HEAD:src/modals/EditBoardModal.jsx
 import { ToastContainer, toast } from 'react-toastify'
 import { Alert } from '../helpers/alerts'
 import { getFormData, objectToArr } from '../helpers/utilities'
+=======
+import { toast } from 'react-toastify'
+import { Alert } from '../../helpers/alerts'
+import { getFormData, objectToArr } from '../../helpers/utilities'
+>>>>>>> main:src/components/modals/EditBoardModal.jsx
 import { IconCross } from '../icons/Symbols'
 import { useDisable } from '../customHooks/useDisable'
 
@@ -51,7 +57,7 @@ function EditBoardModal ({ activeBoard, updateActiveBoard, close, updateBoards }
       updateBoards(newBoard)
       updateActiveBoard(newBoard)
       Alert(() => Promise.resolve(), loadingId, 'The board has been update successfully')
-      setTimeout(() => { close() }, 2500)
+      close()
     } catch (error) {
       Alert(() => Promise.reject(error), loadingId)
     } finally {
@@ -102,7 +108,6 @@ function EditBoardModal ({ activeBoard, updateActiveBoard, close, updateBoards }
         <Button event={handleAddColumn} key='newColBtn' style='secondary' size=' mt-auto mb-2'><p>+ Add New Column</p></Button>
         <Button btnType='submit' key='newBoardBtn' style='primarysm'><p>Save Changes</p></Button>
       </form>
-     <ToastContainer/>
     </article>
   )
 }

@@ -6,8 +6,15 @@ import { IconCross } from '../icons/Symbols'
 import { getFormData, objectToArr } from '../helpers/utilities'
 import { useDisable } from '../customHooks/useDisable'
 import { v4 as uuidv4 } from 'uuid'
-import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+<<<<<<< HEAD:src/modals/addTaskModal.jsx
+=======
+import { IconCross } from '../icons/Symbols'
+import { getFormData, objectToArr } from '../../helpers/utilities'
+import { useDisable } from '../../customHooks/useDisable'
+import { Alert } from '../../helpers/alerts'
+import { toast } from 'react-toastify'
+>>>>>>> main:src/components/modals/addTaskModal.jsx
 
 function AddTaskModal ({ activeBoard, dataTask, isEdit, close, replaceBoardCard, addCardToColumn }) {
   const initialCols = isEdit ? dataTask.subTask : [{ _id: uuidv4(), value: '' }]
@@ -31,6 +38,7 @@ function AddTaskModal ({ activeBoard, dataTask, isEdit, close, replaceBoardCard,
 
   const submitEditTask = async (e) => {
     e.preventDefault()
+    const loadingId = toast.loading('Please wait...', { autoClose: false })
     if (isDisabled()) return
     preventMulticlick()
 
@@ -47,10 +55,12 @@ function AddTaskModal ({ activeBoard, dataTask, isEdit, close, replaceBoardCard,
     if (column !== dataTask.column) updatedCard._id = dataTask._id
     try {
       const newTask = await putCard(dataTask._id, updatedCard)
+      console.log(newTask)
       replaceBoardCard({ newTask, oldCard: { updatedCard, column: dataTask.column } })
+      Alert(() => Promise.resolve(), loadingId, 'The task has been update')
       close()
     } catch (error) {
-      console.log(error)
+      Alert(() => Promise.reject(error), loadingId)
     } finally {
       resetMultiClick()
     }
@@ -58,6 +68,7 @@ function AddTaskModal ({ activeBoard, dataTask, isEdit, close, replaceBoardCard,
 
   const submitNewTask = async (e) => {
     e.preventDefault()
+    const loadingId = toast.loading('Please wait...', { autoClose: false })
     if (isDisabled()) return
     preventMulticlick()
 
@@ -74,9 +85,10 @@ function AddTaskModal ({ activeBoard, dataTask, isEdit, close, replaceBoardCard,
     try {
       const newTask = await postCard(cardData, column)
       addCardToColumn({ newTask })
+      Alert(() => Promise.resolve(), loadingId, 'The task has been created')
       close()
     } catch (error) {
-      console.log(error)
+      Alert(() => Promise.reject(error), loadingId)
     } finally {
       resetMultiClick()
     }
@@ -155,7 +167,6 @@ function AddTaskModal ({ activeBoard, dataTask, isEdit, close, replaceBoardCard,
           </Button>
         </form>
       </section>
-      <ToastContainer />
     </>
   )
 }

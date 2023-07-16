@@ -1,41 +1,38 @@
 import React, { useRef, useState } from 'react'
-import SubTaskCard from '../subTaskCard'
-import Button from '../button'
-import { postCard, putCard } from '../../../core/api'
-import { v4 as uuidv4 } from 'uuid'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+import { SubTaskCard } from '../components/subTaskCard'
+import { Button } from '../components/button'
+import { postCard, putCard } from '../../core/api'
 import { IconCross } from '../icons/Symbols'
-import { getFormData, objectToArr } from '../../helpers/utilities'
-import { useDisable } from '../../customHooks/useDisable'
+import { getFormData, objectToArr } from '../helpers/utilities'
+import { useDisable } from '../customHooks/useDisable'
+import { v4 as uuidv4 } from 'uuid'
+import 'react-toastify/dist/ReactToastify.css'
+import { Alert } from '../helpers/alerts'
+import { toast } from 'react-toastify'
 
-export default function AddTaskModal ({ activeBoard, dataTask, isEdit, close, replaceBoardCard, addCardToColumn }) {
-  const [column, setColumn] = useState([])
-  const [apiSubtask, setApiSubtask] = useState(dataTask ? dataTask.subTask : null)
+function AddTaskModal ({ activeBoard, dataTask, isEdit, close, replaceBoardCard, addCardToColumn }) {
+  const initialCols = isEdit ? dataTask.subTask : [{ _id: uuidv4(), value: '' }]
+  const [column, setColumn] = useState(initialCols)
   const newTaskForm = useRef()
   const { isDisabled, preventMulticlick, resetMultiClick } = useDisable()
 
   const handleAddColumn = () => {
     const cols = [...column]
     cols.push({
-      _id: `col_${uuidv4()}`,
+      _id: uuidv4(),
       value: ''
     })
     setColumn(cols)
   }
 
   const handleDeleteColumn = (colID) => {
-    if (colID.startsWith('col_')) {
-      const newCols = column.filter((item) => item._id !== colID)
-      setColumn(newCols)
-    } else {
-      const newCols = apiSubtask.filter((item) => item._id !== colID)
-      setApiSubtask(newCols)
-    }
+    const newCols = column.filter((item) => item._id !== colID)
+    setColumn(newCols)
   }
 
   const submitEditTask = async (e) => {
     e.preventDefault()
+    const loadingId = toast.loading('Please wait...', { autoClose: false })
     if (isDisabled()) return
     preventMulticlick()
 
@@ -47,15 +44,16 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, close, re
       title,
       description,
       column,
-      _id: dataTask._id,
       subTask: mappedSubtasks
     }
+    if (column !== dataTask.column) updatedCard._id = dataTask._id
     try {
       const newTask = await putCard(dataTask._id, updatedCard)
       replaceBoardCard({ newTask, oldCard: { updatedCard, column: dataTask.column } })
+      Alert(() => Promise.resolve(), loadingId, 'The task has been update')
       close()
     } catch (error) {
-      console.log(error)
+      Alert(() => Promise.reject(error), loadingId)
     } finally {
       resetMultiClick()
     }
@@ -63,6 +61,7 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, close, re
 
   const submitNewTask = async (e) => {
     e.preventDefault()
+    const loadingId = toast.loading('Please wait...', { autoClose: false })
     if (isDisabled()) return
     preventMulticlick()
 
@@ -79,9 +78,10 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, close, re
     try {
       const newTask = await postCard(cardData, column)
       addCardToColumn({ newTask })
+      Alert(() => Promise.resolve(), loadingId, 'The task has been created')
       close()
     } catch (error) {
-      console.log(error)
+      Alert(() => Promise.reject(error), loadingId)
     } finally {
       resetMultiClick()
     }
@@ -117,29 +117,16 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, close, re
           />
           <label htmlFor='subtask' className='pb-1 pt-5 text-xs font-bold opacity-60 dark:text-kwhite'>SubTask</label>
           <div className='h-[120px] overflow-y-auto text-md font-medium scrollbar-thin scrollbar-thumb-kpurple'>
+          { (column.length === 0) && <p className='pt-7 text-center opacity-60 dark:text-kwhite'>Add new subtaks</p> }
           {
-            ((!isEdit && column.length === 0) || (isEdit && dataTask && dataTask.subTask.length === 0)) &&
-              <p className='pt-7 text-center opacity-60 dark:text-kwhite'>Add new columns</p>
-          }
-          {
-            isEdit && apiSubtask.map(item =>
-                  <SubTaskCard
-                      max={'50'}
-                      key={item._id}
-                      colID={item._id}
-                      handleDeleteColumn={handleDeleteColumn}
-                      inputName={item._id}
-                      defValue={item.name}/>)
-          }
-          {isEdit && column.map(item =>
-                  <SubTaskCard
-                      max={'50'}
-                      key={item._id}
-                      colID={item._id}
-                      handleDeleteColumn={handleDeleteColumn}
-                      inputName={item._id}
-                      defValue={item.value}
-                      />)
+            column.map(item =>
+              <SubTaskCard
+                  max={'50'}
+                  key={item._id}
+                  colID={item._id}
+                  handleDeleteColumn={handleDeleteColumn}
+                  inputName={item._id}
+                  defValue={item.name}/>)
           }
           </div>
           <Button
@@ -148,13 +135,13 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, close, re
             key='newColBtn'
             size='mt-3'
           >
-            +add new task
+            +add new subtask
           </Button>
           <label htmlFor='status' className='pb-1 pt-3 text-xs font-bold opacity-60 dark:text-kwhite'>Status</label>
           <select name='status' className='h-[40px] w-full rounded-md border-[1px] border-solid border-kgrayli/30 text-sm font-medium outline-kpurple invalid:border-kred dark:bg-kblackli dark:text-kwhite'>
-            {/* {
+            {
               !isEdit && activeBoard && activeBoard.columns.map(value => (<option key={value._id} value={value._id}>{value.name}</option>))
-            } */}
+            }
             {isEdit && activeBoard &&
                 activeBoard.columns.map((value) =>
                   value._id === dataTask.column ? (<option key={value._id} value={value._id}>{value.name}</option>) : null)
@@ -173,7 +160,8 @@ export default function AddTaskModal ({ activeBoard, dataTask, isEdit, close, re
           </Button>
         </form>
       </section>
-      <ToastContainer />
     </>
   )
 }
+
+export { AddTaskModal }

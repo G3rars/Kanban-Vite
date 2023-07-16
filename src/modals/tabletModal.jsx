@@ -1,10 +1,10 @@
 import React from 'react'
-import { CardModal } from './cardModal.jsx'
-import { ThemeSwitch } from '../SwitchTheme.jsx'
+import { CardModal } from './cardModal'
+import { ThemeSwitch } from '../components/SwitchTheme'
 import { IconLigthTheme, IconDarkTheme, IconHideSidebar } from '../icons/Symbols'
-import { LogoDesktop } from '../icons/Logos.jsx'
+import { LogoDesktop } from '../icons/Logos'
 
-export default function TabletModal ({ close, modalTable, data, setBoardModal, changeBoard, changeTheme, activeBoard, darkTheme }) {
+function TabletModal ({ close, modalTable, data, setBoardModal, changeBoard, changeTheme, activeBoard, darkTheme }) {
   const totalBoards = Array.isArray(data) && data.length
   return (
     <>
@@ -59,3 +59,5 @@ export default function TabletModal ({ close, modalTable, data, setBoardModal, c
     </>
   )
 }
+
+export { TabletModal }

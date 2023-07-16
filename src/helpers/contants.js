@@ -1,4 +1,9 @@
-const initialModalsState = {
+const USER_CONFIG = {
+  ACTIVE_BOARD: 'activeBoard',
+  THEME: 'theme'
+}
+
+const modalStates = {
   settings: false,
   delete: false,
   edit: false,
@@ -53,37 +58,38 @@ function requestReducer (state, action) {
 function modalReducer (state, action) {
   switch (action) {
     case MODALS.OPEN_BOARD_SETTINGS:
-      return { ...initialModalsState, settings: !state.settings }
+      return { ...modalStates, settings: !state.settings }
     case MODALS.OPEN_MINI_MENU:
-      return { ...initialModalsState, mini_menu: !state.mini_menu }
+      return { ...modalStates, mini_menu: !state.mini_menu }
     case MODALS.OPEN_BOARD_EDIT:
-      return { ...initialModalsState, edit: true }
+      return { ...modalStates, edit: true }
     case MODALS.OPEN_EDIT_TASK:
-      return { ...initialModalsState, edit_task: true }
+      return { ...modalStates, edit_task: true }
     case MODALS.OPEN_BOARD_DELETE:
-      return { ...initialModalsState, delete: true }
+      return { ...modalStates, delete: true }
     case MODALS.OPEN_NEW_BOARD_MODAL:
-      return { ...initialModalsState, side_menu: false, new_board: true }
+      return { ...modalStates, side_menu: false, new_board: true }
     case MODALS.OPEN_SIDE_MENU:
-      return { ...initialModalsState, tablet_btn_bottom: false, side_menu: true }
+      return { ...modalStates, tablet_btn_bottom: false, side_menu: true }
     case MODALS.OPEN_TASK_DETAILS:
-      return { ...initialModalsState, task_details: true }
+      return { ...modalStates, task_details: true }
     case MODALS.OPEN_NEW_TASK:
-      return { ...initialModalsState, new_task: true }
+      return { ...modalStates, new_task: true }
     case MODALS.CLOSE_SIDE_MENU:
-      return { ...initialModalsState, side_menu: false }
+      return { ...modalStates, side_menu: false }
     case MODALS.CLOSE_ALL_MODALS:
-      return initialModalsState
+      return modalStates
     default:
       throw new Error('No existe esa accion')
   }
 }
 
 export {
-  initialModalsState,
+  modalStates,
   initialRequestState,
   MODALS,
   REQ_ACTION,
+  USER_CONFIG,
   modalReducer,
   requestReducer
 }

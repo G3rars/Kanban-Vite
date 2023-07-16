@@ -1,15 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react'
-import Button from '../button'
-import SubTaskCard from '../subTaskCard'
+import { Button } from '../components/button'
+import { SubTaskCard } from '../components/subTaskCard'
 import { v4 as uuidv4 } from 'uuid'
-import { postBoard, postColumn } from '../../../core/api'
-import { getFormData, objectToArr } from '../../helpers/utilities'
+import { postBoard, postColumn } from '../../core/api'
+import { getFormData, objectToArr } from '../helpers/utilities'
 import { IconCross } from '../icons/Symbols'
-import { Alert } from '../../helpers/alerts'
-import { ToastContainer, toast } from 'react-toastify'
-import { useDisable } from '../../customHooks/useDisable'
+import { Alert } from '../helpers/alerts'
+import { toast } from 'react-toastify'
+import { useDisable } from '../customHooks/useDisable'
 
-export default function NewBoardModal ({ close, setInitialBoard, initialBoard }) {
+function NewBoardModal ({ close, updateBoards }) {
   const [column, setColumn] = useState([])
   const formRef = useRef()
   const { isDisabled, preventMulticlick, resetMultiClick } = useDisable()
@@ -65,13 +65,10 @@ export default function NewBoardModal ({ close, setInitialBoard, initialBoard })
       const cols = saveColInfo()
       const columnPromises = cols.map(async (col) => await postColumn({ name: col.value }, boardID))
       const updatedColumns = await Promise.all(columnPromises)
-      const formatData = { name: boardName, _id: boardID, columns: updatedColumns }
-      const updateState = [...initialBoard, formatData]
-      setInitialBoard(updateState)
+      const newBoard = { name: boardName, _id: boardID, columns: updatedColumns }
+      updateBoards(newBoard)
       Alert(() => Promise.resolve(), loadingId, 'The board has been created successfully')
-      setTimeout(() => {
-        close()
-      }, 2500)
+      close()
     } catch (error) {
       Alert()
       console.log(error)
@@ -121,7 +118,8 @@ export default function NewBoardModal ({ close, setInitialBoard, initialBoard })
         <Button event={handleAddColumn} key='newColBtn' style='secondary' size='mb-4'><p>+ Add New Column</p></Button>
         <Button btnType='submit' key='newBoardBtn' style='primarysm'><p>Create New Board</p></Button>
       </form>
-      <ToastContainer/>
     </article>
   )
 }
+
+export { NewBoardModal }

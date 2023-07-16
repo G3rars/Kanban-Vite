@@ -2,48 +2,52 @@
 import React, { useReducer } from 'react'
 
 // Components
+import { NewColumnButton } from './components/NewColumnButton'
 import { EmptyBoard } from './components/EmptyBoard'
 import { CardColumn } from './components/CardColumn'
 import { SideBarButton } from './components/SideBarButton'
-import HeaderComp from './components/header'
-import Card from './components/card'
+import { Header } from './components/header'
+import { Card } from './components/card'
 
 // Modals
-import { DeleteModal } from './components/modals/deleteModal'
-import { EditBoardModal } from './components/modals/EditBoardModal'
-import { Error } from './components/modals/Error'
-import TabletModal from './components/modals/tabletModal'
-import ViewTaskModal from './components/modals/ViewTaskModal'
-import NewBoardModal from './components/modals/NewBoardModal'
-import MiniMenu from './components/modals/MiniMenu'
-import AddTaskModal from './components/modals/addTaskModal'
+import { DeleteModal } from './modals/deleteModal'
+import { EditBoardModal } from './modals/EditBoardModal'
+import { Error } from './modals/Error'
+import { TabletModal } from './modals/tabletModal'
+import { ViewTaskModal } from './modals/ViewTaskModal'
+import { NewBoardModal } from './modals/NewBoardModal'
+import { MiniMenu } from './modals/MiniMenu'
+import { AddTaskModal } from './modals/addTaskModal'
 
 // Layout
-import { Portal } from './components/layouts/Portal'
-import { Main } from './components/layouts/Main'
-import { Loading } from './components/layouts/Loading'
+import { Portal } from './layouts/Portal'
+import { Main } from './layouts/Main'
+import { Loading } from './layouts/Loading'
 
-// Extras
-import { useAxios } from './customHooks/useAxios'
+// Hooks
 import { useTheme } from './customHooks/useTheme'
+import { useBoards } from './customHooks/useBoards'
+
+// constants
 import {
   MODALS,
   modalReducer,
-  initialModalsState as initialState
+  modalStates
 } from './helpers/contants'
-import NewColumnButton from './components/NewColumnButton'
+
+// extras
+import { ToastContainer } from 'react-toastify'
 
 function App () {
-  const [state, dispatch] = useReducer(modalReducer, initialState)
+  const [state, dispatch] = useReducer(modalReducer, modalStates)
   const { changeTheme, darkTheme } = useTheme()
   const {
     changeBoard,
     handleViewTask,
+    updateActiveBoard,
     removeBoard,
     handleDeleteTask,
-    setDataTask,
-    setInitialBoard,
-    setActiveBoard,
+    resetDataTask,
     updateBoards,
     replaceBoardCard,
     addCardToColumn,
@@ -51,7 +55,7 @@ function App () {
     activeBoard,
     dataTask,
     reqStatus
-  } = useAxios(dispatch)
+  } = useBoards(dispatch)
 
   const showColumnsCondition = Array.isArray(initialBoard) && initialBoard.length !== 0 && activeBoard && activeBoard.columns.length !== 0
 
@@ -68,7 +72,7 @@ function App () {
         darkTheme={darkTheme}
       />
       {activeBoard &&
-        <HeaderComp
+        <Header
           openSideMenu={() => dispatch(MODALS.OPEN_SIDE_MENU)}
           openBoardSettings={() => dispatch(MODALS.OPEN_BOARD_SETTINGS)}
           openDeleteBoard={() => dispatch(MODALS.OPEN_BOARD_DELETE)}
@@ -95,14 +99,21 @@ function App () {
       >
         {
           showColumnsCondition
-            ? activeBoard.columns.map(value => (
-                <CardColumn key={value._id} data={value}>
-                  {value.cards.length !== 0 && value.cards.map(data => (
-                    <Card handleViewTask={handleViewTask} key={data._id} data={data} />
+            ? activeBoard.columns.map((column, index) => (
+                <CardColumn key={column._id} data={column} index={index}>
+                  {column.cards.length !== 0 && column.cards.map(task => (
+                    <Card handleViewTask={handleViewTask} key={task._id} data={task} />
                   ))}
                 </CardColumn>
             ))
-            : !state.loading && <EmptyBoard event={!activeBoard ? () => dispatch(MODALS.OPEN_NEW_BOARD_MODAL) : () => dispatch(MODALS.OPEN_BOARD_EDIT)} activeBoard={activeBoard} />
+            : !state.loading &&
+              <EmptyBoard
+                activeBoard={activeBoard}
+                event={!activeBoard
+                  ? () => dispatch(MODALS.OPEN_NEW_BOARD_MODAL)
+                  : () => dispatch(MODALS.OPEN_BOARD_EDIT)
+                }
+              />
         }
         {
           showColumnsCondition && <NewColumnButton event={() => dispatch(MODALS.OPEN_BOARD_EDIT)}/>
@@ -116,12 +127,11 @@ function App () {
                 handleDeleteTask={() => handleDeleteTask(dataTask)}
                 dataTask={dataTask}
                 activeBoard={activeBoard}
-                setDataTask={setDataTask}
-                close={() => { dispatch(MODALS.CLOSE_ALL_MODALS); setDataTask(null) }}
+                close={() => { dispatch(MODALS.CLOSE_ALL_MODALS); resetDataTask() }}
               />}
           onEditBoard={() =>
               <EditBoardModal
-                setActiveBoard={setActiveBoard}
+                updateActiveBoard={updateActiveBoard}
                 updateBoards={updateBoards}
                 activeBoard={activeBoard}
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
@@ -134,7 +144,6 @@ function App () {
                 activeBoard={activeBoard}
                 updateBoards={updateBoards}
                 replaceBoardCard={replaceBoardCard}
-                setActiveBoard={setActiveBoard}
                 addCardToColumn={addCardToColumn}
               />}
           onViewTask={() =>
@@ -149,8 +158,8 @@ function App () {
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
               />}
           onNewBoard={() =>
-              <NewBoardModal setInitialBoard={setInitialBoard}
-              initialBoard={initialBoard}
+              <NewBoardModal
+                updateBoards={updateBoards}
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
               />}
           onError={() => <Error />}
@@ -158,6 +167,7 @@ function App () {
         />
       </Main>
       { state.tablet_btn_bottom && <SideBarButton event={() => dispatch(MODALS.OPEN_SIDE_MENU)} /> }
+      <ToastContainer />
     </>
   )
 }

@@ -1,8 +1,8 @@
 import React from 'react'
-import Button from './button'
-import { LogoDesktop } from './icons/Logos'
+import { Button } from './button'
+import { LogoDesktop } from '../icons/Logos'
 
-export default function EmptyBoard ({ activeBoard, event }) {
+function EmptyBoard ({ activeBoard, event }) {
   return (
     <div className='mx-auto flex h-full flex-col place-content-center items-center justify-center gap-6'>
       {!activeBoard && <LogoDesktop />}

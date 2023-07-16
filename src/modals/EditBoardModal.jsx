@@ -1,14 +1,15 @@
 import React, { useRef, useState } from 'react'
-import SubTaskCard from '../subTaskCard'
-import Button from '../button'
-import { putBoard } from '../../../core/api'
+import { SubTaskCard } from '../components/subTaskCard'
+import { Button } from '../components/button'
+import { putBoard } from '../../core/api'
 import { v4 as uuidv4 } from 'uuid'
-import { ToastContainer, toast } from 'react-toastify'
-import { Alert } from '../../helpers/alerts'
+import { toast } from 'react-toastify'
+import { Alert } from '../helpers/alerts'
+import { getFormData, objectToArr } from '../helpers/utilities'
 import { IconCross } from '../icons/Symbols'
-import { useDisable } from '../../customHooks/useDisable'
+import { useDisable } from '../customHooks/useDisable'
 
-function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
+function EditBoardModal ({ activeBoard, updateActiveBoard, close, updateBoards }) {
   const [column, setColumn] = useState(activeBoard.columns)
   const [deleteCol, setDeleteCol] = useState([])
   const formRef = useRef()
@@ -38,22 +39,18 @@ function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
     const loadingId = toast.loading('Please wait...', { autoClose: false })
 
     try {
-      const formData = Object.fromEntries(new FormData(formRef.current))
-      const dataArr = Object.entries(formData)
-      const boardName = dataArr.shift()
-      const filterColumns = dataArr.map(([id, value]) => {
-        if (id.startsWith('col_')) {
-          return { name: value }
-        }
-        return { name: value, _id: id }
-      })
-      const newBoard = await putBoard(activeBoard._id, { name: boardName[1], columns: filterColumns })
+      const { boardName, ...cols } = getFormData(formRef.current)
+      const columns = objectToArr(cols)
+      const filterColumns = columns.map(([id, value]) =>
+        (id.startsWith('col_'))
+          ? { name: value }
+          : { name: value, _id: id }
+      )
+      const newBoard = await putBoard(activeBoard._id, { name: boardName, columns: filterColumns })
       updateBoards(newBoard)
-      setActiveBoard(newBoard)
+      updateActiveBoard(newBoard)
       Alert(() => Promise.resolve(), loadingId, 'The board has been update successfully')
-      setTimeout(() => {
-        close()
-      }, 2500)
+      close()
     } catch (error) {
       Alert(() => Promise.reject(error), loadingId)
     } finally {
@@ -104,7 +101,6 @@ function EditBoardModal ({ activeBoard, setActiveBoard, close, updateBoards }) {
         <Button event={handleAddColumn} key='newColBtn' style='secondary' size=' mt-auto mb-2'><p>+ Add New Column</p></Button>
         <Button btnType='submit' key='newBoardBtn' style='primarysm'><p>Save Changes</p></Button>
       </form>
-     <ToastContainer/>
     </article>
   )
 }

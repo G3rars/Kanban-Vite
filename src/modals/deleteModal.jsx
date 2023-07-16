@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '../button'
+import { Button } from '../components/button'
 
 function DeleteModal ({ close, deleteBoard, dataTask, handleDeleteTask, activeBoard }) {
   return (

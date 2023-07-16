@@ -1,11 +1,11 @@
 import React from 'react'
-import Button from './button'
-import { BoardConfig } from './modals/BoardConfig'
-import { LogoMobile, LogoDesktop } from './icons/Logos'
-import { ArrowDown, ArrowUp } from './icons/Arrows'
-import { IconPlus, IconThreeDots } from './icons/Symbols'
+import { Button } from '../components/button'
+import { BoardConfig } from '../modals/BoardConfig'
+import { LogoMobile, LogoDesktop } from '../icons/Logos'
+import { ArrowDown, ArrowUp } from '../icons/Arrows'
+import { IconPlus, IconThreeDots } from '../icons/Symbols'
 
-export default function HeaderComp ({ openSideMenu, states, openBoardSettings, openDeleteBoard, openEditBoard, data, addTask, openMiniMenu }) {
+function Header ({ openSideMenu, states, openBoardSettings, openDeleteBoard, openEditBoard, data, addTask, openMiniMenu }) {
   return (
     <nav className='relative flex h-[64px] w-full flex-row justify-between pr-7 shadow-md transition duration-500 dark:bg-kdarkGray md:h-[80px] lg:h-[96px]'>
       <div className='ml-4 flex items-center justify-center border-solid border-kcian pr-4 dark:border-kdarkGray md:mx-4 md:border-r'>
@@ -57,3 +57,5 @@ export default function HeaderComp ({ openSideMenu, states, openBoardSettings, o
     </nav>
   )
 }
+
+export { Header }

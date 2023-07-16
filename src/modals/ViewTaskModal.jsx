@@ -1,15 +1,15 @@
 import React, { useRef, useState } from 'react'
-import { Subtask } from '../SubTask'
+import { Subtask } from '../components/SubTask'
 import { BoardConfig } from './BoardConfig'
-import { putCard } from '../../../core/api'
+import { putCard } from '../../core/api'
 import { IconThreeDots } from '../icons/Symbols'
-import { Alert } from '../../helpers/alerts'
-import { ToastContainer, toast } from 'react-toastify'
-import Button from '../button'
-import { getFormData } from '../../helpers/utilities'
-import { useDisable } from '../../customHooks/useDisable'
+import { Alert } from '../helpers/alerts'
+import { toast } from 'react-toastify'
+import { Button } from '../components/button'
+import { getFormData } from '../helpers/utilities'
+import { useDisable } from '../customHooks/useDisable'
 
-export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, close, editTask, replaceBoardCard }) {
+function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, close, editTask, replaceBoardCard }) {
   const [modal, setModal] = useState(false)
   const [task, setTask] = useState(dataTask.subTask)
   const formRef = useRef()
@@ -35,29 +35,31 @@ export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, 
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    const loadingId = toast.loading('Please wait...', { autoClose: false })
     if (isDisabled()) return
     preventMulticlick()
-    const loadingID = toast.loading('Please Wait...')
     const subTasks = task.map(value => ({ name: value.name, completed: value.completed }))
     const { status: columnID } = getFormData(formRef.current)
     const newCardInfo = {
-      _id: dataTask._id,
       title: dataTask.title,
       description: dataTask.description,
       subTask: subTasks
     }
-    if (columnID !== dataTask.column) newCardInfo.column = columnID
-    else newCardInfo.column = dataTask.column
+    if (columnID === dataTask.column) newCardInfo.column = dataTask.column
+    else {
+      newCardInfo.column = columnID
+      newCardInfo._id = dataTask._id
+    }
 
     try {
       const newCard = await putCard(dataTask._id, newCardInfo)
       replaceBoardCard({ newTask: newCard, oldCard: { ...newCardInfo, column: dataTask.column } })
       // TODO: hacer que funcione en vivo
-      await Alert(() => Promise.resolve(), loadingID, 'Changes have been saved')
-      setTimeout(() => { close() }, 1500)
+      Alert(() => Promise.resolve(), loadingId, 'The task has been update successfully')
+      close()
     } catch (error) {
       console.log(error)
-      Alert(() => Promise.reject(error), loadingID)
+      Alert(() => Promise.reject(error), loadingId)
     } finally {
       resetMultiClick()
     }
@@ -66,7 +68,7 @@ export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, 
   const COMPLETED = task.filter(item => item.completed).length
 
   return (
-    <article className='relative flex min-h-[560px] w-screen max-w-[345px] flex-col justify-between gap-6 rounded-md bg-kwhite px-6 pt-6 dark:bg-kblackli md:max-w-[480px]'>
+    <article className='relative flex min-h-[560px] w-screen max-w-[345px] flex-col justify-between gap-6 rounded-md bg-kwhite p-6 dark:bg-kblackli md:max-w-[480px]'>
       <div className='flex max-h-fit items-center justify-between'>
         <h3 className='text-lg font-bold text-kblack dark:text-kwhite'>{dataTask.title}</h3>
         <button onClick={taskOptions} className='flex h-10 w-5 items-center justify-end'><IconThreeDots /></button>
@@ -116,7 +118,8 @@ export default function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, 
           </div>
         )
       }
-      <ToastContainer/>
     </article>
   )
 }
+
+export { ViewTaskModal }

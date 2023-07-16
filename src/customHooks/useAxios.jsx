@@ -14,7 +14,7 @@ function useAxios ({ loadAllBoards, updateActiveBoard }) {
         const index = boards.findIndex((item) => item._id === SAVED_ID)
         if (index !== -1) updateActiveBoard(boards[index])
         if (index === -1 && boards.length !== 0) updateActiveBoard(boards[0])
-      }
+      } else if (boards.length !== 0) updateActiveBoard(boards[0])
       dispatch(REQ_ACTION.LOADED)
     } catch (error) {
       console.error(error)

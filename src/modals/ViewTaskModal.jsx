@@ -68,7 +68,7 @@ function ViewTaskModal ({ dataTask, activeBoard, openDeleteTask, close, editTask
   const COMPLETED = task.filter(item => item.completed).length
 
   return (
-    <article className='relative flex min-h-[560px] w-screen max-w-[345px] flex-col justify-between gap-6 rounded-md bg-kwhite px-6 pt-6 dark:bg-kblackli md:max-w-[480px]'>
+    <article className='relative flex min-h-[560px] w-screen max-w-[345px] flex-col justify-between gap-6 rounded-md bg-kwhite p-6 dark:bg-kblackli md:max-w-[480px]'>
       <div className='flex max-h-fit items-center justify-between'>
         <h3 className='text-lg font-bold text-kblack dark:text-kwhite'>{dataTask.title}</h3>
         <button onClick={taskOptions} className='flex h-10 w-5 items-center justify-end'><IconThreeDots /></button>

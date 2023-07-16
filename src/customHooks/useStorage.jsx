@@ -5,12 +5,17 @@ function useStorage ({ storageName }) {
 
   function getSavedItem () {
     const item = localStorage.getItem(storageName) ?? null
-    return item
+    return JSON.parse(item)
+  }
+
+  function removeItem () {
+    localStorage.removeItem(storageName)
   }
 
   return {
     saveItem,
-    getSavedItem
+    getSavedItem,
+    removeItem
   }
 }
 

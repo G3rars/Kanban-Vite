@@ -34,6 +34,8 @@ import {
   modalReducer,
   modalStates
 } from './helpers/contants'
+
+// extras
 import { ToastContainer } from 'react-toastify'
 
 function App () {
@@ -158,7 +160,6 @@ function App () {
           onNewBoard={() =>
               <NewBoardModal
                 updateBoards={updateBoards}
-                initialBoard={initialBoard}
                 close={() => dispatch(MODALS.CLOSE_ALL_MODALS)}
               />}
           onError={() => <Error />}

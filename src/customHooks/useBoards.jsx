@@ -1,18 +1,21 @@
 import { useEffect, useState } from 'react'
 import { deleteBoard, deleteCard } from '../../core/api'
-import { MODALS } from '../helpers/contants'
+import { MODALS, USER_CONFIG } from '../helpers/contants'
 import { useAxios } from './useAxios'
 import { toast } from 'react-toastify'
 import { Alert } from '../helpers/alerts'
+import { useStorage } from './useStorage'
 
 function useBoards (dispatchAction) {
   const [initialBoard, setInitialBoard] = useState([])
   const [activeBoard, setActiveBoard] = useState(null)
   const [dataTask, setDataTask] = useState(null)
   const { fetchData, reqStatus } = useAxios({ loadAllBoards, updateActiveBoard })
+  const { getSavedItem, saveItem } = useStorage({ storageName: USER_CONFIG.ACTIVE_BOARD })
 
   useEffect(() => {
-    fetchData()
+    const savedBoard = getSavedItem()
+    fetchData(savedBoard)
   }, [])
 
   useEffect(() => {
@@ -31,6 +34,7 @@ function useBoards (dispatchAction) {
 
   function updateActiveBoard (board) {
     setActiveBoard(board)
+    saveItem(board._id)
   }
 
   function resetDataTask () {
@@ -40,7 +44,9 @@ function useBoards (dispatchAction) {
   function updateBoards (board) {
     const newBoards = [...initialBoard]
     const index = newBoards.findIndex((item) => item._id === board._id)
-    newBoards.splice(index, 1, board)
+    index === -1
+      ? newBoards.push(board)
+      : newBoards.splice(index, 1, board)
     setInitialBoard(newBoards)
   }
 

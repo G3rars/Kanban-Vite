@@ -5,12 +5,17 @@ import { REQ_ACTION, initialRequestState, requestReducer } from '../helpers/cont
 function useAxios ({ loadAllBoards, updateActiveBoard }) {
   const [state, dispatch] = useReducer(requestReducer, initialRequestState)
 
-  const fetchData = async () => {
+  const fetchData = async (SAVED_ID) => {
     try {
       dispatch(REQ_ACTION.LOADING)
       const boards = await getBoards()
       loadAllBoards(boards)
-      if (boards.length !== 0) updateActiveBoard(boards[0])
+      if (SAVED_ID) {
+        const index = boards.findIndex((item) => item._id === SAVED_ID)
+        updateActiveBoard(boards[index])
+      } else if (boards.length !== 0) {
+        updateActiveBoard(boards[0])
+      }
       dispatch(REQ_ACTION.LOADED)
     } catch (error) {
       console.error(error)

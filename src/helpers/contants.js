@@ -1,3 +1,8 @@
+const USER_CONFIG = {
+  ACTIVE_BOARD: 'activeBoard',
+  THEME: 'theme'
+}
+
 const modalStates = {
   settings: false,
   delete: false,
@@ -84,6 +89,7 @@ export {
   initialRequestState,
   MODALS,
   REQ_ACTION,
+  USER_CONFIG,
   modalReducer,
   requestReducer
 }

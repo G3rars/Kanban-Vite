@@ -3,15 +3,9 @@ import { SubTaskCard } from '../components/subTaskCard'
 import { Button } from '../components/button'
 import { putBoard } from '../../core/api'
 import { v4 as uuidv4 } from 'uuid'
-<<<<<<< HEAD:src/modals/EditBoardModal.jsx
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { Alert } from '../helpers/alerts'
 import { getFormData, objectToArr } from '../helpers/utilities'
-=======
-import { toast } from 'react-toastify'
-import { Alert } from '../../helpers/alerts'
-import { getFormData, objectToArr } from '../../helpers/utilities'
->>>>>>> main:src/components/modals/EditBoardModal.jsx
 import { IconCross } from '../icons/Symbols'
 import { useDisable } from '../customHooks/useDisable'
 
@@ -52,7 +46,6 @@ function EditBoardModal ({ activeBoard, updateActiveBoard, close, updateBoards }
           ? { name: value }
           : { name: value, _id: id }
       )
-      console.log(filterColumns)
       const newBoard = await putBoard(activeBoard._id, { name: boardName, columns: filterColumns })
       updateBoards(newBoard)
       updateActiveBoard(newBoard)

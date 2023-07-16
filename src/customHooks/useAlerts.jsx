@@ -11,7 +11,6 @@ function useAlerts () {
   }
 
   function successAlert ({ msg }) {
-    console.log(toastifyID)
     if (toastifyID !== null) toast.update(toastifyID, { render: msg, type: 'success', isLoading: false })
   }
 

@@ -82,6 +82,7 @@ function useBoards (dispatchAction) {
     newBoard.columns[index].cards.splice(cardIndex, 1)
     updateActiveBoard(newBoard)
     updateBoards(newBoard)
+    setDataTask(null)
   }
 
   const handleViewTask = (keyData) => {
@@ -94,8 +95,8 @@ function useBoards (dispatchAction) {
     await deleteBoard(activeBoard._id)
     const index = initialBoard.findIndex((item) => item._id === activeBoard._id)
     initialBoard.splice(index, 1)
-    console.log('[useBoard.jsx] - removeBoard ', initialBoard) // []
-    updateActiveBoard(initialBoard.at(0)) // initialBoard []
+    console.log('[useBoard.jsx] - removeBoard ', initialBoard)
+    updateActiveBoard(initialBoard.at(0))
     dispatchAction(MODALS.CLOSE_ALL_MODALS)
   }
 

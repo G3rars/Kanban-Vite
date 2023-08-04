@@ -42,7 +42,7 @@ function Header ({ openSideMenu, states, openBoardSettings, openDeleteBoard, ope
         <button type='button' onClick={handleWarning} className='relative mr-4 h-7 w-7 md:h-10 md:w-10'>
           { warningModal && (
             <div className='absolute -top-3 right-10 grid h-12 w-48 place-content-center rounded-xl bg-kpurple transition md:h-16 md:w-48 '>
-              <p className='text-md font-bold tracking-wide text-kwhite'>The information will be deleted every hour</p>
+              <p className='text-md font-bold tracking-wide text-kwhite'>The information will be deleted every 10 minutes</p>
             </div>
           )}
           <IconWarning />

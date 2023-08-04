@@ -33,8 +33,13 @@ function useBoards (dispatchAction) {
   }
 
   function updateActiveBoard (board) {
-    setActiveBoard(board)
-    saveItem(board._id)
+    if (board === undefined) {
+      setActiveBoard(null)
+      saveItem([])
+    } else {
+      setActiveBoard(board)
+      saveItem(board._id)
+    }
   }
 
   function resetDataTask () {
@@ -89,7 +94,8 @@ function useBoards (dispatchAction) {
     await deleteBoard(activeBoard._id)
     const index = initialBoard.findIndex((item) => item._id === activeBoard._id)
     initialBoard.splice(index, 1)
-    updateActiveBoard(initialBoard.at(0))
+    console.log('[useBoard.jsx] - removeBoard ', initialBoard) // []
+    updateActiveBoard(initialBoard.at(0)) // initialBoard []
     dispatchAction(MODALS.CLOSE_ALL_MODALS)
   }
 

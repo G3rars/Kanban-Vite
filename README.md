@@ -18,10 +18,10 @@
 
 ## Capturas de Pantalla
 
-![Captura de Pantalla 1](/public/c1.png)
-![Captura de Pantalla 2](/public/c2.png)
-![Captura de Pantalla 3](/public/c3.png)
-![Captura de Pantalla 4](/public/c4.png)
+![ ](/public/c1.png)
+![ ](/public/c2.png)
+![ ](/public/c3.png)
+![ ](/public/c4.png)
 
 ## Tecnologías Utilizadas
 

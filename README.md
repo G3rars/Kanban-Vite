@@ -45,7 +45,7 @@
 
 3. Agrega las columnas que necesitas para tu proyecto.
 
-4. Comienza a crear tareas y subtareas y organízalas en las columnas según su estado.
+4. Comienza a crear tareas, subtareas y organízalas en las columnas según su estado.
 
 5. ¡Organiza y gestiona tus proyectos de manera eficaz!
 
